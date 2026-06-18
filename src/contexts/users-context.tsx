@@ -10,6 +10,7 @@ import {
 } from "react";
 import {
   initialUsers,
+  nextUserId,
   syncUserName,
   type AppUser,
 } from "@/lib/users-data";
@@ -17,6 +18,7 @@ import {
 type UsersContextValue = {
   users: AppUser[];
   getUser: (id: number) => AppUser | undefined;
+  addUser: (data: Omit<AppUser, "id">) => number;
   updateUser: (id: number, data: Partial<AppUser>) => void;
   updateUserRole: (id: number, role: string) => void;
 };
@@ -30,6 +32,15 @@ export function UsersProvider({ children }: { children: ReactNode }) {
     (id: number) => users.find((u) => u.id === id),
     [users]
   );
+
+  const addUser = useCallback((data: Omit<AppUser, "id">) => {
+    let newId = 0;
+    setUsers((prev) => {
+      newId = nextUserId(prev);
+      return [...prev, syncUserName({ ...data, id: newId })];
+    });
+    return newId;
+  }, []);
 
   const updateUser = useCallback((id: number, data: Partial<AppUser>) => {
     setUsers((prev) =>
@@ -47,8 +58,8 @@ export function UsersProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const value = useMemo(
-    () => ({ users, getUser, updateUser, updateUserRole }),
-    [users, getUser, updateUser, updateUserRole]
+    () => ({ users, getUser, addUser, updateUser, updateUserRole }),
+    [users, getUser, addUser, updateUser, updateUserRole]
   );
 
   return (

@@ -4,6 +4,7 @@ import {
   User, Contact, MapPin, CheckCircle, Check, ArrowLeft, ArrowRight,
 } from "lucide-react";
 import { Card, CardContent, Input, Label, DropdownSelect, Button } from "@/components/ui";
+import { useAlert } from "@/contexts/alert-context";
 
 const WS = [
   { key: "account", label: "Account", icon: User },
@@ -13,6 +14,7 @@ const WS = [
 ];
 
 export default function FormWizard() {
+  const { showAlert } = useAlert();
   const [step, ss] = useState(0);
   const [w, sw] = useState({
     email: "", username: "", password: "", cpw: "",
@@ -167,7 +169,7 @@ export default function FormWizard() {
                 <Button
                   variant="success"
                   size="sm"
-                  onClick={() => alert("Submitted!")}
+                  onClick={() => showAlert("Submitted!", { variant: "success" })}
                 >
                   <CheckCircle />
                   Submit

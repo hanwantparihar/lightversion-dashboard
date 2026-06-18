@@ -60,7 +60,11 @@ export function UserRolesTable({
       width: "240px",
       render: (user) => (
         <div className="flex items-center gap-2">
-          <AvatarInitials bg={user.avatarColor} initials={user.initials} />
+          <AvatarInitials
+            bg={user.avatarColor}
+            initials={user.initials}
+            src={user.avatarUrl}
+          />
           <span className="font-bold">{user.name}</span>
         </div>
       ),

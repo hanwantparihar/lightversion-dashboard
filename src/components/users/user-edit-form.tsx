@@ -1,5 +1,6 @@
 "use client";
 
+import { useRef, useState } from "react";
 import {
   User,
   Mail,
@@ -31,7 +32,17 @@ type UserEditFormProps = {
   onChange: (user: AppUser) => void;
   onSave?: () => void;
   onCancel?: () => void;
+  mode?: "create" | "edit";
+  roleOptions?: string[];
 };
+
+const AVATAR_MAX_BYTES = 5 * 1024 * 1024;
+const ACCEPTED_IMAGE_TYPES = [
+  "image/jpeg",
+  "image/png",
+  "image/gif",
+  "image/webp",
+];
 
 function FormSection({
   title,
@@ -62,14 +73,58 @@ export function UserEditForm({
   onChange,
   onSave,
   onCancel,
+  mode = "edit",
+  roleOptions = [],
 }: UserEditFormProps) {
+  const isCreate = mode === "create";
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [uploadError, setUploadError] = useState("");
   const update = <K extends keyof AppUser>(key: K, value: AppUser[K]) => {
     onChange({ ...user, [key]: value });
+  };
+
+  const openFilePicker = () => fileInputRef.current?.click();
+
+  const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    e.target.value = "";
+    if (!file) return;
+
+    if (!ACCEPTED_IMAGE_TYPES.includes(file.type)) {
+      setUploadError("Use JPG, PNG, GIF, or WEBP.");
+      return;
+    }
+    if (file.size > AVATAR_MAX_BYTES) {
+      setUploadError("Image must be 5 MB or smaller.");
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      if (typeof reader.result === "string") {
+        setUploadError("");
+        update("avatarUrl", reader.result);
+      }
+    };
+    reader.onerror = () => setUploadError("Could not read the image.");
+    reader.readAsDataURL(file);
+  };
+
+  const removeAvatar = () => {
+    setUploadError("");
+    update("avatarUrl", "");
   };
 
   return (
     <Card className="overflow-hidden shadow-sm">
       <div className="border-b bg-muted/30 px-6 py-6">
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept={ACCEPTED_IMAGE_TYPES.join(",")}
+          className="hidden"
+          onChange={handleAvatarChange}
+        />
         <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center gap-4">
             <div className="relative shrink-0">
@@ -77,6 +132,8 @@ export function UserEditForm({
                 <AvatarInitials
                   bg={user.avatarColor}
                   initials={user.initials}
+                  src={user.avatarUrl}
+                  className="h-[42px] w-[42px] rounded-xl"
                 />
               </div>
               <Button
@@ -84,16 +141,19 @@ export function UserEditForm({
                 size="icon-sm"
                 className="absolute -bottom-1 -right-1 rounded-full border-2 border-background shadow-md"
                 aria-label="Change photo"
+                onClick={openFilePicker}
               >
                 <Camera />
               </Button>
             </div>
             <div>
               <h2 className="text-lg font-extrabold tracking-tight">
-                {user.firstName} {user.lastName}
+                {isCreate && !user.firstName && !user.lastName
+                  ? "New user"
+                  : `${user.firstName} ${user.lastName}`.trim() || "New user"}
               </h2>
               <p className="text-sm font-medium text-muted-foreground">
-                {user.email}
+                {user.email || "Enter contact details below"}
               </p>
               <div className="mt-2 flex flex-wrap items-center gap-2">
                 <RoleBadge role={user.role} />
@@ -104,11 +164,21 @@ export function UserEditForm({
               </div>
             </div>
           </div>
-          <Button type="button" variant="outline" size="sm">
-            <Camera />
-            Upload photo
-          </Button>
+          <div className="flex flex-wrap items-center gap-2">
+            <Button type="button" variant="outline" size="sm" onClick={openFilePicker}>
+              <Camera />
+              Upload photo
+            </Button>
+            {user.avatarUrl && (
+              <Button type="button" variant="ghost" size="sm" onClick={removeAvatar}>
+                Remove
+              </Button>
+            )}
+          </div>
         </div>
+        {uploadError && (
+          <p className="mt-3 text-sm font-semibold text-destructive">{uploadError}</p>
+        )}
       </div>
 
       <CardContent className="p-0">
@@ -234,7 +304,7 @@ export function UserEditForm({
 
         <FormSection
           title="Account settings"
-          description="Status and regional preferences."
+          description="Role and account status."
         >
           <div className="f2">
             <div className="fm">
@@ -248,26 +318,20 @@ export function UserEditForm({
                 }))}
               />
             </div>
-            <div className="fm">
-              <Label>Timezone</Label>
-              <DropdownSelect
-                value={user.timezone}
-                onChange={(timezone) => update("timezone", timezone)}
-                options={[
-                  { value: "America/New_York", label: "Eastern (US)" },
-                  { value: "America/Chicago", label: "Central (US)" },
-                  { value: "America/Los_Angeles", label: "Pacific (US)" },
-                  { value: "Europe/London", label: "London" },
-                  { value: "Asia/Tokyo", label: "Tokyo" },
-                ]}
-              />
-            </div>
+            {roleOptions.length > 0 && (
+              <div className="fm">
+                <Label>Role</Label>
+                <DropdownSelect
+                  value={user.role}
+                  onChange={(role) => update("role", role)}
+                  options={roleOptions.map((role) => ({
+                    value: role,
+                    label: role,
+                  }))}
+                />
+              </div>
+            )}
           </div>
-          <p className="text-xs font-medium text-muted-foreground">
-            Role is managed under{" "}
-            <span className="font-bold text-foreground">Role management</span>.
-            Current role: <span className="font-bold">{user.role}</span>
-          </p>
         </FormSection>
 
         {/* <FormSection title="Notifications">
@@ -317,7 +381,7 @@ export function UserEditForm({
         )}
         <Button type="button" size="sm" onClick={onSave}>
           <CircleCheck />
-          Save changes
+          {isCreate ? "Create user" : "Save changes"}
         </Button>
       </div>
     </Card>

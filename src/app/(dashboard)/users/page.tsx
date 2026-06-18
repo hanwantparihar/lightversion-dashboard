@@ -67,7 +67,7 @@ export default function UsersPage() {
             <Users size={18} />
             All Users
           </CardTitle>
-          <Button size="sm">
+          <Button size="sm" onClick={() => router.push("/users/create")}>
             <UserPlus />
             Add User
           </Button>
@@ -140,7 +140,6 @@ export default function UsersPage() {
           <UsersTable
             users={pageUsers}
             onEditUser={goToEdit}
-            onViewUser={goToEdit}
             emptyMessage="No users match your filters."
           />
 

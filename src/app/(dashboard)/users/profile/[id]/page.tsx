@@ -8,12 +8,14 @@ import { Button } from "@/components/ui";
 import { PageStack } from "@/components";
 import { UserEditForm } from "@/components/users/user-edit-form";
 import { useUsers } from "@/contexts/users-context";
+import { useRoles } from "@/contexts/roles-context";
 import type { AppUser } from "@/lib/users-data";
 
 export default function EditUserProfilePage() {
   const params = useParams();
   const router = useRouter();
   const { getUser, updateUser } = useUsers();
+  const { roleNames } = useRoles();
   const userId = Number(params.id);
   const sourceUser = getUser(userId);
 
@@ -69,6 +71,7 @@ export default function EditUserProfilePage() {
         onChange={setDraft}
         onSave={handleSave}
         onCancel={handleCancel}
+        roleOptions={roleNames}
       />
     </PageStack>
   );

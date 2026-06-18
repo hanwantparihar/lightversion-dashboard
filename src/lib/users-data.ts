@@ -15,6 +15,7 @@ export type AppUser = {
   timezone: string;
   initials: string;
   avatarColor: string;
+  avatarUrl?: string;
   emailNotifications: boolean;
   pushNotifications: boolean;
   marketingEmails: boolean;
@@ -286,4 +287,52 @@ export function syncUserName(user: AppUser): AppUser {
     name: `${user.firstName} ${user.lastName}`.trim(),
     initials: `${user.firstName[0] ?? ""}${user.lastName[0] ?? ""}`.toUpperCase(),
   };
+}
+
+const AVATAR_COLORS = [
+  "#2563eb",
+  "#10b981",
+  "#7c3aed",
+  "#f59e0b",
+  "#ec4899",
+  "#06b6d4",
+  "#ef4444",
+  "#8b5cf6",
+  "#14b8a6",
+  "#f97316",
+  "#6366f1",
+  "#0ea5e9",
+] as const;
+
+export function createEmptyUser(id: number, defaultRole = "Viewer"): AppUser {
+  return {
+    id,
+    name: "",
+    firstName: "",
+    lastName: "",
+    email: "",
+    phone: "",
+    location: "",
+    company: "Nexora AI Inc.",
+    jobTitle: "",
+    role: defaultRole,
+    status: "Pending",
+    date: new Date().toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+    }),
+    bio: "",
+    timezone: "America/New_York",
+    initials: "",
+    avatarColor: AVATAR_COLORS[id % AVATAR_COLORS.length],
+    avatarUrl: "",
+    emailNotifications: true,
+    pushNotifications: false,
+    marketingEmails: false,
+  };
+}
+
+export function nextUserId(users: AppUser[]): number {
+  return users.reduce((max, u) => Math.max(max, u.id), 0) + 1;
 }

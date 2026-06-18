@@ -23,9 +23,11 @@ import {
   Label,
   Modal
 } from '@/components/ui'
+import { useAlert } from '@/contexts/alert-context'
 import { LucideIcon } from 'lucide-react'
 
 export default function ModalsPage () {
+  const { showAlert } = useAlert()
   const [b, setB] = useState(false),
     [c, setC] = useState(false),
     [sc, setSc] = useState(false),
@@ -278,7 +280,7 @@ export default function ModalsPage () {
               variant='destructive'
               onClick={() => {
                 setCf(false)
-                alert('Deleted!')
+                showAlert('Deleted!', { variant: 'success' })
               }}
             >
               <Trash2 />

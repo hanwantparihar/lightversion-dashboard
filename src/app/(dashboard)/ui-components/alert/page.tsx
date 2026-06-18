@@ -27,6 +27,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { useAlert } from "@/contexts/alert-context";
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -81,10 +82,6 @@ const DISMISSIBLE: {
   { id: "d4", variant: "info",    message: "Tip: You can use keyboard shortcuts for faster navigation." },
 ];
 
-// ─── Toast type ───────────────────────────────────────────────────────────────
-
-type ToastItem = { id: number; variant: AlertVariant; message: string };
-
 const TOAST_MESSAGES: Record<AlertVariant, string> = {
   primary: "Primary notification for the user.",
   success: "Operation completed successfully!",
@@ -97,20 +94,12 @@ const TOAST_MESSAGES: Record<AlertVariant, string> = {
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default function AlertPage() {
+  const { showToast } = useAlert();
   const [dismissed, setDismissed] = useState<Set<string>>(new Set());
-  const [toasts,    setToasts]    = useState<ToastItem[]>([]);
 
   const dismiss       = (id: string) => setDismissed((p) => new Set([...p, id]));
   const resetSection  = ()           => setDismissed(new Set());
-  const resetAll      = ()           => { setDismissed(new Set()); setToasts([]); };
-
-  function addToast(variant: AlertVariant) {
-    const id = Date.now();
-    setToasts((p) => [...p, { id, variant, message: TOAST_MESSAGES[variant] }]);
-    setTimeout(() => setToasts((p) => p.filter((t) => t.id !== id)), 4000);
-  }
-
-  const removeToast = (id: number) => setToasts((p) => p.filter((t) => t.id !== id));
+  const resetAll      = ()           => setDismissed(new Set());
 
   const allDismissed = DISMISSIBLE.every((a) => dismissed.has(a.id));
 
@@ -347,46 +336,24 @@ export default function AlertPage() {
         description="Click a button to show a toast notification that auto-hides after 4 seconds."
       >
         <div className="flex flex-wrap gap-2.5">
-          <Button size="sm" variant="success" onClick={() => addToast("success")}>
+          <Button size="sm" variant="success" onClick={() => showToast(TOAST_MESSAGES.success, "success")}>
             <CheckCircle2 size={14} />
             Success Toast
           </Button>
-          <Button size="sm" variant="destructive" onClick={() => addToast("danger")}>
+          <Button size="sm" variant="destructive" onClick={() => showToast(TOAST_MESSAGES.danger, "danger")}>
             <XCircle size={14} />
             Error Toast
           </Button>
-          <Button size="sm" variant="warning" onClick={() => addToast("warning")}>
+          <Button size="sm" variant="warning" onClick={() => showToast(TOAST_MESSAGES.warning, "warning")}>
             <AlertTriangle size={14} />
             Warning Toast
           </Button>
-          <Button size="sm" variant="info" onClick={() => addToast("info")}>
+          <Button size="sm" variant="info" onClick={() => showToast(TOAST_MESSAGES.info, "info")}>
             <Info size={14} />
             Info Toast
           </Button>
         </div>
       </SectionCard>
-
-      {/* ── Toast container (fixed, bottom-right) ────────────────────── */}
-      {toasts.length > 0 && (
-        <div
-          aria-live="polite"
-          aria-label="Notifications"
-          className="fixed bottom-5 right-5 z-50 flex w-[340px] flex-col gap-2"
-        >
-          {toasts.map((t) => (
-            <Alert
-              key={t.id}
-              variant={t.variant}
-              dismissible
-              onDismiss={() => removeToast(t.id)}
-              className="shadow-lg"
-            >
-              <AlertIcon>{ICONS[t.variant]}</AlertIcon>
-              <AlertContent>{t.message}</AlertContent>
-            </Alert>
-          ))}
-        </div>
-      )}
 
     </div>
   );

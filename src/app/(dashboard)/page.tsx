@@ -107,14 +107,14 @@ export default function Dashboard() {
 
       <div className="gr g-31 g2">
         <Card>
-          <CardHeader><CardTitle>Recent Orders</CardTitle></CardHeader>
+          <CardHeader className="mb-4"><CardTitle>Recent Orders</CardTitle></CardHeader>
           <CardContent className="p-0">
             <OrdersTable orders={orders} />
           </CardContent>
         </Card>
 
         <Card>
-          <CardHeader><CardTitle>Activity Feed</CardTitle></CardHeader>
+          <CardHeader ><CardTitle>Activity Feed</CardTitle></CardHeader>
           <CardContent>
             {actFeed.map((a, i) => (
               <div
@@ -148,14 +148,14 @@ export default function Dashboard() {
 
       <div className="gr g-2 g2">
         <Card>
-          <CardHeader><CardTitle>Top Products</CardTitle></CardHeader>
+          <CardHeader className="mb-4"><CardTitle>Top Products</CardTitle></CardHeader>
           <CardContent className="p-0">
             <ProductsTable products={products} />
           </CardContent>
         </Card>
 
         <Card>
-          <CardHeader><CardTitle>Traffic Sources</CardTitle></CardHeader>
+          <CardHeader className="mb-4"><CardTitle>Traffic Sources</CardTitle></CardHeader>
           <CardContent>
             <div style={{ height: 220 }}>
               <ResponsiveContainer width="100%" height="100%">

@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import { Card, CardHeader, CardContent, CardTitle, Button } from "@/components/ui";
 import { PageStack, EditableProductsTable } from "@/components";
+import { useAlert } from "@/contexts/alert-context";
 import type { EditableProductRow } from "@/components/tables/editable-products-table";
 
 const initProds: EditableProductRow[] = [
@@ -22,6 +23,7 @@ const initProds: EditableProductRow[] = [
 ];
 
 export default function EditableTables() {
+  const { showAlert } = useAlert();
   const [rows, setRows] = useState(initProds);
 
   return (
@@ -69,7 +71,7 @@ export default function EditableTables() {
             <Button
               type="button"
               size="sm"
-              onClick={() => alert("Saved!")}
+              onClick={() => showAlert("Saved!", { variant: "success" })}
             >
               <CheckCircle />
               Save

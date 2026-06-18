@@ -7,18 +7,9 @@ type TableActionsProps = {
   onDelete?: () => void;
 };
 
-export function TableActions({ onView, onEdit, onDelete }: TableActionsProps) {
+export function TableActions({  onEdit, onDelete }: TableActionsProps) {
   return (
     <div className="fc g2">
-      <Button
-        type="button"
-        variant="info"
-        size="icon"
-        aria-label="View"
-        onClick={onView}
-      >
-        <Eye />
-      </Button>
       <Button
         type="button"
         variant="success"

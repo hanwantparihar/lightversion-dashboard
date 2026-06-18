@@ -120,6 +120,8 @@ export const NAV: NavItem[] = [
 
       { id: "user-list", path: "/users", label: "User list" },
 
+      { id: "user-create", path: "/users/create", label: "Create user" },
+
       { id: "user-roles", path: "/users/roles", label: "Role management" },
 
     ],

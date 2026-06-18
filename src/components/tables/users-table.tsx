@@ -24,7 +24,6 @@ export function UsersTable({
   compact = false,
   showActions = true,
   onEditUser,
-  onViewUser,
   emptyMessage,
 }: UsersTableProps) {
   const columns: TableColumn<AppUser>[] = [
@@ -42,7 +41,11 @@ export function UsersTable({
       width: compact ? "220px" : "260px",
       render: (row) => (
         <div className="flex items-center gap-2">
-          <AvatarInitials bg={row.avatarColor} initials={row.initials} />
+          <AvatarInitials
+            bg={row.avatarColor}
+            initials={row.initials}
+            src={row.avatarUrl}
+          />
           <span className="font-bold">{row.name}</span>
         </div>
       ),
@@ -91,7 +94,6 @@ export function UsersTable({
             width: "120px",
             render: (row: AppUser) => (
               <TableActions
-                onView={onViewUser ? () => onViewUser(row) : undefined}
                 onEdit={onEditUser ? () => onEditUser(row) : undefined}
               />
             ),
