@@ -48,8 +48,8 @@ export function ProfileMenu ({ open, onClose, containerRef }: ProfileMenuProps) 
       </div>
       <div className='p-1.5'>
         <Link
-          href=''
-          // onClick={onClose}
+          href='/system/settings'
+          onClick={onClose}
           className='flex w-full items-center gap-2 rounded-lg px-2.5 py-2 text-sm font-semibold transition-colors hover:bg-muted'
         >
           <Settings size={15} />
