@@ -270,25 +270,28 @@ export default function Notifications () {
           </div>
           <div className='fc g2'>
             <Button variant='outline' size='sm' onClick={mra}>
-              <CircleCheck size={13} style={{ marginRight: 4 }} />
+              <CircleCheck />
               Mark all read
             </Button>
-            <Button size='sm' onClick={() => setN([])}>
-              <Trash2 size={13} style={{ marginRight: 4 }} />
+            <Button variant='destructive' size='sm' onClick={() => setN([])}>
+              <Trash2 />
               Clear all
             </Button>
           </div>
         </CardHeader>
         <CardContent>
-          <div className='fc g2' style={{ flexWrap: 'wrap', marginBottom: 8 }}>
+          <div className='mb-2 flex flex-wrap gap-2'>
             {types.map(t => (
-              <button
+              <Button
                 key={t}
-                className={`nf-pl ${f === t ? 'av' : ''}`}
+                type="button"
+                variant={f === t ? 'default' : 'outline'}
+                size="sm"
+                className="rounded-full"
                 onClick={() => setF(t)}
               >
                 {t === 'all' ? 'All' : t.charAt(0).toUpperCase() + t.slice(1)}
-              </button>
+              </Button>
             ))}
           </div>
 
@@ -334,9 +337,16 @@ export default function Notifications () {
                       <Clock size={12} />
                       {it.time}
                     </div>
-                    <button className='nf-dl' onClick={() => del(it.id)}>
-                      <Trash2 size={13} />
-                    </button>
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="icon-sm"
+                      className="text-destructive hover:bg-destructive/5 hover:text-destructive"
+                      onClick={() => del(it.id)}
+                      aria-label="Delete notification"
+                    >
+                      <Trash2 />
+                    </Button>
                   </div>
                 ))}
               </div>

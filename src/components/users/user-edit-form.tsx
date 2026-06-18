@@ -79,13 +79,14 @@ export function UserEditForm({
                   initials={user.initials}
                 />
               </div>
-              <button
+              <Button
                 type="button"
-                className="absolute -bottom-1 -right-1 grid h-7 w-7 place-items-center rounded-full border-2 border-background bg-primary text-primary-foreground shadow-md"
+                size="icon-sm"
+                className="absolute -bottom-1 -right-1 rounded-full border-2 border-background shadow-md"
                 aria-label="Change photo"
               >
-                <Camera size={12} />
-              </button>
+                <Camera />
+              </Button>
             </div>
             <div>
               <h2 className="text-lg font-extrabold tracking-tight">
@@ -104,7 +105,7 @@ export function UserEditForm({
             </div>
           </div>
           <Button type="button" variant="outline" size="sm">
-            <Camera size={14} className="mr-1.5" />
+            <Camera />
             Upload photo
           </Button>
         </div>
@@ -315,7 +316,7 @@ export function UserEditForm({
           </Button>
         )}
         <Button type="button" size="sm" onClick={onSave}>
-          <CircleCheck size={14} className="mr-1.5" />
+          <CircleCheck />
           Save changes
         </Button>
       </div>

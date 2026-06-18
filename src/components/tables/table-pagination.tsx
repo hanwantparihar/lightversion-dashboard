@@ -6,6 +6,7 @@ import {
   ChevronsLeft,
   ChevronsRight,
 } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 type TablePaginationProps = {
@@ -33,53 +34,59 @@ export function TablePagination({
       <div className="text-[13px] font-semibold text-muted-foreground">
         Showing {rangeStart} to {rangeEnd} of {totalItems}
       </div>
-      <div className="fc" style={{ gap: 3 }}>
-        <button
+      <div className="fc gap-[3px]">
+        <Button
           type="button"
-          className="dp"
+          variant="light"
+          size="icon"
           disabled={page <= 1}
           onClick={() => onPageChange(1)}
           aria-label="First page"
         >
-          <ChevronsLeft size={15} />
-        </button>
-        <button
+          <ChevronsLeft />
+        </Button>
+        <Button
           type="button"
-          className="dp"
+          variant="light"
+          size="icon"
           disabled={page <= 1}
           onClick={() => onPageChange(page - 1)}
           aria-label="Previous page"
         >
-          <ChevronLeft size={15} />
-        </button>
+          <ChevronLeft />
+        </Button>
         {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
-          <button
+          <Button
             key={p}
             type="button"
-            className={cn("dp", p === page && "av")}
+            variant={p === page ? "default" : "light"}
+            size="icon"
+            className="text-xs"
             onClick={() => onPageChange(p)}
           >
             {p}
-          </button>
+          </Button>
         ))}
-        <button
+        <Button
           type="button"
-          className="dp"
+          variant="light"
+          size="icon"
           disabled={page >= totalPages}
           onClick={() => onPageChange(page + 1)}
           aria-label="Next page"
         >
-          <ChevronRight size={15} />
-        </button>
-        <button
+          <ChevronRight />
+        </Button>
+        <Button
           type="button"
-          className="dp"
+          variant="light"
+          size="icon"
           disabled={page >= totalPages}
           onClick={() => onPageChange(totalPages)}
           aria-label="Last page"
         >
-          <ChevronsRight size={15} />
-        </button>
+          <ChevronsRight />
+        </Button>
       </div>
     </div>
   );

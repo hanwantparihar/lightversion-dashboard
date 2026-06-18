@@ -8,7 +8,7 @@ import {
   Download,
   Printer,
 } from "lucide-react";
-import { Card, CardHeader, CardContent, CardTitle, Input, DropdownSelect } from "@/components/ui";
+import { Card, CardHeader, CardContent, CardTitle, Input, DropdownSelect, Button } from "@/components/ui";
 import { PageStack, EmployeesTable, TablePagination } from "@/components";
 import type { EmployeeRow } from "@/components/tables/employees-table";
 
@@ -113,18 +113,18 @@ export default function DataTables() {
                   className="h-9 w-[200px] rounded-lg pl-9"
                 />
               </div>
-              <button type="button" className="ex" style={{ background: "#2563eb" }}>
-                <FileDown size={14} />
+              <Button type="button" size="sm" variant="default">
+                <FileDown />
                 CSV
-              </button>
-              <button type="button" className="ex" style={{ background: "#10b981" }}>
-                <Download size={14} />
+              </Button>
+              <Button type="button" size="sm" variant="success">
+                <Download />
                 Excel
-              </button>
-              <button type="button" className="ex" style={{ background: "#7c3aed" }}>
-                <Printer size={14} />
+              </Button>
+              <Button type="button" size="sm" variant="info">
+                <Printer />
                 Print
-              </button>
+              </Button>
             </div>
           </div>
 

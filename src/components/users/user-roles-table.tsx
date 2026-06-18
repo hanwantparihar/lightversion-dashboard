@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { Edit3 } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { DropdownSelect } from "@/components/ui";
 import { AvatarInitials } from "@/components/common/avatar-initials";
 import { DataTable, type TableColumn } from "@/components/tables/data-table";
@@ -113,14 +114,15 @@ export function UserRolesTable({
       title: "Actions",
       width: "80px",
       render: (user) => (
-        <Link
-          href={`/users/profile/${user.id}`}
-          className="ab"
-          aria-label={`Edit ${user.name}`}
-          title="Edit user"
-        >
-          <Edit3 size={14} />
-        </Link>
+        <Button variant="success" size="icon" asChild>
+          <Link
+            href={`/users/profile/${user.id}`}
+            aria-label={`Edit ${user.name}`}
+            title="Edit user"
+          >
+            <Edit3 />
+          </Link>
+        </Button>
       ),
     },
   ];

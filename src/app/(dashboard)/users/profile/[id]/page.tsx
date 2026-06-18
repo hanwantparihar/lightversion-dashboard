@@ -53,7 +53,7 @@ export default function EditUserProfilePage() {
       <div className="flex flex-wrap items-center justify-between gap-3">
         <Button variant="ghost" size="sm" asChild className="-ml-2">
           <Link href="/users">
-            <ArrowLeft size={14} className="mr-1.5" />
+            <ArrowLeft />
             Back to users
           </Link>
         </Button>

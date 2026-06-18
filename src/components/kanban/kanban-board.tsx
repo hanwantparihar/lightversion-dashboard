@@ -79,7 +79,7 @@ export function KanbanBoard({
           </CardDescription>
         </div>
         <Button size="sm">
-          <Plus size={14} className="mr-1" />
+          <Plus />
           Add Task
         </Button>
       </CardHeader>
@@ -166,24 +166,26 @@ export function KanbanBoard({
                           borderTop: "1px dashed var(--bd)",
                         }}
                       >
-                        <button
+                        <Button
                           type="button"
-                          className="kb-mv"
+                          variant="outline"
+                          size="sm"
                           onClick={() => move(key, ci, -1)}
                           disabled={ki === 0}
                         >
-                          <ChevronLeft size={12} />
+                          <ChevronLeft />
                           Back
-                        </button>
-                        <button
+                        </Button>
+                        <Button
                           type="button"
-                          className="kb-mv"
+                          variant="outline"
+                          size="sm"
                           onClick={() => move(key, ci, 1)}
                           disabled={ki === colKeys.length - 1}
                         >
                           Next
-                          <ChevronRight size={12} />
-                        </button>
+                          <ChevronRight />
+                        </Button>
                       </div>
                     </div>
                   ))}

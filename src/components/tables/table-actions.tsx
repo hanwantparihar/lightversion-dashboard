@@ -1,4 +1,5 @@
 import { Eye, Edit3, Trash2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 type TableActionsProps = {
   onView?: () => void;
@@ -9,30 +10,33 @@ type TableActionsProps = {
 export function TableActions({ onView, onEdit, onDelete }: TableActionsProps) {
   return (
     <div className="fc g2">
-      <button
+      <Button
         type="button"
-        className="ab"
+        variant="info"
+        size="icon"
         aria-label="View"
         onClick={onView}
       >
-        <Eye size={14} />
-      </button>
-      <button
+        <Eye />
+      </Button>
+      <Button
         type="button"
-        className="ab"
+        variant="success"
+        size="icon"
         aria-label="Edit"
         onClick={onEdit}
       >
-        <Edit3 size={14} />
-      </button>
-      <button
+        <Edit3 />
+      </Button>
+      <Button
         type="button"
-        className="ab dl"
+        variant="destructive"
+        size="icon"
         aria-label="Delete"
         onClick={onDelete}
       >
-        <Trash2 size={14} />
-      </button>
+        <Trash2 />
+      </Button>
     </div>
   );
 }

@@ -453,11 +453,11 @@ export default function SettingsContent () {
             size='sm'
             onClick={handleReset}
           >
-            <RefreshCw size={14} className='mr-1.5' />
+            <RefreshCw />
             Reset defaults
           </Button>
           <Button type='button' size='sm' onClick={handleSave}>
-            <CircleCheck size={14} className='mr-1.5' />
+            <CircleCheck />
             Save changes
           </Button>
         </div>

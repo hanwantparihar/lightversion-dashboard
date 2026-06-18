@@ -151,24 +151,26 @@ export default function FormWizard() {
             <div className="fb" style={{ marginTop: 24 }}>
               <Button
                 variant="outline"
+                size="sm"
                 onClick={() => ss((s) => Math.max(s - 1, 0))}
-                style={step === 0 ? { opacity: 0.4, pointerEvents: "none" } : {}}
+                disabled={step === 0}
               >
-                <ArrowLeft size={15} style={{ marginRight: 5 }} />Previous
+                <ArrowLeft />
+                Previous
               </Button>
               {step < 3 ? (
-                <Button
-                  onClick={() => ss((s) => s + 1)}
-                  style={{ background: "var(--vi)", boxShadow: "0 5px 16px -5px rgba(124,58,237,.4)" }}
-                >
-                  Next Step<ArrowRight size={15} style={{ marginLeft: 5 }} />
+                <Button size="sm" onClick={() => ss((s) => s + 1)}>
+                  Next Step
+                  <ArrowRight />
                 </Button>
               ) : (
                 <Button
+                  variant="success"
+                  size="sm"
                   onClick={() => alert("Submitted!")}
-                  style={{ background: "var(--em)", boxShadow: "0 5px 16px -5px rgba(16,185,129,.4)" }}
                 >
-                  <CheckCircle size={15} style={{ marginRight: 5 }} />Submit
+                  <CheckCircle />
+                  Submit
                 </Button>
               )}
             </div>

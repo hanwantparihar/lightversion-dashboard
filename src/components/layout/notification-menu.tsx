@@ -13,6 +13,7 @@ import {
   Bell,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -169,14 +170,15 @@ export function NotificationMenu({
           )}
         </div>
         {unread > 0 && (
-          <button
+          <Button
             type="button"
+            variant="ghost"
+            size="sm"
             onClick={markAllRead}
-            className="flex items-center gap-1 rounded-lg px-2 py-1 text-xs font-semibold text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
           >
-            <CheckCheck size={13} />
+            <CheckCheck />
             Mark all read
-          </button>
+          </Button>
         )}
       </div>
 

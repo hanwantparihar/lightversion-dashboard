@@ -8,7 +8,7 @@ import {
   RotateCcw,
   CheckCircle,
 } from "lucide-react";
-import { Card, CardHeader, CardContent, CardTitle } from "@/components/ui";
+import { Card, CardHeader, CardContent, CardTitle, Button } from "@/components/ui";
 import { PageStack, EditableProductsTable } from "@/components";
 import type { EditableProductRow } from "@/components/tables/editable-products-table";
 
@@ -33,10 +33,10 @@ export default function EditableTables() {
             Editable Product Table
           </CardTitle>
           <div className="fc g2">
-            <button
+            <Button
               type="button"
-              className="ex"
-              style={{ background: "var(--em)" }}
+              size="sm"
+              variant="success"
               onClick={() => {
                 const nid = rows.length
                   ? Math.max(...rows.map((r) => r.id)) + 1
@@ -54,27 +54,26 @@ export default function EditableTables() {
                 ]);
               }}
             >
-              <Plus size={14} />
+              <Plus />
               Add Row
-            </button>
-            <button
+            </Button>
+            <Button
               type="button"
-              className="ex"
-              style={{ background: "var(--am)" }}
+              size="sm"
+              variant="warning"
               onClick={() => setRows(initProds)}
             >
-              <RotateCcw size={14} />
+              <RotateCcw />
               Undo
-            </button>
-            <button
+            </Button>
+            <Button
               type="button"
-              className="ex"
-              style={{ background: "var(--pr)" }}
+              size="sm"
               onClick={() => alert("Saved!")}
             >
-              <CheckCircle size={14} />
+              <CheckCircle />
               Save
-            </button>
+            </Button>
           </div>
         </CardHeader>
         <CardContent className="p-0">

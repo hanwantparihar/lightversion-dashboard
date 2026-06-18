@@ -52,8 +52,8 @@ export default function RichEditor() {
             <PenLine size={17} />Content Editor
           </div>
           <div className="fc g2">
-            <Button variant="outline" size="sm"><Layers size={14} style={{ marginRight: 4 }} />Templates</Button>
-            <Button variant="outline" size="sm"><Eye size={14} style={{ marginRight: 4 }} />Preview</Button>
+            <Button variant="outline" size="sm"><Layers />Templates</Button>
+            <Button variant="outline" size="sm"><Eye />Preview</Button>
           </div>
         </CardHeader>
         <div className="rte-tb">
@@ -61,7 +61,15 @@ export default function RichEditor() {
             item === "s" ? (
               <div key={i} className="sp" />
             ) : (
-              <button key={i} className="rte-b" onClick={item[0] as MouseEventHandler<HTMLButtonElement>}>{item[1] as ReactNode}</button>
+              <Button
+                key={i}
+                type="button"
+                variant="ghost"
+                size="icon-sm"
+                onClick={item[0] as MouseEventHandler<HTMLButtonElement>}
+              >
+                {item[1] as ReactNode}
+              </Button>
             ) as ReactNode
           ) as ReactNode  }
         </div>

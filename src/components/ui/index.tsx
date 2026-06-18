@@ -197,13 +197,16 @@ export function Modal({
       >
         <DialogHeader className="flex-row items-center justify-between space-y-0">
           <DialogTitle>{title}</DialogTitle>
-          <button
+          <Button
             type="button"
-            className="rounded-lg bg-muted p-1.5 text-muted-foreground hover:bg-destructive hover:text-destructive-foreground"
+            variant="ghost"
+            size="icon-sm"
+            className="rounded-lg hover:bg-destructive hover:text-destructive-foreground"
             onClick={onClose}
+            aria-label="Close"
           >
             <X size={16} />
-          </button>
+          </Button>
         </DialogHeader>
         <div className="px-5 pb-2 text-sm leading-relaxed text-muted-foreground">
           {children}

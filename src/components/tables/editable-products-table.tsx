@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Trash2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { DataTable, type TableColumn } from "./data-table";
 export type EditableProductRow = {
   id: number;
@@ -156,14 +157,15 @@ export function EditableProductsTable({
       title: "Del",
       width: "60px",
       render: (row) => (
-        <button
+        <Button
           type="button"
-          className="ab dl"
+          variant="destructive"
+          size="icon"
           onClick={() => onChange(rows.filter((x) => x.id !== row.id))}
           aria-label={`Delete ${row.n}`}
         >
-          <Trash2 size={14} />
-        </button>
+          <Trash2 />
+        </Button>
       ),
     },
   ];

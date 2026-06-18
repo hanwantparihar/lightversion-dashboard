@@ -35,8 +35,8 @@ export default function FormLayouts() {
             </div>
           ))}
           <div style={{ padding: "14px 20px" }} className="fc g3">
-            <Button size="sm"><Check size={14} style={{ marginRight: 4 }} />Submit</Button>
-            <Button variant="outline" size="sm"><RefreshCw size={14} style={{ marginRight: 4 }} />Reset</Button>
+            <Button size="sm"><Check />Submit</Button>
+            <Button variant="outline" size="sm"><RefreshCw />Reset</Button>
           </div>
         </CardContent>
       </Card>
@@ -49,7 +49,7 @@ export default function FormLayouts() {
             <div className="fm"><Label>Last Name</Label><Input placeholder="Doe" /></div>
             <div className="fm"><Label>Email</Label><Input placeholder="john@example.com" /></div>
             <div className="fm"><Label>Message</Label><Textarea placeholder="Your message..." /></div>
-            <Button style={{ width: "100%" }} size="sm"><Check size={14} style={{ marginRight: 4 }} />Send Message</Button>
+            <Button className="w-full" size="sm"><Check />Send Message</Button>
           </CardContent>
         </Card>
 
@@ -71,7 +71,7 @@ export default function FormLayouts() {
                 />
               </div>
               <div style={{ flex: "none", alignSelf: "flex-end" }}>
-                <Button size="sm"><Search size={14} style={{ marginRight: 4 }} />Search</Button>
+                <Button size="sm"><Search />Search</Button>
               </div>
             </div>
           </CardContent>

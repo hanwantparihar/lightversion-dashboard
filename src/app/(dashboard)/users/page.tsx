@@ -68,7 +68,7 @@ export default function UsersPage() {
             All Users
           </CardTitle>
           <Button size="sm">
-            <UserPlus size={14} className="mr-1" />
+            <UserPlus />
             Add User
           </Button>
         </CardHeader>

@@ -1,6 +1,7 @@
 "use client";
 
 import { Edit3, Trash2, Shield } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { DataTable, type TableColumn } from "@/components/tables/data-table";
 import {
   PERMISSION_LABELS,
@@ -94,17 +95,19 @@ export function RolesList({
 
         return (
           <div className="fc g2">
-            <button
+            <Button
               type="button"
-              className="ab"
+              variant="success"
+              size="icon"
               aria-label={`Edit ${role.name}`}
               onClick={() => onEdit(role)}
             >
-              <Edit3 size={14} />
-            </button>
-            <button
+              <Edit3 />
+            </Button>
+            <Button
               type="button"
-              className="ab dl"
+              variant="destructive"
+              size="icon"
               aria-label={`Delete ${role.name}`}
               onClick={() => onDelete(role)}
               disabled={isProtected || count > 0}
@@ -116,8 +119,8 @@ export function RolesList({
                     : "Delete role"
               }
             >
-              <Trash2 size={14} />
-            </button>
+              <Trash2 />
+            </Button>
           </div>
         );
       },

@@ -275,13 +275,13 @@ export default function ModalsPage () {
             </Button>
             <Button
               size='sm'
-              style={{ background: 'var(--ds)' }}
+              variant='destructive'
               onClick={() => {
                 setCf(false)
                 alert('Deleted!')
               }}
             >
-              <Trash2 size={14} style={{ marginRight: 4 }} />
+              <Trash2 />
               Delete
             </Button>
           </>
@@ -331,7 +331,7 @@ export default function ModalsPage () {
               Cancel
             </Button>
             <Button size='sm' onClick={() => setFm(false)}>
-              <CircleCheck size={14} style={{ marginRight: 4 }} />
+              <CircleCheck />
               Save
             </Button>
           </>

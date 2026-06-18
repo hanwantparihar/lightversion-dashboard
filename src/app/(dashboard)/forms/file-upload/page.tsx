@@ -27,14 +27,14 @@ export default function FileUpload() {
             <CloudUpload size={28} style={{ color: "var(--pr)", margin: "0 auto 12px", display: "block" }} />
             <h3 style={{ fontSize: 17, fontWeight: 800, margin: "0 0 5px" }}>Drag & Drop files here</h3>
             <p style={{ fontSize: 13, color: "var(--mt-fg)", margin: "0 0 14px" }}>or click to browse</p>
-            <Button size="sm"><PenLine size={14} style={{ marginRight: 4 }} />Choose Files</Button>
+            <Button size="sm"><PenLine />Choose Files</Button>
             <div className="fc" style={{ justifyContent: "center", gap: 5, fontSize: 12, color: "var(--mt-fg)", marginTop: 14 }}>
               <Info size={13} />PDF, DOC, PNG, JPG, MP4, ZIP | Max 25MB
             </div>
           </div>
           <div className="fb" style={{ margin: "20px 0 12px" }}>
             <h3 style={{ fontSize: 15, fontWeight: 800 }}>Uploaded Files ({files.length})</h3>
-            <Button variant="outline" size="sm" onClick={() => setFiles([])}><Trash2 size={13} style={{ marginRight: 4 }} />Clear All</Button>
+            <Button variant="outline" size="sm" onClick={() => setFiles([])}><Trash2 />Clear All</Button>
           </div>
           {files.map((f) => (
             <div key={f.id} className="fu-f">
@@ -56,16 +56,15 @@ export default function FileUpload() {
                 ) : (
                   <CircleCheck size={18} style={{ color: "#10b981" }} />
                 )}
-                <button
-                  style={{
-                    width: 26, height: 26, borderRadius: 7, border: "none",
-                    background: "var(--mt)", color: "var(--mt-fg)",
-                    display: "grid", placeItems: "center", cursor: "pointer",
-                  }}
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon-sm"
                   onClick={() => setFiles((p) => p.filter((x) => x.id !== f.id))}
+                  aria-label={`Remove ${f.name}`}
                 >
-                  <X size={13} />
-                </button>
+                  <X />
+                </Button>
               </div>
             </div>
           ))}
@@ -92,7 +91,7 @@ export default function FileUpload() {
               <FileImage size={30} style={{ color: "var(--pr)", margin: "0 auto 10px", display: "block" }} />
               <h3 style={{ fontSize: 15, fontWeight: 800 }}>Upload Images</h3>
               <p style={{ fontSize: 13, color: "var(--mt-fg)", margin: "4px 0 12px" }}>JPG, PNG, GIF, WEBP</p>
-              <Button size="sm" style={{ background: "var(--em)", boxShadow: "none" }}>Browse</Button>
+              <Button size="sm" variant="success">Browse</Button>
             </div>
             <h4 style={{ fontSize: 13.5, fontWeight: 800, margin: "16px 0 10px" }}>Previews</h4>
             <div className="fc g3" style={{ flexWrap: "wrap" }}>

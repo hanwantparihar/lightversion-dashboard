@@ -87,11 +87,11 @@ export default function Orders() {
           </Tabs>
           <div className="fc g2">
             <Button variant="outline" size="sm">
-              <Filter size={14} className="mr-1" />
+              <Filter />
               Filter
             </Button>
             <Button size="sm">
-              <Download size={14} className="mr-1" />
+              <Download />
               Export
             </Button>
           </div>

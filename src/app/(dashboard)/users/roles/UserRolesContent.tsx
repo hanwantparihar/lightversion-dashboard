@@ -216,8 +216,8 @@ export default function UserRolesContent () {
               </CardDescription>
             </div>
             {tab === 'roles' && (
-              <Button size='sm' onClick={openAddRole}>
-                <Plus size={14} className='mr-1' />
+              <Button size="sm" onClick={openAddRole}>
+                <Plus />
                 Add role
               </Button>
             )}
@@ -227,7 +227,7 @@ export default function UserRolesContent () {
                 onClick={saveAssignments}
                 disabled={pendingChanges.length === 0}
               >
-                <CircleCheck size={14} className='mr-1' />
+                <CircleCheck />
                 Save assignments
                 {pendingChanges.length > 0 ? ` (${pendingChanges.length})` : ''}
               </Button>
@@ -350,7 +350,7 @@ export default function UserRolesContent () {
               Cancel
             </Button>
             <Button size='sm' onClick={saveRoleDefinition}>
-              <CircleCheck size={14} className='mr-1' />
+              <CircleCheck />
               {editingRole ? 'Update role' : 'Create role'}
             </Button>
           </>
