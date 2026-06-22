@@ -3,6 +3,7 @@ import { Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import { AlertProvider } from "@/contexts/alert-context";
+import { AuthProvider } from "@/contexts/auth-context";
 import { siteConfig } from "@/config/site";
 import { generateBrandCssVars } from "@/config/colors";
 
@@ -33,7 +34,9 @@ export default function RootLayout({
       </head>
       <body className={`${plusJakarta.variable} font-sans`}>
         <ThemeProvider>
-          <AlertProvider>{children}</AlertProvider>
+          <AuthProvider>
+            <AlertProvider>{children}</AlertProvider>
+          </AuthProvider>
         </ThemeProvider>
       </body>
     </html>

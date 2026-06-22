@@ -26,8 +26,8 @@ import {
 import { useAlert } from '@/contexts/alert-context'
 import { LucideIcon } from 'lucide-react'
 
-export default function ModalsPage () {
-  const { showAlert } = useAlert()
+export default function ModalsPage() {
+  const { showAlert, showToast } = useAlert()
   const [b, setB] = useState(false),
     [c, setC] = useState(false),
     [sc, setSc] = useState(false),
@@ -280,7 +280,7 @@ export default function ModalsPage () {
               variant='destructive'
               onClick={() => {
                 setCf(false)
-                showAlert('Deleted!', { variant: 'success' })
+                showToast('Deleted!', 'danger')
               }}
             >
               <Trash2 />

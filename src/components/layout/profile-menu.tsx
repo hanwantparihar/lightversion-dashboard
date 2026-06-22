@@ -4,6 +4,7 @@ import { useEffect, type RefObject } from 'react'
 import Link from 'next/link'
 import { Settings, LogOut } from 'lucide-react'
 import { CURRENT_USER } from '@/lib/current-user'
+import { useAuth } from '@/contexts/auth-context'
 
 type ProfileMenuProps = {
   open: boolean
@@ -11,7 +12,8 @@ type ProfileMenuProps = {
   containerRef: RefObject<HTMLElement | null>
 }
 
-export function ProfileMenu ({ open, onClose, containerRef }: ProfileMenuProps) {
+export function ProfileMenu({ open, onClose, containerRef }: ProfileMenuProps) {
+  const { signOut } = useAuth()
   useEffect(() => {
     if (!open) return
 
@@ -57,7 +59,7 @@ export function ProfileMenu ({ open, onClose, containerRef }: ProfileMenuProps) 
         </Link>
         <button
           type='button'
-          onClick={onClose}
+          onClick={() => { onClose(); signOut(); }}
           className='flex w-full items-center gap-2 rounded-lg px-2.5 py-2 text-sm font-semibold text-destructive transition-colors hover:bg-destructive/10'
         >
           <LogOut size={15} />
