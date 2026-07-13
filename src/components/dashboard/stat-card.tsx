@@ -59,7 +59,7 @@ export function StatCard({
           {label}
         </div>
       </div>
-      <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-[45px] opacity-70">
+      {/* <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-[45px] opacity-70">
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart
             data={spark}
@@ -80,7 +80,7 @@ export function StatCard({
             />
           </AreaChart>
         </ResponsiveContainer>
-      </div>
+      </div> */}
     </Card>
   );
 }

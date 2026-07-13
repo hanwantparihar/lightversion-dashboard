@@ -7,17 +7,22 @@ import { Sidebar } from './sidebar'
 import { Topbar } from './topbar'
 import { getBreadcrumbGroup, getPageTitle } from '@/lib/nav'
 import { useSidebar } from '@/hooks/use-sidebar'
+import { useThemeCustomizer } from '@/contexts/theme-customizer-context'
 
 interface ShellProps {
   children: ReactNode
 }
 
-export function Shell ({ children }: ShellProps) {
+export function Shell({ children }: ShellProps) {
   const { collapsed, mobileOpen, toggleCollapsed, openMobile, closeMobile } =
     useSidebar()
+  const { settings } = useThemeCustomizer()
   const pathname = usePathname()
   const title = getPageTitle(pathname)
   const group = getBreadcrumbGroup(pathname)
+
+  // Map contentWidth setting to a max-width for the inner content area.
+  const maxWidth = settings.contentWidth === 'full' ? undefined : settings.contentWidth
 
   return (
     <div className='flex min-h-screen w-full bg-background text-foreground'>
@@ -34,25 +39,28 @@ export function Shell ({ children }: ShellProps) {
           onToggleCollapse={toggleCollapsed}
         />
         <main className='flex-1 animate-fade-in p-5' key={pathname}>
-          <div className='mb-5 flex flex-wrap items-end justify-between gap-3.5'>
-            <div>
-              <div className='mb-1 flex items-center gap-2 text-xs font-semibold text-muted-foreground'>
-                Home
-                <ChevronRight size={13} />
-                {group && (
-                  <>
-                    <span>{group}</span>
-                    <ChevronRight size={13} />
-                  </>
-                )}
-                <span className='font-bold text-primary'>{title}</span>
+          <div style={{ maxWidth, margin: maxWidth ? '0 auto' : undefined, width: '100%' }}>
+            {/* Breadcrumb row — hidden via CSS when settings.breadcrumb is false */}
+            <div className='breadcrumb-row mb-5 flex flex-wrap items-end justify-between gap-3.5'>
+              <div>
+                <div className='mb-1 flex items-center gap-2 text-xs font-semibold text-muted-foreground'>
+                  Home
+                  <ChevronRight size={13} />
+                  {group && (
+                    <>
+                      <span>{group}</span>
+                      <ChevronRight size={13} />
+                    </>
+                  )}
+                  <span className='font-bold text-primary'>{title}</span>
+                </div>
+                <h1 className='text-2xl font-extrabold tracking-tight'>
+                  {title}
+                </h1>
               </div>
-              <h1 className='text-2xl font-extrabold tracking-tight'>
-                {title}
-              </h1>
             </div>
+            {children}
           </div>
-          {children}
         </main>
       </div>
     </div>

@@ -6,6 +6,9 @@ import { AlertProvider } from "@/contexts/alert-context";
 import { AuthProvider } from "@/contexts/auth-context";
 import { siteConfig } from "@/config/site";
 import { generateBrandCssVars } from "@/config/colors";
+import { ThemeCustomizerContextProvider } from "@/contexts/theme-customizer-context";
+import { ThemeCustomizerProvider } from "@/components/theme-customizer/ThemeCustomizerProvider";
+import { ThemeCustomizer } from "@/components/theme-customizer/ThemeCustomizer";
 
 const plusJakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
@@ -34,9 +37,14 @@ export default function RootLayout({
       </head>
       <body className={`${plusJakarta.variable} font-sans`}>
         <ThemeProvider>
-          <AuthProvider>
-            <AlertProvider>{children}</AlertProvider>
-          </AuthProvider>
+          <ThemeCustomizerContextProvider>
+            <ThemeCustomizerProvider>
+              <AuthProvider>
+                <AlertProvider>{children}</AlertProvider>
+              </AuthProvider>
+              <ThemeCustomizer />
+            </ThemeCustomizerProvider>
+          </ThemeCustomizerContextProvider>
         </ThemeProvider>
       </body>
     </html>

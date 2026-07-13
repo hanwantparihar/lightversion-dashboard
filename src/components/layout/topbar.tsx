@@ -18,6 +18,7 @@ import { ProfileMenu } from '@/components/layout/profile-menu'
 import { NotificationMenu } from '@/components/layout/notification-menu'
 import { CURRENT_USER } from '@/lib/current-user'
 import { cn } from '@/lib/utils'
+import { useThemeCustomizer } from '@/contexts/theme-customizer-context'
 
 interface TopbarProps {
   openMenu: () => void
@@ -25,9 +26,22 @@ interface TopbarProps {
   onToggleCollapse: () => void
 }
 
-export function Topbar ({ openMenu, collapsed, onToggleCollapse }: TopbarProps) {
+// Map headerStyle → Tailwind/inline classes for the <header> element.
+const HEADER_STYLE_CLASSES: Record<string, string> = {
+  solid: 'bg-card border-b',
+  glass: 'border-b bg-background/60 backdrop-blur-xl',
+  transparent: 'bg-transparent',
+  'border-bottom': 'bg-card border-b-2 border-b-primary',
+  floating: 'bg-card border rounded-xl mx-3 my-2.5 shadow-sm',
+  sticky: 'sticky top-0 bg-background/80 backdrop-blur-xl border-b',
+  static: 'static bg-background/80 border-b',
+}
+
+export function Topbar({ openMenu, collapsed, onToggleCollapse }: TopbarProps) {
   const { theme, setTheme } = useTheme()
   const isMobile = useIsMobile()
+  const { settings } = useThemeCustomizer()
+  const headerClass = HEADER_STYLE_CLASSES[settings.headerStyle] ?? HEADER_STYLE_CLASSES.solid
 
   const [profileOpen, setProfileOpen] = useState(false)
   const profileRef = useRef<HTMLDivElement>(null)
@@ -41,7 +55,7 @@ export function Topbar ({ openMenu, collapsed, onToggleCollapse }: TopbarProps) 
   }, [])
 
   return (
-    <header className='sticky top-0 z-30 flex h-[66px] items-center gap-3 border-b bg-background/80 px-5 backdrop-blur-xl'>
+    <header className={cn('z-30 flex h-[66px] items-center gap-3 px-5', headerClass)}>
       {isMobile && (
         <Button variant='outline' size='icon' onClick={openMenu}>
           <Menu size={19} />
@@ -72,13 +86,13 @@ export function Topbar ({ openMenu, collapsed, onToggleCollapse }: TopbarProps) 
 
       <div className='flex items-center gap-3'>
         {/* Theme toggle */}
-        <Button
+        {/* <Button
           variant='outline'
           size='icon'
           onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
         >
           {theme === 'dark' ? <Sun size={19} /> : <Moon size={19} />}
-        </Button>
+        </Button> */}
 
         {/* Notifications */}
         <div className='relative' ref={notifRef}>

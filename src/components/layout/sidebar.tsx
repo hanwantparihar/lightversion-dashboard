@@ -1,18 +1,32 @@
 'use client'
 
+import React, { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { useState, useEffect, useRef } from 'react'
 import { ChevronDown, ChevronLeft, ChevronRight, Sparkles } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { NAV } from '@/lib/nav'
 import { Button } from '@/components/ui/button'
+import { useThemeCustomizer } from '@/contexts/theme-customizer-context'
 
 interface SidebarProps {
   open: boolean
   close: () => void
   collapsed: boolean
   onToggleCollapse: () => void
+}
+
+// Compute sidebar background style based on theme customizer setting.
+// Returns null for 'default' so the existing Tailwind gradient stays intact.
+function useSidebarBackground(color: string, primaryColor: string): React.CSSProperties | undefined {
+  if (color === 'default')       return undefined
+  if (color === 'dark')          return { background: '#0f172a' }
+  if (color === 'light')         return { background: 'hsl(var(--background))', borderRight: '1px solid hsl(var(--border))' }
+  if (color === 'primary')       return { background: primaryColor }
+  if (color === 'gradient')      return { background: 'linear-gradient(to bottom, #4f46e5, #2563eb, #0f172a)' }
+  if (color === 'transparent')   return { background: 'transparent' }
+  if (color === 'glassmorphism') return { background: 'rgba(255,255,255,0.07)', backdropFilter: 'blur(20px) saturate(160%)', borderRight: '1px solid rgba(255,255,255,0.12)' }
+  return undefined
 }
 
 export function Sidebar({
@@ -22,6 +36,9 @@ export function Sidebar({
   onToggleCollapse
 }: SidebarProps) {
   const pathname = usePathname()
+  const { settings } = useThemeCustomizer()
+  const sidebarBg = useSidebarBackground(settings.sidebarColor, settings.primaryColor)
+  const sidebarStyle = settings.sidebarStyle
   const isActive = (path: string) => {
     if (path === '/') return pathname === '/'
     if (path === '/users') {
@@ -36,7 +53,16 @@ export function Sidebar({
   const [flyoutId, setFlyoutId] = useState<string | null>(null)
   const [hovered, setHovered] = useState(false)
   const sidebarRef = useRef<HTMLElement>(null)
-  const effectiveCollapsed = collapsed && !open && !hovered
+
+  // Derive effective collapsed/width state from the theme customizer's sidebarStyle.
+  // 'default' defers to the user's manual collapse preference (useSidebar).
+  const effectiveCollapsed: boolean = (() => {
+    if (sidebarStyle === 'expanded')    return false
+    if (sidebarStyle === 'compact')     return false
+    if (sidebarStyle === 'mini' || sidebarStyle === 'collapsed' || sidebarStyle === 'icon-only') return !open
+    if (sidebarStyle === 'hover-expand') return !open && !hovered
+    return collapsed && !open && !hovered // 'default'
+  })()
 
   useEffect(() => {
     for (const item of NAV) {
@@ -76,11 +102,16 @@ export function Sidebar({
       )}
       <aside
         ref={sidebarRef}
-        onMouseEnter={() => collapsed && !open && setHovered(true)}
+        onMouseEnter={() => {
+          if (sidebarStyle === 'hover-expand' && !open) setHovered(true)
+          else if (sidebarStyle === 'default' && collapsed && !open) setHovered(true)
+        }}
         onMouseLeave={() => setHovered(false)}
+        style={sidebarBg}
         className={cn(
-          'sticky top-0 z-50 flex h-screen shrink-0 flex-col overflow-hidden bg-gradient-to-b from-[#0c2444] via-[#091a33] to-[#071427] transition-[width] duration-300 ease-in-out',
-          effectiveCollapsed ? 'w-[80px]' : 'w-[260px]',
+          'sticky top-0 z-50 flex h-screen shrink-0 flex-col overflow-hidden transition-[width] duration-300 ease-in-out',
+          !sidebarBg && 'bg-gradient-to-b from-[#0c2444] via-[#091a33] to-[#071427]',
+          sidebarStyle === 'compact' ? 'w-[220px]' : effectiveCollapsed ? 'w-[80px]' : 'w-[260px]',
           open
             ? 'fixed translate-x-0'
             : 'fixed -translate-x-full lg:sticky lg:translate-x-0'

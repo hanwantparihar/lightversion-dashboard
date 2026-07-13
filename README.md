@@ -1,4 +1,4 @@
-# Panelix — Next.js 14 Admin Dashboard
+# Nexora AI — Next.js 14 Admin Dashboard
 
 A premium admin dashboard theme built with **Next.js 14**, **Tailwind CSS**, **shadcn/ui**, React 18, Recharts, and Lucide icons.
 
@@ -23,7 +23,7 @@ Open **http://localhost:3000**
 ## Project Structure
 
 ```
-panelix-nextjs/
+Nexora AI-nextjs/
 ├── src/
 │   ├── app/                          # Next.js App Router pages
 │   │   ├── layout.tsx                # Root layout (ThemeProvider + Shell)

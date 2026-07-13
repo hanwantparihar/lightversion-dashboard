@@ -47,6 +47,9 @@ export {
   type KanbanData,
 } from "@/components/kanban/kanban-board";
 
+// Billing
+export { PlanCard } from "@/components/billing/plan-card";
+
 // Users
 export { UserEditForm, ProfileForm } from "@/components/users/user-edit-form";
 export { UserRolesTable } from "@/components/users/user-roles-table";
