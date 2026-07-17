@@ -17,11 +17,6 @@ export function PlanCard({ plan, current, onSelect }: PlanCardProps) {
         plan.popular && "border-primary shadow-md shadow-primary/10"
       )}
     >
-      {/* {plan.popular && (
-        <Badge className="absolute -top-2.5 left-1/2 -translate-x-1/2">
-          Most Popular
-        </Badge>
-      )} */}
       <CardHeader>
         <CardTitle>{plan.name}</CardTitle>
         <CardDescription>{plan.description}</CardDescription>

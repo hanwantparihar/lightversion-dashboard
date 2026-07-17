@@ -69,16 +69,16 @@ const dateOptions = [
 
 function FileIcon({ type }: { type: FileType }) {
   if (type === "folder")
-    return <Folder size={46} className="fill-amber-400 text-amber-400" />;
+    return <Folder size={28} className="fill-amber-400 text-amber-400" />;
   if (type === "jpg" || type === "png")
-    return <div className="flex h-12 w-12 items-center justify-center rounded bg-green-500 text-white"><FileImage size={36} /></div>;
+    return <div className="flex h-7 w-7 items-center justify-center rounded bg-green-500 text-white"><FileImage size={14} /></div>;
   if (type === "mp4")
-    return <div className="flex h-12 w-12 items-center justify-center rounded bg-blue-500 text-white"><FileVideo size={36} /></div>;
+    return <div className="flex h-7 w-7 items-center justify-center rounded bg-blue-500 text-white"><FileVideo size={14} /></div>;
   if (type === "pdf")
-    return <div className="flex h-12 w-12 items-center justify-center rounded bg-red-500 text-white"><FileText size={36} /></div>;
+    return <div className="flex h-7 w-7 items-center justify-center rounded bg-red-500 text-white"><FileText size={14} /></div>;
   if (type === "zip")
-    return <div className="flex h-12 w-12 items-center justify-center rounded bg-yellow-500 text-white"><FileArchive size={36} /></div>;
-  return <div className="flex h-12 w-12 items-center justify-center rounded bg-gray-400 text-white"><FileText size={36} /></div>;
+    return <div className="flex h-7 w-7 items-center justify-center rounded bg-yellow-500 text-white"><FileArchive size={14} /></div>;
+  return <div className="flex h-7 w-7 items-center justify-center rounded bg-gray-400 text-white"><FileText size={14} /></div>;
 }
 
 function typeColor(type: FileType) {

@@ -380,7 +380,7 @@ export default function MediaGalleryPage() {
     <PageStack>
       {/* ── Page header ── */}
       <div className="flex items-center justify-between">
-        <h1 className="text-xl font-semibold">Library</h1>
+        <h1 className="text-xl font-semibold">Media Gallery</h1>
         <Button size="sm" className="gap-1.5" onClick={() => setUploadOpen(true)}>
           <UploadCloud size={14} /> Upload
         </Button>

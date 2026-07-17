@@ -40,7 +40,7 @@ export default function UsersReportPage() {
 
   return (
     <PageStack>
-      <div className="flex flex-wrap items-center justify-between gap-3">
+      {/* <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h2 className="text-lg font-bold">User Analytics</h2>
           <p className="text-sm text-muted-foreground">
@@ -51,7 +51,7 @@ export default function UsersReportPage() {
           <FileDown size={14} />
           Export CSV
         </Button>
-      </div>
+      </div> */}
 
       <StatsGrid
         stats={[

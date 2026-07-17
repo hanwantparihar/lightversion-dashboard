@@ -51,7 +51,7 @@ export default function RevenueReportPage() {
 
   return (
     <PageStack>
-      <div className="flex flex-wrap items-center justify-between gap-3">
+      {/* <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h2 className="text-lg font-bold">Revenue Analytics</h2>
           <p className="text-sm text-muted-foreground">
@@ -62,7 +62,7 @@ export default function RevenueReportPage() {
           <FileDown size={14} />
           Export CSV
         </Button>
-      </div>
+      </div> */}
 
       <StatsGrid
         stats={[

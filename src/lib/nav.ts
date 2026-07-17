@@ -16,6 +16,12 @@ import {
   Code2,
   LifeBuoy,
   Mail,
+  UsersRound,
+  CalendarDays,
+  MessageSquare,
+  FlaskConical,
+  Brain,
+  Sparkles,
   type LucideIcon,
 } from "lucide-react";
 
@@ -51,17 +57,33 @@ export const NAV: NavItem[] = [
   { id: "dashboard", path: "/", label: "Dashboard", icon: LayoutDashboard },
   { id: "analytics", path: "/analytics", label: "Analytics", icon: BarChart3 },
 
-  // { sec: "Reports" },
   {
-    id: "reports-g",
-    label: "Advanced Dashboard",
-    icon: FileBarChart,
+    id: "adv-analytics-g",
+    label: "Advanced Analytics",
+    icon: Brain,
     children: [
-      { id: "reports-hub", path: "/reports", label: "Reports Hub" },
-      { id: "reports-revenue", path: "/reports/revenue", label: "Revenue Analytics" },
-      { id: "reports-users", path: "/reports/users", label: "User Analytics" },
+      { id: "analytics-tokens",     path: "/analytics/ai-tokens",  label: "AI Token Tracking"   },
+      { id: "analytics-realtime",   path: "/analytics/realtime",   label: "Real-time Analytics" },
+      { id: "analytics-geography",  path: "/analytics/geography",  label: "Geography Reports"   },
+      { id: "analytics-conversion", path: "/analytics/conversion", label: "Conversion Tracking" },
     ],
   },
+  {
+  id: "reports-g",
+  label: "Advanced Dashboard",
+  icon: FileBarChart,
+  children: [
+    { id: "reports-hub", path: "/reports", label: "Reports Hub" },
+    { id: "reports-revenue", path: "/reports/revenue", label: "Revenue Analytics" },
+    { id: "reports-users", path: "/reports/users", label: "User Analytics" },
+  ],
+  },
+
+  { sec: "AI Features" },
+  { id: "ai", path: "/ai", label: "AI Workspace", icon: Sparkles },
+
+  // { sec: "Reports" },
+
 
   { sec: "Manage" },
   {
@@ -97,6 +119,17 @@ export const NAV: NavItem[] = [
       { id: "files-storage", path: "/file-manager/storage", label: "Cloud Storage" },
     ],
   },
+    {
+    id: "team-g",
+    label: "Team",
+    icon: UsersRound,
+    children: [
+      { id: "team-workspaces", path: "/team/workspaces", label: "Workspaces" },
+      { id: "team-permissions", path: "/team/permissions", label: "Permissions" },
+      { id: "team-projects", path: "/team/projects", label: "Shared Projects" },
+      { id: "team-comments", path: "/team/comments", label: "Mentions & Comments" },
+    ],
+  },
 
   { sec: "General" },
   { id: "settings", path: "/system/settings", label: "Settings", icon: Settings },
@@ -105,9 +138,13 @@ export const NAV: NavItem[] = [
     label: "Billing",
     icon: CreditCard,
     children: [
-      { id: "billing-overview", path: "/system/billing", label: "Overview" },
-      { id: "billing-plans", path: "/system/billing/plans", label: "Subscription Plans" },
-      { id: "billing-subscription", path: "/system/billing/subscription", label: "Subscription" },
+      { id: "billing-overview",     path: "/system/billing",              label: "Overview"          },
+      { id: "billing-plans",        path: "/system/billing/plans",        label: "Subscription Plans"},
+      { id: "billing-subscription", path: "/system/billing/subscription", label: "Subscription"      },
+      { id: "billing-usage",        path: "/system/billing/usage",        label: "Usage Billing"     },
+      { id: "billing-invoices",     path: "/system/billing/invoices",     label: "Invoices"          },
+      { id: "billing-coupons",      path: "/system/billing/coupons",      label: "Coupons"           },
+      { id: "billing-trials",       path: "/system/billing/trials",       label: "Trial System"      },
     ],
   },
   {
@@ -119,7 +156,26 @@ export const NAV: NavItem[] = [
       { id: "support-chat", path: "/system/support/chat", label: "Chat Panel" },
     ],
   },
-  // API module moved into Settings → Developer section
+  {
+    id: "devtools-g",
+    label: "Dev Tools",
+    icon: FlaskConical,
+    children: [
+      { id: "dev-docs",       path: "/developer/docs",       label: "SDK Documentation"   },
+      { id: "dev-playground", path: "/developer/playground", label: "API Playground"      },
+      { id: "dev-sandbox",    path: "/developer/sandbox",    label: "Sandbox Environment" },
+    ],
+  },
+  // {
+  //   id: "developer-api-g",
+  //   label: "API Module",
+  //   icon: Code2,
+  //   children: [
+  //     { id: "api-keys", path: "/developer/api", label: "API Keys" },
+  //     { id: "api-logs", path: "/developer/api/logs", label: "API Logs" },
+  //     { id: "api-webhooks", path: "/developer/api/webhooks", label: "Webhook Support" },
+  //   ],
+  // },
   // {
   //   id: "settings-g",
   //   label: "Advanced Settings",
@@ -130,6 +186,24 @@ export const NAV: NavItem[] = [
   //     { id: "settings-smtp", path: "/system/settings/smtp", label: "SMTP Settings" },
   //   ],
   // },
+
+  // { sec: "Team Collaboration" },
+  // {
+  //   id: "team-g",
+  //   label: "Team",
+  //   icon: UsersRound,
+  //   children: [
+  //     { id: "team-workspaces", path: "/team/workspaces", label: "Workspaces" },
+  //     { id: "team-permissions", path: "/team/permissions", label: "Permissions" },
+  //     { id: "team-projects", path: "/team/projects", label: "Shared Projects" },
+  //     { id: "team-comments", path: "/team/comments", label: "Mentions & Comments" },
+  //   ],
+  // },
+
+  // { sec: "Advanced UI" },
+  // { id: "calendar", path: "/calendar", label: "Calendar", icon: CalendarDays },
+  // { id: "chat", path: "/chat", label: "Chat", icon: MessageSquare },
+  // { id: "kanban", path: "/kanban", label: "Kanban Board", icon: LayoutDashboard },
 
   { sec: "Components" },
   {
@@ -172,6 +246,9 @@ export const NAV: NavItem[] = [
       { id: "ui-alert", path: "/ui-components/alert", label: "Alert" },
       { id: "ui-buttons", path: "/ui-components/buttons", label: "Buttons" },
       { id: "modals", path: "/modals", label: "Modals" },
+      { id: "calendar", path: "/calendar", label: "Calendar" },
+      { id: "chat", path: "/chat", label: "Chat" },
+      { id: "kanban", path: "/kanban", label: "Kanban Board" },
     ],
   },
 
@@ -195,10 +272,14 @@ export const NAV: NavItem[] = [
   },
   {
     id: "security-g",
-    label: "Advanced Auth",
+    label: "Advanced Security",
     icon: Shield,
     children: [
-      { id: "security-sessions", path: "/security/sessions", label: "Session Management" },
+      { id: "security-sessions",       path: "/security/sessions",         label: "Session Management" },
+      { id: "security-audit-logs",     path: "/security/audit-logs",       label: "Audit Logs"         },
+      { id: "security-ip",             path: "/security/ip-restrictions",  label: "IP Restrictions"    },
+      { id: "security-activity",       path: "/security/activity",         label: "Activity Tracking"  },
+      { id: "security-devices",        path: "/security/devices",          label: "Device Management"  },
     ],
   },
   {
@@ -258,6 +339,8 @@ export function getBreadcrumbGroup(pathname: string): string | undefined {
   if (pathname.startsWith("/system/support")) return "Support System";
   if (pathname.startsWith("/system/settings")) return "Advanced Settings";
   if (pathname.startsWith("/security/")) return "Advanced Auth";
+  if (pathname.startsWith("/team/")) return "Team";
+  if (pathname.startsWith("/ai/")) return "AI Features";
 
   return undefined;
 }
