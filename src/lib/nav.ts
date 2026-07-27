@@ -67,7 +67,7 @@ export const NAV: NavItem[] = [
   // { sec: "Reports" },
 
 
-  { sec: "Multi-Tenant" },
+  { sec: "Advance Features" },
   {
     id: "tenants-g",
     label: "Multi-Tenant",
@@ -89,17 +89,17 @@ export const NAV: NavItem[] = [
       { id: "wl-remove-branding", path: "/white-label/remove-branding",  label: "Remove Branding"  },
     ],
   },
-  {
-    id: "integrations-g",
-    label: "Integrations",
-    icon: Puzzle,
-    children: [
-      { id: "int-slack",    path: "/integrations/slack",             label: "Slack"             },
-      { id: "int-zapier",   path: "/integrations/zapier",            label: "Zapier"            },
-      { id: "int-whatsapp", path: "/integrations/whatsapp",          label: "WhatsApp API"      },
-      { id: "int-google",   path: "/integrations/google-workspace",  label: "Google Workspace"  },
-    ],
-  },
+  // {
+  //   id: "integrations-g",
+  //   label: "Integrations",
+  //   icon: Puzzle,
+  //   children: [
+  //     { id: "int-slack",    path: "/integrations/slack",             label: "Slack"             },
+  //     { id: "int-zapier",   path: "/integrations/zapier",            label: "Zapier"            },
+  //     { id: "int-whatsapp", path: "/integrations/whatsapp",          label: "WhatsApp API"      },
+  //     { id: "int-google",   path: "/integrations/google-workspace",  label: "Google Workspace"  },
+  //   ],
+  // },
   {
     id: "workflows-g",
     label: "Workflow Automation",
@@ -120,27 +120,27 @@ export const NAV: NavItem[] = [
       { id: "mon-performance", path: "/monitoring/performance", label: "Performance Analytics"},
     ],
   },
-  {
-    id: "enterprise-g",
-    label: "Enterprise Support",
-    icon: HeadphonesIcon,
-    children: [
-      { id: "ent-support",    path: "/enterprise/priority-support", label: "Priority Support"     },
-      { id: "ent-onboarding", path: "/enterprise/onboarding",       label: "Dedicated Onboarding" },
-      { id: "ent-migration",  path: "/enterprise/migration",        label: "Migration Tools"      },
-    ],
-  },
-  {
-    id: "enterprise-sec-g",
-    label: "Enterprise Security",
-    icon: ShieldAlert,
-    children: [
-      { id: "entsec-sso",      path: "/enterprise-security/sso",      label: "SSO Login"       },
-      { id: "entsec-ldap",     path: "/enterprise-security/ldap",     label: "LDAP Support"    },
-      { id: "entsec-rbac",     path: "/enterprise-security/rbac",     label: "Advanced RBAC"   },
-      { id: "entsec-policies", path: "/enterprise-security/policies", label: "Security Policies"},
-    ],
-  },
+  // {
+  //   id: "enterprise-g",
+  //   label: "Enterprise Support",
+  //   icon: HeadphonesIcon,
+  //   children: [
+  //     { id: "ent-support",    path: "/enterprise/priority-support", label: "Priority Support"     },
+  //     { id: "ent-onboarding", path: "/enterprise/onboarding",       label: "Dedicated Onboarding" },
+  //     { id: "ent-migration",  path: "/enterprise/migration",        label: "Migration Tools"      },
+  //   ],
+  // },
+  // {
+  //   id: "enterprise-sec-g",
+  //   label: "Enterprise Security",
+  //   icon: ShieldAlert,
+  //   children: [
+  //     { id: "entsec-sso",      path: "/enterprise-security/sso",      label: "SSO Login"       },
+  //     { id: "entsec-ldap",     path: "/enterprise-security/ldap",     label: "LDAP Support"    },
+  //     { id: "entsec-rbac",     path: "/enterprise-security/rbac",     label: "Advanced RBAC"   },
+  //     { id: "entsec-policies", path: "/enterprise-security/policies", label: "Security Policies"},
+  //   ],
+  // }  ,
 
   { sec: "Manage" },
   {
