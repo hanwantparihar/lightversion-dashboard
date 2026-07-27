@@ -1,27 +1,9 @@
 import {
-  LayoutDashboard,
-  BarChart3,
-  Users,
-  Settings,
-  ClipboardList,
-  Table2,
-  KeyRound,
-  Component,
-  BookOpen,
-  FileBarChart,
-  Briefcase,
-  CreditCard,
-  Shield,
-  FolderOpen,
-  Code2,
-  LifeBuoy,
-  Mail,
-  UsersRound,
-  CalendarDays,
-  MessageSquare,
-  FlaskConical,
-  Brain,
-  Sparkles,
+  LayoutDashboard, BarChart3, Users, Settings, ClipboardList,
+  Table2, KeyRound, Component, BookOpen, FileBarChart, Briefcase,
+  CreditCard, Shield, FolderOpen, Code2, LifeBuoy, Mail,
+  UsersRound, CalendarDays, MessageSquare, FlaskConical, Brain,
+  Sparkles, Building2, Tag, Puzzle, Workflow, MonitorDot, HeadphonesIcon, ShieldAlert,
   type LucideIcon,
 } from "lucide-react";
 
@@ -84,6 +66,81 @@ export const NAV: NavItem[] = [
 
   // { sec: "Reports" },
 
+
+  { sec: "Multi-Tenant" },
+  {
+    id: "tenants-g",
+    label: "Multi-Tenant",
+    icon: Building2,
+    children: [
+      { id: "tenants",           path: "/tenants",            label: "Tenant Management"   },
+      { id: "tenants-isolation", path: "/tenants/isolation",  label: "Workspace Isolation" },
+      { id: "tenants-billing",   path: "/tenants/billing",    label: "Tenant Billing"      },
+      { id: "tenants-analytics", path: "/tenants/analytics",  label: "Tenant Analytics"    },
+    ],
+  },
+  {
+    id: "white-label-g",
+    label: "White Label",
+    icon: Tag,
+    children: [
+      { id: "wl-branding",        path: "/white-label/branding",         label: "Custom Branding"  },
+      { id: "wl-domain",          path: "/white-label/domain",           label: "Custom Domain"    },
+      { id: "wl-remove-branding", path: "/white-label/remove-branding",  label: "Remove Branding"  },
+    ],
+  },
+  {
+    id: "integrations-g",
+    label: "Integrations",
+    icon: Puzzle,
+    children: [
+      { id: "int-slack",    path: "/integrations/slack",             label: "Slack"             },
+      { id: "int-zapier",   path: "/integrations/zapier",            label: "Zapier"            },
+      { id: "int-whatsapp", path: "/integrations/whatsapp",          label: "WhatsApp API"      },
+      { id: "int-google",   path: "/integrations/google-workspace",  label: "Google Workspace"  },
+    ],
+  },
+  {
+    id: "workflows-g",
+    label: "Workflow Automation",
+    icon: Workflow,
+    children: [
+      { id: "wf-builder",   path: "/workflows/builder",   label: "Automation Builder"  },
+      { id: "wf-triggers",  path: "/workflows/triggers",  label: "Trigger Actions"     },
+      { id: "wf-scheduled", path: "/workflows/scheduled", label: "Scheduled Workflows" },
+    ],
+  },
+  {
+    id: "monitoring-g",
+    label: "Monitoring",
+    icon: MonitorDot,
+    children: [
+      { id: "mon-servers",     path: "/monitoring/servers",     label: "Server Monitoring"    },
+      { id: "mon-errors",      path: "/monitoring/errors",      label: "Error Tracking"       },
+      { id: "mon-performance", path: "/monitoring/performance", label: "Performance Analytics"},
+    ],
+  },
+  {
+    id: "enterprise-g",
+    label: "Enterprise Support",
+    icon: HeadphonesIcon,
+    children: [
+      { id: "ent-support",    path: "/enterprise/priority-support", label: "Priority Support"     },
+      { id: "ent-onboarding", path: "/enterprise/onboarding",       label: "Dedicated Onboarding" },
+      { id: "ent-migration",  path: "/enterprise/migration",        label: "Migration Tools"      },
+    ],
+  },
+  {
+    id: "enterprise-sec-g",
+    label: "Enterprise Security",
+    icon: ShieldAlert,
+    children: [
+      { id: "entsec-sso",      path: "/enterprise-security/sso",      label: "SSO Login"       },
+      { id: "entsec-ldap",     path: "/enterprise-security/ldap",     label: "LDAP Support"    },
+      { id: "entsec-rbac",     path: "/enterprise-security/rbac",     label: "Advanced RBAC"   },
+      { id: "entsec-policies", path: "/enterprise-security/policies", label: "Security Policies"},
+    ],
+  },
 
   { sec: "Manage" },
   {
@@ -340,7 +397,27 @@ export function getBreadcrumbGroup(pathname: string): string | undefined {
   if (pathname.startsWith("/system/settings")) return "Advanced Settings";
   if (pathname.startsWith("/security/")) return "Advanced Auth";
   if (pathname.startsWith("/team/")) return "Team";
+  if (pathname.startsWith("/tenants")) return "Multi-Tenant";
+  if (pathname.startsWith("/white-label")) return "White Label";
+  if (pathname.startsWith("/integrations")) return "Integrations";
+  if (pathname.startsWith("/workflows"))   return "Workflow Automation";
+  if (pathname.startsWith("/monitoring"))  return "Monitoring";
+  if (pathname.startsWith("/enterprise"))         return "Enterprise Support";
+  if (pathname.startsWith("/enterprise-security")) return "Enterprise Security";
   if (pathname.startsWith("/ai/")) return "AI Features";
 
+  return undefined;
+}
+
+// Returns the path of the first child in the nav group that owns `pathname`.
+// Used by the breadcrumb to make the group segment a clickable link.
+export function getGroupPath(pathname: string): string | undefined {
+  for (const item of NAV) {
+    if (!("children" in item) || !item.children) continue;
+    const owns = item.children.some(
+      (c) => pathname === c.path || pathname.startsWith(c.path + "/")
+    );
+    if (owns) return item.children[0].path;
+  }
   return undefined;
 }

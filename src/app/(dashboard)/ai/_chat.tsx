@@ -37,16 +37,16 @@ export function ChatView({
             <div className="px-5 h-[52px] border-b border-border flex items-center justify-between shrink-0">
                 <div className="flex items-center gap-2">
                     <Sparkles size={15} className="text-primary" />
-                    <span className="font-bold text-[15px]">{convo.title}</span>
-                    {convo.tag && (
+                    <span className="font-bold text-[15px]">{convo?.title}</span>
+                    {convo?.tag && (
                         <span
                             className="text-[11px] px-[7px] py-0.5 rounded-full font-bold"
                             style={{
-                                background: (convo.tag in TAG_COLORS ? TAG_COLORS[convo.tag] : "#888") + "22",
-                                color: convo.tag in TAG_COLORS ? TAG_COLORS[convo.tag] : "#888",
+                                background: (convo?.tag in TAG_COLORS ? TAG_COLORS[convo?.tag] : "#888") + "22",
+                                color: convo?.tag in TAG_COLORS ? TAG_COLORS[convo?.tag] : "#888",
                             }}
                         >
-                            {convo.tag}
+                            {convo?.tag}
                         </span>
                     )}
                 </div>
@@ -55,7 +55,7 @@ export function ChatView({
 
             {/* Messages */}
             <div className="flex-1 overflow-y-auto px-[12%] py-6">
-                {convo.messages.length === 0 ? (
+                {convo?.messages.length === 0 ? (
                     <div className="text-center max-w-[480px] mx-auto mt-[50px]">
                         <div className="w-[52px] h-[52px] rounded-[14px] bg-primary/10 flex items-center justify-center mx-auto mb-[14px]">
                             <Sparkles size={24} className="text-primary" />
@@ -77,7 +77,7 @@ export function ChatView({
                         </div>
                     </div>
                 ) : (
-                    convo.messages.map((msg) => (
+                    convo?.messages.map((msg) => (
                         <MsgBubble
                             key={msg.id}
                             msg={msg}

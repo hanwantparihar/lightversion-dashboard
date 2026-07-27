@@ -34,10 +34,10 @@ import { useAlert } from "@/contexts/alert-context";
 const ICONS: Record<AlertVariant, ReactNode> = {
   primary: <Info size={16} />,
   success: <CheckCircle2 size={16} />,
-  danger:  <XCircle size={16} />,
+  danger: <XCircle size={16} />,
   warning: <AlertTriangle size={16} />,
-  info:    <Info size={16} />,
-  dark:    <ShieldCheck size={16} />,
+  info: <Info size={16} />,
+  dark: <ShieldCheck size={16} />,
 };
 
 function SectionCard({
@@ -76,19 +76,19 @@ const DISMISSIBLE: {
   variant: AlertVariant;
   message: string;
 }[] = [
-  { id: "d1", variant: "success", message: "Your profile has been updated successfully!" },
-  { id: "d2", variant: "danger",  message: "Failed to upload file. Maximum size is 10MB." },
-  { id: "d3", variant: "warning", message: "Your session will expire in 5 minutes. Save your work." },
-  { id: "d4", variant: "info",    message: "Tip: You can use keyboard shortcuts for faster navigation." },
-];
+    { id: "d1", variant: "success", message: "Your profile has been updated successfully!" },
+    { id: "d2", variant: "danger", message: "Failed to upload file. Maximum size is 10MB." },
+    { id: "d3", variant: "warning", message: "Your session will expire in 5 minutes. Save your work." },
+    { id: "d4", variant: "info", message: "Tip: You can use keyboard shortcuts for faster navigation." },
+  ];
 
 const TOAST_MESSAGES: Record<AlertVariant, string> = {
   primary: "Primary notification for the user.",
   success: "Operation completed successfully!",
-  danger:  "An error occurred. Please try again.",
+  danger: "An error occurred. Please try again.",
   warning: "Warning: Your session is about to expire.",
-  info:    "Info: A new update is available.",
-  dark:    "System maintenance message.",
+  info: "Info: A new update is available.",
+  dark: "System maintenance message.",
 };
 
 // ─── Page ─────────────────────────────────────────────────────────────────────
@@ -97,9 +97,9 @@ export default function AlertPage() {
   const { showToast } = useAlert();
   const [dismissed, setDismissed] = useState<Set<string>>(new Set());
 
-  const dismiss       = (id: string) => setDismissed((p) => new Set([...p, id]));
-  const resetSection  = ()           => setDismissed(new Set());
-  const resetAll      = ()           => setDismissed(new Set());
+  const dismiss = (id: string) => setDismissed((p) => new Set(Array.from(p).concat(id)));
+  const resetSection = () => setDismissed(new Set());
+  const resetAll = () => setDismissed(new Set());
 
   const allDismissed = DISMISSIBLE.every((a) => dismissed.has(a.id));
 
@@ -107,12 +107,12 @@ export default function AlertPage() {
     <div className="space-y-6">
 
       {/* ── Page-level Reset All ─────────────────────────────────────── */}
-      <div className="flex justify-end">
+      {/* <div className="flex justify-end">
         <Button variant="outline" size="sm" onClick={resetAll}>
           <RefreshCw size={13} />
           Reset All
         </Button>
-      </div>
+      </div> */}
 
       {/* ── 1. Default Alerts ────────────────────────────────────────── */}
       <SectionCard

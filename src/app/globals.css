@@ -167,7 +167,7 @@
   }
 
   .g2 {
-    @apply gap-[18px];
+    @apply gap-[10px];
   }
 
   .g3 {
@@ -685,8 +685,15 @@
 
 /* ─── Floating button pulse animation ──────────────────────────────────────── */
 @keyframes tc-pulse {
-  0%, 100% { box-shadow: 0 0 0 0 hsl(var(--primary) / 0.4); }
-  50%       { box-shadow: 0 0 0 10px hsl(var(--primary) / 0); }
+
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 hsl(var(--primary) / 0.4);
+  }
+
+  50% {
+    box-shadow: 0 0 0 10px hsl(var(--primary) / 0);
+  }
 }
 
 /* ─── Sidebar Color Themes ──────────────────────────────────────────────────── */
@@ -696,7 +703,10 @@
   background: hsl(var(--background)) !important;
   border-right: 1px solid hsl(var(--border));
 }
-[data-sidebar-color="light"] aside .logo-text { color: hsl(var(--foreground)) !important; }
+
+[data-sidebar-color="light"] aside .logo-text {
+  color: hsl(var(--foreground)) !important;
+}
 
 /* Solid dark sidebar */
 [data-sidebar-color="dark"] aside {
@@ -707,6 +717,7 @@
 [data-sidebar-color="primary"] aside {
   background: hsl(var(--primary)) !important;
 }
+
 [data-sidebar-color="primary"] aside [class*="text-\[#aebfd6\]"],
 [data-sidebar-color="primary"] aside [class*="text-\[#6f82a0\]"] {
   color: hsl(var(--primary-foreground) / 0.7) !important;
@@ -729,6 +740,7 @@
   backdrop-filter: blur(20px) saturate(160%);
   border-right: 1px solid rgba(255, 255, 255, 0.12) !important;
 }
+
 .dark [data-sidebar-color="glassmorphism"] aside {
   background: rgba(0, 0, 0, 0.3) !important;
 }
@@ -780,17 +792,21 @@
 [data-density="compact"] main {
   padding: 0.75rem !important;
 }
-[data-density="compact"] main > div:first-child {
+
+[data-density="compact"] main>div:first-child {
   margin-bottom: 0.75rem !important;
 }
+
 [data-density="compact"] .card,
 [data-density="compact"] [class~="p-5"],
 [data-density="compact"] [class~="p-6"] {
   padding: 0.75rem !important;
 }
+
 [data-density="compact"] .g2 {
   gap: 0.625rem !important;
 }
+
 [data-density="compact"] header {
   height: 54px !important;
 }
@@ -798,12 +814,15 @@
 [data-density="spacious"] main {
   padding: 2rem !important;
 }
-[data-density="spacious"] main > div:first-child {
+
+[data-density="spacious"] main>div:first-child {
   margin-bottom: 1.75rem !important;
 }
+
 [data-density="spacious"] .g2 {
   gap: 1.5rem !important;
 }
+
 [data-density="spacious"] header {
   height: 80px !important;
 }
@@ -890,21 +909,61 @@
 
 /* ─── Scrollbar Styles ───────────────────────────────────────────────────────── */
 
-[data-scrollbar="thin"] ::-webkit-scrollbar { width: 4px; height: 4px; }
-[data-scrollbar="thin"] ::-webkit-scrollbar-track { background: transparent; }
-[data-scrollbar="thin"] ::-webkit-scrollbar-thumb { background: hsl(var(--border)); border-radius: 2px; }
+[data-scrollbar="thin"] ::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
 
-[data-scrollbar="rounded"] ::-webkit-scrollbar { width: 8px; height: 8px; }
-[data-scrollbar="rounded"] ::-webkit-scrollbar-track { background: hsl(var(--muted)); border-radius: 8px; }
-[data-scrollbar="rounded"] ::-webkit-scrollbar-thumb { background: hsl(var(--muted-foreground) / 0.4); border-radius: 8px; }
+[data-scrollbar="thin"] ::-webkit-scrollbar-track {
+  background: transparent;
+}
 
-[data-scrollbar="hidden"] ::-webkit-scrollbar { display: none; }
-[data-scrollbar="hidden"] * { scrollbar-width: none; -ms-overflow-style: none; }
+[data-scrollbar="thin"] ::-webkit-scrollbar-thumb {
+  background: hsl(var(--border));
+  border-radius: 2px;
+}
 
-[data-scrollbar="colored"] ::-webkit-scrollbar { width: 6px; height: 6px; }
-[data-scrollbar="colored"] ::-webkit-scrollbar-track { background: hsl(var(--primary) / 0.05); }
-[data-scrollbar="colored"] ::-webkit-scrollbar-thumb { background: hsl(var(--primary) / 0.4); border-radius: 3px; }
-[data-scrollbar="colored"] ::-webkit-scrollbar-thumb:hover { background: hsl(var(--primary) / 0.7); }
+[data-scrollbar="rounded"] ::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+[data-scrollbar="rounded"] ::-webkit-scrollbar-track {
+  background: hsl(var(--muted));
+  border-radius: 8px;
+}
+
+[data-scrollbar="rounded"] ::-webkit-scrollbar-thumb {
+  background: hsl(var(--muted-foreground) / 0.4);
+  border-radius: 8px;
+}
+
+[data-scrollbar="hidden"] ::-webkit-scrollbar {
+  display: none;
+}
+
+[data-scrollbar="hidden"] * {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+[data-scrollbar="colored"] ::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+[data-scrollbar="colored"] ::-webkit-scrollbar-track {
+  background: hsl(var(--primary) / 0.05);
+}
+
+[data-scrollbar="colored"] ::-webkit-scrollbar-thumb {
+  background: hsl(var(--primary) / 0.4);
+  border-radius: 3px;
+}
+
+[data-scrollbar="colored"] ::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--primary) / 0.7);
+}
 
 /* ─── Animation ──────────────────────────────────────────────────────────────── */
 
@@ -916,28 +975,54 @@
   transition-duration: 0.01ms !important;
 }
 
-[data-animation="fast"] * { --tc-speed: 0.5; }
-[data-animation="fast"] .animate-fade-in { animation-duration: 0.15s; }
+[data-animation="fast"] * {
+  --tc-speed: 0.5;
+}
 
-[data-animation="slow"] * { --tc-speed: 2; }
-[data-animation="slow"] .animate-fade-in { animation-duration: 0.8s; }
+[data-animation="fast"] .animate-fade-in {
+  animation-duration: 0.15s;
+}
+
+[data-animation="slow"] * {
+  --tc-speed: 2;
+}
+
+[data-animation="slow"] .animate-fade-in {
+  animation-duration: 0.8s;
+}
 
 /* ─── Page Transitions ───────────────────────────────────────────────────────── */
 
 [data-transition="slide"] .animate-fade-in {
   animation-name: tc-slide-in;
 }
+
 @keyframes tc-slide-in {
-  from { opacity: 0; transform: translateX(16px); }
-  to   { opacity: 1; transform: translateX(0); }
+  from {
+    opacity: 0;
+    transform: translateX(16px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
 [data-transition="scale"] .animate-fade-in {
   animation-name: tc-scale-in;
 }
+
 @keyframes tc-scale-in {
-  from { opacity: 0; transform: scale(0.97); }
-  to   { opacity: 1; transform: scale(1); }
+  from {
+    opacity: 0;
+    transform: scale(0.97);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 [data-transition="none"] .animate-fade-in {
@@ -946,10 +1031,21 @@
 
 /* ─── Content Width ──────────────────────────────────────────────────────────── */
 
-[data-content-width="1140px"] main > * { max-width: 1140px; }
-[data-content-width="1280px"] main > * { max-width: 1280px; }
-[data-content-width="1440px"] main > * { max-width: 1440px; }
-[data-content-width="1600px"] main > * { max-width: 1600px; }
+[data-content-width="1140px"] main>* {
+  max-width: 1140px;
+}
+
+[data-content-width="1280px"] main>* {
+  max-width: 1280px;
+}
+
+[data-content-width="1440px"] main>* {
+  max-width: 1440px;
+}
+
+[data-content-width="1600px"] main>* {
+  max-width: 1600px;
+}
 
 [data-layout="boxed"] .flex.min-h-screen {
   max-width: 1440px;
@@ -968,6 +1064,7 @@
   --foreground: 215 50% 5%;
   --background: 0 0% 100%;
 }
+
 .dark.a11y-contrast {
   --foreground: 0 0% 100%;
   --background: 0 0% 0%;
@@ -995,6 +1092,7 @@
 [data-loader] #tc-loader {
   display: flex !important;
 }
+
 #tc-loader {
   display: none;
   position: fixed;
@@ -1015,7 +1113,12 @@
   border-radius: 50%;
   animation: tc-spin 0.7s linear infinite;
 }
-@keyframes tc-spin { to { transform: rotate(360deg); } }
+
+@keyframes tc-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
 
 /* Loader: pulse */
 [data-loader="pulse"] .tc-loader-inner {
@@ -1025,9 +1128,19 @@
   background: hsl(var(--primary));
   animation: tc-pulse-anim 1s ease-in-out infinite;
 }
+
 @keyframes tc-pulse-anim {
-  0%, 100% { transform: scale(0.8); opacity: 0.6; }
-  50%       { transform: scale(1.2); opacity: 1; }
+
+  0%,
+  100% {
+    transform: scale(0.8);
+    opacity: 0.6;
+  }
+
+  50% {
+    transform: scale(1.2);
+    opacity: 1;
+  }
 }
 
 /* Loader: bar */
@@ -1036,6 +1149,7 @@
   background: transparent;
   backdrop-filter: none;
 }
+
 [data-loader="bar"] .tc-loader-inner {
   position: fixed;
   top: 0;
@@ -1045,8 +1159,20 @@
   background: hsl(var(--primary));
   animation: tc-bar 1.2s ease-in-out infinite;
 }
+
 @keyframes tc-bar {
-  0%   { width: 0; opacity: 1; }
-  70%  { width: 85%; opacity: 1; }
-  100% { width: 100%; opacity: 0; }
+  0% {
+    width: 0;
+    opacity: 1;
+  }
+
+  70% {
+    width: 85%;
+    opacity: 1;
+  }
+
+  100% {
+    width: 100%;
+    opacity: 0;
+  }
 }
