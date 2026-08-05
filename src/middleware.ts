@@ -14,8 +14,8 @@ const PUBLIC_PATHS = [
 // Auth pages — authenticated users should not see these
 const AUTH_ONLY_PATHS = [
   "/auth/login",
-  "/auth/register",
-  "/auth/forgot-password",
+  // "/auth/register",
+  // "/auth/forgot-password",
 ];
 
 export function middleware(request: NextRequest) {

@@ -34,6 +34,8 @@ type UserEditFormProps = {
   onCancel?: () => void;
   mode?: "create" | "edit";
   roleOptions?: string[];
+  errors?: Partial<Record<keyof AppUser, string>>;
+  touched?: Partial<Record<keyof AppUser, boolean>>;
 };
 
 const AVATAR_MAX_BYTES = 5 * 1024 * 1024;
@@ -75,12 +77,18 @@ export function UserEditForm({
   onCancel,
   mode = "edit",
   roleOptions = [],
+  errors = {},
+  touched = {},
 }: UserEditFormProps) {
   const isCreate = mode === "create";
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [uploadError, setUploadError] = useState("");
   const update = <K extends keyof AppUser>(key: K, value: AppUser[K]) => {
     onChange({ ...user, [key]: value });
+  };
+
+  const getError = (field: keyof AppUser) => {
+    return touched[field] && errors[field] ? errors[field] : "";
   };
 
   const openFilePicker = () => fileInputRef.current?.click();
@@ -127,19 +135,19 @@ export function UserEditForm({
         />
         <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center gap-4">
-            <div className="relative shrink-0">
+            <div className="group relative shrink-0 cursor-pointer" onClick={openFilePicker}>
               <div className="scale-125">
                 <AvatarInitials
                   bg={user.avatarColor}
                   initials={user.initials}
                   src={user.avatarUrl}
-                  className="h-[42px] w-[42px] rounded-xl"
+                  className="h-[42px] w-[42px] rounded-xl transition-opacity group-hover:opacity-70"
                 />
               </div>
               <Button
                 type="button"
                 size="icon-sm"
-                className="absolute -bottom-1 -right-1 rounded-full border-2 border-background shadow-md"
+                className="absolute -bottom-1 -right-1 rounded-full border-2 border-background shadow-md opacity-0 transition-opacity group-hover:opacity-100"
                 aria-label="Change photo"
                 onClick={openFilePicker}
               >
@@ -200,6 +208,11 @@ export function UserEditForm({
                   className="pl-10"
                 />
               </div>
+              {getError("firstName") && (
+                <p className="mt-1 text-xs font-medium text-destructive">
+                  {getError("firstName")}
+                </p>
+              )}
             </div>
             <div className="fm">
               <Label>Last name</Label>
@@ -207,6 +220,11 @@ export function UserEditForm({
                 value={user.lastName}
                 onChange={(e) => update("lastName", e.target.value)}
               />
+              {getError("lastName") && (
+                <p className="mt-1 text-xs font-medium text-destructive">
+                  {getError("lastName")}
+                </p>
+              )}
             </div>
           </div>
           <div className="f2">
@@ -224,6 +242,11 @@ export function UserEditForm({
                   className="pl-10"
                 />
               </div>
+              {getError("email") && (
+                <p className="mt-1 text-xs font-medium text-destructive">
+                  {getError("email")}
+                </p>
+              )}
             </div>
             <div className="fm">
               <Label>Phone number</Label>
@@ -239,6 +262,11 @@ export function UserEditForm({
                   className="pl-10"
                 />
               </div>
+              {getError("phone") && (
+                <p className="mt-1 text-xs font-medium text-destructive">
+                  {getError("phone")}
+                </p>
+              )}
             </div>
           </div>
         </FormSection>
@@ -299,6 +327,11 @@ export function UserEditForm({
               rows={3}
               placeholder="Short description about this user…"
             />
+            {getError("bio") && (
+              <p className="mt-1 text-xs font-medium text-destructive">
+                {getError("bio")}
+              </p>
+            )}
           </div>
         </FormSection>
 

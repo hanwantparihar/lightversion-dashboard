@@ -475,12 +475,13 @@ const SECTIONS: Section[] = [
 // ─── Main ThemeCustomizer Component ─────────────────────────────────────────
 
 export function ThemeCustomizer() {
-  const { isReady } = useThemeCustomizer()
+  const { isReady, resetSettings } = useThemeCustomizer()
 
   const [mounted, setMounted] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
   const [search, setSearch] = useState('')
   const [openSections, setOpenSections] = useState<Set<string>>(new Set(['appearance']))
+  const [showResetDialog, setShowResetDialog] = useState(false)
 
   useEffect(() => { setMounted(true) }, [])
 
@@ -607,12 +608,64 @@ export function ThemeCustomizer() {
         </div>
 
         {/* Footer */}
-        <div className='shrink-0 border-t border-border bg-muted/40 px-5 py-3'>
+        <div className='shrink-0 border-t border-border bg-muted/40 px-5 py-3 space-y-2.5'>
+          <button
+            type='button'
+            onClick={() => setShowResetDialog(true)}
+            className='w-full rounded-lg bg-destructive/10 px-4 py-2.5 text-[13px] font-bold text-destructive transition-all hover:bg-destructive/20 hover:shadow-sm focus:outline-none focus:ring-2 focus:ring-destructive/40'
+          >
+            Reset to Default Theme
+          </button>
           <p className='text-center text-[11px] text-muted-foreground'>
             Changes apply instantly and save automatically
           </p>
         </div>
       </div>
+
+      {/* Reset Confirmation Dialog */}
+      {showResetDialog && (
+        <>
+          <div
+            className='fixed inset-0 z-[75] bg-black/50 backdrop-blur-sm transition-opacity'
+            onClick={() => setShowResetDialog(false)}
+            aria-hidden
+          />
+          <div
+            role='dialog'
+            aria-modal='true'
+            aria-labelledby='reset-dialog-title'
+            className='fixed left-1/2 top-1/2 z-[76] w-[90%] max-w-md -translate-x-1/2 -translate-y-1/2 rounded-2xl border border-border bg-background shadow-2xl'
+          >
+            <div className='border-b border-border px-6 py-5'>
+              <h3 id='reset-dialog-title' className='text-[15px] font-extrabold tracking-tight text-foreground'>
+                Reset Theme Settings
+              </h3>
+              <p className='mt-1.5 text-[13px] text-muted-foreground'>
+                Are you sure you want to reset all theme customizations to their default values? This action cannot be undone.
+              </p>
+            </div>
+            <div className='flex gap-3 px-6 py-5'>
+              <button
+                type='button'
+                onClick={() => setShowResetDialog(false)}
+                className='flex-1 rounded-lg border-2 border-border bg-card px-4 py-2.5 text-[13px] font-bold text-foreground transition-all hover:bg-muted focus:outline-none focus:ring-2 focus:ring-ring'
+              >
+                Cancel
+              </button>
+              <button
+                type='button'
+                onClick={() => {
+                  resetSettings()
+                  setShowResetDialog(false)
+                }}
+                className='flex-1 rounded-lg bg-destructive px-4 py-2.5 text-[13px] font-bold text-destructive-foreground transition-all hover:bg-destructive/90 focus:outline-none focus:ring-2 focus:ring-destructive'
+              >
+                Reset Theme
+              </button>
+            </div>
+          </div>
+        </>
+      )}
     </>,
     document.body,
   )
