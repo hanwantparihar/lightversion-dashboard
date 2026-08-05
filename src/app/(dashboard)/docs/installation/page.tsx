@@ -218,13 +218,15 @@ cd nexora-ai`}</CodeBlock>
               <CodeBlock>{`npm run dev
 # or
 pnpm dev`}</CodeBlock>
-              <div className="mt-3 flex items-center gap-2 rounded-lg border border-success/30 bg-success/5 px-4 py-3 text-sm font-semibold text-success">
+              <div className="mt-3 flex flex-wrap items-center gap-2 rounded-lg border border-success/30 bg-success/5 px-4 py-3 text-sm font-semibold text-success">
                 <CheckCircle2 size={16} className="shrink-0" />
-                Open{" "}
-                <span className="font-mono text-xs font-bold">
-                  http://localhost:3000
-                </span>{" "}
-                in your browser — the dashboard is live.
+                <span className="flex flex-wrap items-center gap-1">
+                  <span>Open</span>
+                  <span className="font-mono text-xs font-bold break-all">
+                    http://localhost:3000
+                  </span>
+                  <span>in your browser — the dashboard is live.</span>
+                </span>
               </div>
             </Step>
 
@@ -254,33 +256,93 @@ npm run start`}</CodeBlock>
         </CardHeader>
         <CardContent>
           <pre className="overflow-x-auto rounded-lg bg-slate-900 p-5 text-[12.5px] leading-7 text-slate-300 dark:bg-slate-950">
-{`nexora-ai/
+            {`nexora-ai/
 ├── src/
 │   ├── app/
-│   │   ├── (auth)/               # Auth layout + pages (login, register…)
-│   │   │   ├── layout.tsx        # Split-screen auth layout
-│   │   │   └── auth/             # /auth/login  /auth/register …
-│   │   └── (dashboard)/          # Main app layout + all dashboard pages
-│   │       ├── layout.tsx        # Shell with sidebar + topbar
-│   │       └── page.tsx          # Dashboard home  →  /
+│   │   ├── (auth)/                    # Auth layout + pages
+│   │   │   ├── layout.tsx             # Split-screen auth layout
+│   │   │   └── auth/                  # /auth/login, /auth/register, /auth/otp…
+│   │   ├── (dashboard)/               # Main app layout + all dashboard pages
+│   │   │   ├── layout.tsx             # Shell with sidebar + topbar
+│   │   │   ├── page.tsx               # Dashboard home → /
+│   │   │   ├── analytics/             # Analytics & reports
+│   │   │   ├── charts/                # Chart demos (line-bar, advanced, widgets)
+│   │   │   ├── crm/                   # CRM (leads, pipeline, tasks, notes)
+│   │   │   ├── developer/             # API keys, logs, webhooks
+│   │   │   ├── docs/                  # Documentation (installation, basic-setup)
+│   │   │   ├── file-manager/          # File manager & gallery
+│   │   │   ├── forms/                 # Form layouts, wizard, file-upload
+│   │   │   ├── kanban/                # Kanban board
+│   │   │   ├── manage/                # Customers, invoices, products, messages
+│   │   │   ├── modals/                # Modal examples
+│   │   │   ├── notifications/         # Notifications page
+│   │   │   ├── orders/                # Orders management
+│   │   │   ├── reports/               # Revenue & user reports
+│   │   │   ├── security/              # Sessions management
+│   │   │   ├── system/                # Settings, billing, coupons
+│   │   │   ├── tables/                # Table examples
+│   │   │   ├── ui-components/         # UI component showcase
+│   │   │   └── users/                 # User management (list, create, edit, roles)
+│   │   ├── globals.css                # Global styles + CSS variables
+│   │   ├── layout.tsx                 # Root layout (ThemeProvider)
+│   │   └── not-found.tsx              # 404 page
 │   │
 │   ├── components/
-│   │   ├── ui/                   # Reusable primitives (Button, Alert, Card…)
-│   │   ├── layout/               # Sidebar, Topbar
-│   │   ├── common/               # Shared page helpers (Placeholder…)
-│   │   └── providers/            # ThemeProvider, context wrappers
+│   │   ├── ui/                        # Primitives (Button, Alert, Card, Input…)
+│   │   ├── layout/                    # Sidebar, Topbar, Shell, NotificationMenu
+│   │   ├── common/                    # AvatarInitials, PageLayout, Placeholder
+│   │   ├── providers/                 # ThemeProvider
+│   │   ├── theme-customizer/          # Theme customization UI
+│   │   ├── charts/                    # Chart components
+│   │   ├── dashboard/                 # Dashboard widgets
+│   │   ├── tables/                    # Data tables (users, products, orders…)
+│   │   ├── users/                     # User forms & role management
+│   │   ├── crm/                       # CRM modals (leads, tasks)
+│   │   ├── kanban/                    # Kanban board component
+│   │   ├── billing/                   # Billing plan card
+│   │   └── support/                   # Support ticket modal
 │   │
 │   ├── config/
-│   │   ├── colors.ts             # ← Brand colors — change primary here
-│   │   ├── nav.ts                # ← Sidebar navigation tree
-│   │   └── site.ts               # Site name, description, links
+│   │   ├── colors.ts                  # ← Brand colors — change primary here
+│   │   └── site.ts                    # Site name, description, metadata
 │   │
-│   └── lib/
-│       └── utils.ts              # Tailwind cn() helper
+│   ├── contexts/
+│   │   ├── auth-context.tsx           # Authentication state
+│   │   ├── users-context.tsx          # User management state
+│   │   ├── roles-context.tsx          # Roles & permissions
+│   │   ├── crm-context.tsx            # CRM data (leads, tasks)
+│   │   ├── support-context.tsx        # Support tickets
+│   │   ├── alert-context.tsx          # Alert notifications
+│   │   └── theme-customizer-context.tsx  # Theme settings
+│   │
+│   ├── hooks/
+│   │   ├── use-mobile.ts              # Mobile breakpoint detection
+│   │   └── use-sidebar.ts             # Sidebar state management
+│   │
+│   ├── lib/
+│   │   ├── utils.ts                   # Tailwind cn() helper
+│   │   ├── auth.ts                    # Auth utilities
+│   │   ├── current-user.ts            # Current user data
+│   │   ├── nav.ts                     # ← Sidebar navigation tree
+│   │   ├── users-data.ts              # Mock user data
+│   │   ├── roles-data.ts              # Mock roles data
+│   │   ├── crm-data.ts                # Mock CRM data
+│   │   ├── kanban-data.ts             # Mock kanban data
+│   │   ├── billing-data.ts            # Billing & subscription data
+│   │   ├── reports-data.ts            # Reports & analytics data
+│   │   └── export.ts                  # CSV/Excel export utilities
+│   │
+│   ├── types/
+│   │   └── css.d.ts                   # CSS module type definitions
+│   │
+│   └── middleware.ts                  # Next.js middleware (auth routing)
 │
-├── tailwind.config.ts            # Tailwind + CSS variable token mapping
-├── globals.css                   # CSS custom properties (neutral tokens)
-└── .env.local                    # Environment variables (local only)`}
+├── public/                             # Static assets
+├── tailwind.config.ts                  # Tailwind + CSS variable mapping
+├── next.config.js                      # Next.js configuration
+├── tsconfig.json                       # TypeScript configuration
+├── package.json                        # Dependencies & scripts
+└── .env.local                          # Environment variables (local only)`}
           </pre>
         </CardContent>
       </Card>
@@ -347,7 +409,7 @@ npm run start`}</CodeBlock>
           <div className="grid gap-3 sm:grid-cols-2">
             {[
               {
-                name: "Next.js 14",
+                name: "Next.js 16",
                 role: "Framework",
                 desc: "App Router, server components, file-based routing",
                 color: "bg-slate-800 text-white",
