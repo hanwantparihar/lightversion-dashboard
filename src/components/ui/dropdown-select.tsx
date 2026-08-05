@@ -72,7 +72,7 @@ export function DropdownSelect({
 
       <SelectPrimitive.Portal>
         <SelectPrimitive.Content
-          className="z-50 min-w-[var(--radix-select-trigger-width)] overflow-hidden rounded-lg border border-border bg-popover text-popover-foreground shadow-md animate-in fade-in-0 zoom-in-95"
+          className="z-[100] min-w-[var(--radix-select-trigger-width)] overflow-hidden rounded-lg border border-border bg-popover text-popover-foreground shadow-md animate-in fade-in-0 zoom-in-95"
           position="popper"
           sideOffset={4}
         >

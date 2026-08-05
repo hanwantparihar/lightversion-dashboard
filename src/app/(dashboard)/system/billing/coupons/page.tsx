@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
-import { Tag, Plus, Copy, ToggleLeft, ToggleRight, Trash2, Check } from "lucide-react";
-import { Card, CardHeader, CardContent, CardTitle, CardDescription, Button, Input, Label } from "@/components/ui";
+import { Tag, Plus, Copy, Trash2, Check } from "lucide-react";
+import { Card, CardHeader, CardContent, CardTitle, CardDescription, Button, Input, Label, Switch } from "@/components/ui";
 import { PageStack } from "@/components";
 import { COUPONS, type Coupon } from "@/lib/advanced-billing-data";
 
@@ -119,9 +119,10 @@ export default function CouponsPage() {
                                         <button onClick={() => copy(c.code)} style={{ background: "none", border: "none", cursor: "pointer", color: "var(--mt-fg)" }} title="Copy code">
                                             {copied === c.code ? <Check size={15} style={{ color: "#10b981" }} /> : <Copy size={15} />}
                                         </button>
-                                        <button onClick={() => toggle(c.id)} style={{ background: "none", border: "none", cursor: "pointer", color: c.active ? "#10b981" : "var(--mt-fg)" }} title={c.active ? "Disable" : "Enable"}>
-                                            {c.active ? <ToggleRight size={22} /> : <ToggleLeft size={22} />}
-                                        </button>
+                                        <Switch
+                                            checked={c.active}
+                                            onChange={() => toggle(c.id)}
+                                        />
                                         <button onClick={() => remove(c.id)} style={{ background: "none", border: "none", cursor: "pointer", color: "var(--mt-fg)" }}>
                                             <Trash2 size={15} />
                                         </button>

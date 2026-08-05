@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect, useCallback } from "react";
+import { cn } from "@/lib/utils";
 import { AiSidebar } from "./_sidebar";
 import { ChatView } from "./_chat";
 import { PromptsView } from "./_prompts";
@@ -19,6 +20,7 @@ export default function AiWorkspacePage() {
     // ── Global ─────────────────────────────────────────────────────────────────
     const [view, setView] = useState<View>("chat");
     const [modelId, setModelId] = useState<string>(MODELS[0].id);
+    const [sidebarOpen, setSidebarOpen] = useState(false);
 
     // ── Chat ───────────────────────────────────────────────────────────────────
     const [convos, setConvos] = useState<Convo[]>(SEED_CONVOS);
@@ -28,8 +30,11 @@ export default function AiWorkspacePage() {
     const [copiedId, setCopiedId] = useState<string | null>(null);
     const [chatSearch, setChatSearch] = useState("");
     const [files, setFiles] = useState<UploadedFile[]>([]);
+    const [editingMsgId, setEditingMsgId] = useState<string | null>(null);
+    const [editText, setEditText] = useState("");
     const bottomRef = useRef<HTMLDivElement>(null);
     const inputRef = useRef<HTMLTextAreaElement>(null);
+    const fileInputRef = useRef<HTMLInputElement>(null);
 
     // ── Prompts ────────────────────────────────────────────────────────────────
     const [templates, setTemplates] = useState<PromptTemplate[]>(INITIAL_TEMPLATES);
@@ -60,7 +65,11 @@ export default function AiWorkspacePage() {
 
     const sendChat = useCallback(
         (text = chatInput) => {
-            if (!text.trim() || loading) return;
+            const trimmedText = text.trim();
+            const hasContent = trimmedText || files.length > 0;
+
+            if (!hasContent || loading) return;
+
             setChatInput("");
             const now = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
             const fileNote = files.length
@@ -69,7 +78,7 @@ export default function AiWorkspacePage() {
             const userMsg: Message = {
                 id: `m${Date.now()}`,
                 role: "user",
-                content: text.trim() + fileNote,
+                content: (trimmedText || "Attached files") + fileNote,
                 time: now,
             };
             setConvos((p) =>
@@ -77,7 +86,7 @@ export default function AiWorkspacePage() {
                     if (c.id !== activeId) return c;
                     const title =
                         c.messages.length === 0
-                            ? text.slice(0, 38) + (text.length > 38 ? "…" : "")
+                            ? (trimmedText || "File upload").slice(0, 38) + ((trimmedText || "File upload").length > 38 ? "…" : "")
                             : c.title;
                     return { ...c, title, messages: [...c.messages, userMsg] };
                 }),
@@ -88,7 +97,7 @@ export default function AiWorkspacePage() {
                 const ai: Message = {
                     id: `m${Date.now() + 1}`,
                     role: "ai",
-                    content: simulateAI(text, modelId),
+                    content: simulateAI(trimmedText || "Analyze attached files", modelId),
                     time: now,
                     reaction: null,
                 };
@@ -159,13 +168,51 @@ export default function AiWorkspacePage() {
     }
 
     function addFile() {
-        const names = ["report.pdf", "data.csv", "screenshot.png", "brief.docx"];
-        const types = ["PDF", "CSV", "Image", "DOC"];
-        const i = Math.floor(Math.random() * 4);
-        setFiles((p) => [
-            ...p,
-            { id: `f${Date.now()}`, name: names[i], type: types[i], size: `${(Math.random() * 2 + 0.1).toFixed(1)} MB` },
-        ]);
+        fileInputRef.current?.click();
+    }
+
+    function handleFileSelect(e: React.ChangeEvent<HTMLInputElement>) {
+        const selectedFiles = e.target.files;
+        if (!selectedFiles) return;
+
+        const newFiles: UploadedFile[] = Array.from(selectedFiles).map((file) => ({
+            id: `f${Date.now()}-${Math.random()}`,
+            name: file.name,
+            type: file.type.split('/')[0] || 'file',
+            size: file.size > 1_000_000
+                ? `${(file.size / 1_000_000).toFixed(1)} MB`
+                : `${Math.round(file.size / 1000)} KB`,
+        }));
+
+        setFiles((p) => [...p, ...newFiles]);
+        e.target.value = ''; // Reset input
+    }
+
+    function startEditMsg(msgId: string, content: string) {
+        setEditingMsgId(msgId);
+        setEditText(content.split('\n\n📎')[0]); // Remove file attachment note
+    }
+
+    function saveEditMsg() {
+        if (!editingMsgId || !editText.trim()) return;
+
+        setConvos((p) =>
+            p.map((c) => {
+                if (c.id !== activeId) return c;
+                const messages = c.messages.map((m) =>
+                    m.id === editingMsgId ? { ...m, content: editText.trim() } : m
+                );
+                return { ...c, messages };
+            }),
+        );
+
+        setEditingMsgId(null);
+        setEditText("");
+    }
+
+    function cancelEditMsg() {
+        setEditingMsgId(null);
+        setEditText("");
     }
 
     // ── Prompt actions ─────────────────────────────────────────────────────────
@@ -189,20 +236,43 @@ export default function AiWorkspacePage() {
     return (
         <div className="flex overflow-hidden rounded-2xl border border-border bg-card" style={{ height: "calc(100vh - 80px)" }}>
 
-            <AiSidebar
-                view={view}
-                setView={setView}
-                modelId={modelId}
-                setModelId={setModelId}
-                convos={convos}
-                activeId={activeId}
-                setActiveId={setActiveId}
-                chatSearch={chatSearch}
-                setChatSearch={setChatSearch}
-                onNewChat={newChat}
-                onPin={pinConvo}
-                onDelete={deleteConvo}
-            />
+            {/* Mobile overlay */}
+            {sidebarOpen && (
+                <div
+                    className="fixed inset-0 bg-black/50 z-40 md:hidden"
+                    onClick={() => setSidebarOpen(false)}
+                />
+            )}
+
+            {/* Sidebar - slides in on mobile */}
+            <div className={cn(
+                "fixed md:relative inset-y-0 left-0 z-50 md:z-0 transform transition-transform duration-300 md:transform-none",
+                sidebarOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
+            )}>
+                <AiSidebar
+                    view={view}
+                    setView={(v) => {
+                        setView(v);
+                        setSidebarOpen(false);
+                    }}
+                    modelId={modelId}
+                    setModelId={setModelId}
+                    convos={convos}
+                    activeId={activeId}
+                    setActiveId={(id) => {
+                        setActiveId(id);
+                        setSidebarOpen(false);
+                    }}
+                    chatSearch={chatSearch}
+                    setChatSearch={setChatSearch}
+                    onNewChat={() => {
+                        newChat();
+                        setSidebarOpen(false);
+                    }}
+                    onPin={pinConvo}
+                    onDelete={deleteConvo}
+                />
+            </div>
 
             {/* Main area */}
             <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
@@ -218,12 +288,21 @@ export default function AiWorkspacePage() {
                         copiedId={copiedId}
                         bottomRef={bottomRef}
                         inputRef={inputRef}
+                        fileInputRef={fileInputRef}
+                        editingMsgId={editingMsgId}
+                        editText={editText}
+                        setEditText={setEditText}
                         onSend={sendChat}
                         onReact={reactMsg}
                         onCopy={copyMsg}
                         onRegenerate={regenLast}
                         onAddFile={addFile}
+                        onFileSelect={handleFileSelect}
                         onRemoveFile={(id) => setFiles((p) => p.filter((x) => x.id !== id))}
+                        onEditMsg={startEditMsg}
+                        onSaveEdit={saveEditMsg}
+                        onCancelEdit={cancelEditMsg}
+                        onToggleSidebar={() => setSidebarOpen(!sidebarOpen)}
                     />
                 )}
 

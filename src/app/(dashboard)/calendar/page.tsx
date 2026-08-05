@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
-import { ChevronLeft, ChevronRight, Plus } from "lucide-react";
-import { Card, CardContent, Button } from "@/components/ui";
+import { ChevronLeft, ChevronRight, Plus, X } from "lucide-react";
+import { Card, CardContent, Button, Modal, Input, Label, DropdownSelect } from "@/components/ui";
 import { PageStack } from "@/components";
 import { CALENDAR_EVENTS, type CalendarEvent } from "@/lib/calendar-data";
 
@@ -19,6 +19,12 @@ export default function CalendarPage() {
     const [year, setYear] = useState(2026);
     const [month, setMonth] = useState(6); // July
     const [selected, setSelected] = useState<number | null>(null);
+    const [events, setEvents] = useState<CalendarEvent[]>(CALENDAR_EVENTS);
+    const [showAddModal, setShowAddModal] = useState(false);
+    const [newEventTitle, setNewEventTitle] = useState("");
+    const [newEventDate, setNewEventDate] = useState("");
+    const [newEventTime, setNewEventTime] = useState("");
+    const [newEventCategory, setNewEventCategory] = useState<CalendarEvent["category"]>("event");
 
     function prev() {
         if (month === 0) { setMonth(11); setYear((y) => y - 1); }
@@ -37,7 +43,7 @@ export default function CalendarPage() {
         i < firstDay ? null : i - firstDay + 1
     );
 
-    const eventsForMonth = CALENDAR_EVENTS.filter((e) => e.month === month && e.year === year);
+    const eventsForMonth = events.filter((e) => e.month === month && e.year === year);
     const eventsByDay: Record<number, CalendarEvent[]> = {};
     for (const ev of eventsForMonth) {
         if (!eventsByDay[ev.date]) eventsByDay[ev.date] = [];
@@ -48,14 +54,33 @@ export default function CalendarPage() {
     const today = new Date();
     const isCurrentMonth = today.getFullYear() === year && today.getMonth() === month;
 
+    function handleAddEvent() {
+        if (!newEventTitle.trim() || !newEventDate) return;
+
+        const date = new Date(newEventDate);
+        const newEvent: CalendarEvent = {
+            id: `evt-${Date.now()}`,
+            title: newEventTitle.trim(),
+            date: date.getDate(),
+            month: date.getMonth(),
+            year: date.getFullYear(),
+            time: newEventTime || undefined,
+            category: newEventCategory,
+            color: CATEGORY_COLORS[newEventCategory],
+        };
+
+        setEvents([...events, newEvent]);
+        setNewEventTitle("");
+        setNewEventDate("");
+        setNewEventTime("");
+        setNewEventCategory("event");
+        setShowAddModal(false);
+    }
+
     return (
         <PageStack>
             <div className="fb">
-                {/* <div>
-                    <h2 style={{ fontWeight: 800, fontSize: 22 }}>Calendar</h2>
-                    <p style={{ color: "var(--mt-fg)", fontSize: 14, marginTop: 2 }}>Manage team events and deadlines</p>
-                </div> */}
-                <Button><Plus size={16} /> Add Event</Button>
+                <Button onClick={() => setShowAddModal(true)}><Plus size={16} /> Add Event</Button>
             </div>
 
             {/* Legend */}
@@ -205,6 +230,63 @@ export default function CalendarPage() {
                     </Card>
                 </div>
             </div>
+
+            {/* Add Event Modal */}
+            <Modal
+                open={showAddModal}
+                onClose={() => setShowAddModal(false)}
+                title="Add New Event"
+                footer={
+                    <>
+                        <Button variant="outline" size="sm" onClick={() => setShowAddModal(false)}>
+                            <X size={13} /> Cancel
+                        </Button>
+                        <Button size="sm" onClick={handleAddEvent} disabled={!newEventTitle.trim() || !newEventDate}>
+                            <Plus size={13} /> Add Event
+                        </Button>
+                    </>
+                }
+            >
+                <div className="space-y-4 pt-2">
+                    <div className="flex flex-col gap-1.5">
+                        <Label>Event Title</Label>
+                        <Input
+                            value={newEventTitle}
+                            onChange={(e) => setNewEventTitle(e.target.value)}
+                            placeholder="e.g., Team Meeting"
+                        />
+                    </div>
+                    <div className="flex flex-col gap-1.5">
+                        <Label>Date</Label>
+                        <Input
+                            type="date"
+                            value={newEventDate}
+                            onChange={(e) => setNewEventDate(e.target.value)}
+                        />
+                    </div>
+                    <div className="flex flex-col gap-1.5">
+                        <Label>Time (optional)</Label>
+                        <Input
+                            type="time"
+                            value={newEventTime}
+                            onChange={(e) => setNewEventTime(e.target.value)}
+                        />
+                    </div>
+                    <div className="flex flex-col gap-1.5">
+                        <Label>Category</Label>
+                        <DropdownSelect
+                            value={newEventCategory}
+                            onChange={(value) => setNewEventCategory(value as CalendarEvent["category"])}
+                            options={[
+                                { value: "meeting", label: "Meeting" },
+                                { value: "deadline", label: "Deadline" },
+                                { value: "reminder", label: "Reminder" },
+                                { value: "event", label: "Event" },
+                            ]}
+                        />
+                    </div>
+                </div>
+            </Modal>
         </PageStack>
     );
 }

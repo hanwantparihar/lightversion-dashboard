@@ -218,13 +218,15 @@ cd nexora-ai`}</CodeBlock>
               <CodeBlock>{`npm run dev
 # or
 pnpm dev`}</CodeBlock>
-              <div className="mt-3 flex items-center gap-2 rounded-lg border border-success/30 bg-success/5 px-4 py-3 text-sm font-semibold text-success">
+              <div className="mt-3 flex flex-wrap items-center gap-2 rounded-lg border border-success/30 bg-success/5 px-4 py-3 text-sm font-semibold text-success">
                 <CheckCircle2 size={16} className="shrink-0" />
-                Open{" "}
-                <span className="font-mono text-xs font-bold">
-                  http://localhost:3000
-                </span>{" "}
-                in your browser — the dashboard is live.
+                <span className="flex flex-wrap items-center gap-1">
+                  <span>Open</span>
+                  <span className="font-mono text-xs font-bold break-all">
+                    http://localhost:3000
+                  </span>
+                  <span>in your browser — the dashboard is live.</span>
+                </span>
               </div>
             </Step>
 
@@ -254,33 +256,75 @@ npm run start`}</CodeBlock>
         </CardHeader>
         <CardContent>
           <pre className="overflow-x-auto rounded-lg bg-slate-900 p-5 text-[12.5px] leading-7 text-slate-300 dark:bg-slate-950">
-{`nexora-ai/
+            {`nexora-ai/
 ├── src/
 │   ├── app/
-│   │   ├── (auth)/               # Auth layout + pages (login, register…)
-│   │   │   ├── layout.tsx        # Split-screen auth layout
-│   │   │   └── auth/             # /auth/login  /auth/register …
-│   │   └── (dashboard)/          # Main app layout + all dashboard pages
-│   │       ├── layout.tsx        # Shell with sidebar + topbar
-│   │       └── page.tsx          # Dashboard home  →  /
+│   │   ├── (auth)/                    # Auth layout + pages (login, register…)
+│   │   │   ├── layout.tsx             # Split-screen auth layout
+│   │   │   └── auth/                  # /auth/login, /auth/register…
+│   │   ├── (dashboard)/               # Main app layout + all dashboard pages
+│   │   │   ├── layout.tsx             # Shell with sidebar + topbar
+│   │   │   ├── page.tsx               # Dashboard home → /
+│   │   │   ├── analytics/             # Analytics pages
+│   │   │   ├── charts/                # Chart examples
+│   │   │   ├── forms/                 # Form layouts
+│   │   │   ├── tables/                # Table examples
+│   │   │   ├── users/                 # User management
+│   │   │   ├── system/                # Settings, billing
+│   │   │   ├── ai/                    # AI workspace
+│   │   │   └── ...                    # Other dashboard pages
+│   │   ├── globals.css                # Global styles + CSS variables
+│   │   ├── layout.tsx                 # Root layout
+│   │   └── not-found.tsx              # 404 page
 │   │
 │   ├── components/
-│   │   ├── ui/                   # Reusable primitives (Button, Alert, Card…)
-│   │   ├── layout/               # Sidebar, Topbar
-│   │   ├── common/               # Shared page helpers (Placeholder…)
-│   │   └── providers/            # ThemeProvider, context wrappers
+│   │   ├── ui/                        # Reusable primitives (Button, Card, Input…)
+│   │   ├── layout/                    # Sidebar, Topbar, Shell
+│   │   ├── common/                    # Shared helpers (Placeholder, Toast…)
+│   │   ├── tables/                    # Table components (DataTable, cells…)
+│   │   ├── charts/                    # Chart components (ChartCard, RingChart…)
+│   │   ├── users/                     # User-specific components
+│   │   ├── theme-customizer/          # Theme customization panel
+│   │   ├── providers/                 # Context providers
+│   │   └── index.ts                   # Component exports
 │   │
 │   ├── config/
-│   │   ├── colors.ts             # ← Brand colors — change primary here
-│   │   ├── nav.ts                # ← Sidebar navigation tree
-│   │   └── site.ts               # Site name, description, links
+│   │   ├── colors.ts                  # ← Brand colors — change primary here
+│   │   └── site.ts                    # Site name, description, metadata
 │   │
-│   └── lib/
-│       └── utils.ts              # Tailwind cn() helper
+│   ├── contexts/
+│   │   ├── theme-customizer-context.tsx  # Theme customization state
+│   │   ├── users-context.tsx          # User management state
+│   │   ├── roles-context.tsx          # Role management state
+│   │   ├── crm-context.tsx            # CRM data state
+│   │   ├── support-context.tsx        # Support ticket state
+│   │   └── auth-context.tsx           # Authentication state
+│   │
+│   ├── hooks/
+│   │   ├── use-sidebar.ts             # Sidebar collapse/mobile state
+│   │   └── use-mobile.ts              # Mobile detection hook
+│   │
+│   ├── lib/
+│   │   ├── nav.ts                     # ← Sidebar navigation tree
+│   │   ├── utils.ts                   # Tailwind cn() helper
+│   │   ├── users-data.ts              # User data & utilities
+│   │   ├── roles-data.ts              # Role permissions data
+│   │   ├── crm-data.ts                # CRM sample data
+│   │   ├── calendar-data.ts           # Calendar events data
+│   │   ├── kanban-data.ts             # Kanban board data
+│   │   └── ...                        # Other data files
+│   │
+│   ├── types/
+│   │   └── css.d.ts                   # TypeScript type definitions
+│   │
+│   └── middleware.ts                  # Next.js middleware
 │
-├── tailwind.config.ts            # Tailwind + CSS variable token mapping
-├── globals.css                   # CSS custom properties (neutral tokens)
-└── .env.local                    # Environment variables (local only)`}
+├── public/                             # Static assets
+├── tailwind.config.ts                  # Tailwind + CSS variable mapping
+├── next.config.js                      # Next.js configuration
+├── tsconfig.json                       # TypeScript configuration
+├── package.json                        # Dependencies & scripts
+└── .env.local                          # Environment variables (local only)`}
           </pre>
         </CardContent>
       </Card>
@@ -347,7 +391,7 @@ npm run start`}</CodeBlock>
           <div className="grid gap-3 sm:grid-cols-2">
             {[
               {
-                name: "Next.js 14",
+                name: "Next.js 16",
                 role: "Framework",
                 desc: "App Router, server components, file-based routing",
                 color: "bg-slate-800 text-white",

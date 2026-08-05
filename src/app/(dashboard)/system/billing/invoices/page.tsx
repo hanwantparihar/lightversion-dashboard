@@ -151,9 +151,6 @@ export default function InvoicesPage() {
                                             <div className="fc g1">
                                                 <Button size="sm" variant="ghost" onClick={() => setPreview(inv)}><Eye size={13} /></Button>
                                                 <Button size="sm" variant="ghost"><Download size={13} /></Button>
-                                                {inv.status === "draft" && (
-                                                    <Button size="sm" variant="ghost" onClick={() => send(inv.id)}><Send size={13} /></Button>
-                                                )}
                                             </div>
                                         </td>
                                     </tr>

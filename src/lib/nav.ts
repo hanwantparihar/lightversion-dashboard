@@ -344,3 +344,16 @@ export function getBreadcrumbGroup(pathname: string): string | undefined {
 
   return undefined;
 }
+
+// Returns the path of the first child in the nav group that owns `pathname`.
+// Used by the breadcrumb to make the group segment a clickable link.
+export function getGroupPath(pathname: string): string | undefined {
+  for (const item of NAV) {
+    if (!("children" in item) || !item.children) continue;
+    const owns = item.children.some(
+      (c) => pathname === c.path || pathname.startsWith(c.path + "/")
+    );
+    if (owns) return item.children[0].path;
+  }
+  return undefined;
+}

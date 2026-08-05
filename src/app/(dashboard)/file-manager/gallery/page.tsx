@@ -17,6 +17,7 @@ import {
   Check,
   X,
   MoreVertical,
+  Plus,
 } from "lucide-react";
 import { Button, Input, Modal, DropdownSelect } from "@/components/ui";
 import { PageStack } from "@/components";
@@ -176,13 +177,13 @@ function GridCard({
                 <div className="absolute right-0 top-7 z-20 min-w-[130px] rounded-lg border bg-popover py-1 shadow-lg">
                   <button
                     onClick={() => { onDownload(item); setMenuOpen(false); }}
-                    className="flex w-full items-center gap-2 px-3 py-2 text-sm hover:bg-accent transition-colors"
+                    className="flex w-full items-center gap-2 px-3 py-2 text-sm rounded-lg hover:bg-accent transition-colors"
                   >
                     <Download size={13} /> Download
                   </button>
                   <button
                     onClick={() => { onDelete(item.id); setMenuOpen(false); }}
-                    className="flex w-full items-center gap-2 px-3 py-2 text-sm text-destructive hover:bg-accent transition-colors"
+                    className="flex w-full items-center gap-2 px-3 py-2 text-sm rounded-lg text-destructive hover:bg-accent transition-colors"
                   >
                     <Trash2 size={13} /> Delete
                   </button>
@@ -293,6 +294,7 @@ export default function MediaGalleryPage() {
   const [uploadOpen, setUploadOpen] = useState(false);
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const [dragging, setDragging] = useState(false);
+  const [previewFiles, setPreviewFiles] = useState<File[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // ── Filter ─────────────────────────────────────────────────────────────────
@@ -339,14 +341,24 @@ export default function MediaGalleryPage() {
     e.preventDefault();
     setDragging(false);
     const files = Array.from(e.dataTransfer.files);
-    addFiles(files);
+    setPreviewFiles(prev => [...prev, ...files]);
   }, []);
 
-  function addFiles(files: File[]) {
+  function handleFileInput(e: React.ChangeEvent<HTMLInputElement>) {
+    if (e.target.files) {
+      const newFiles = Array.from(e.target.files);
+      setPreviewFiles(prev => [...prev, ...newFiles]);
+      e.target.value = ''; // Reset input
+    }
+  }
+
+  function confirmUpload() {
+    if (previewFiles.length === 0) return;
+
     const now = new Date();
     const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
     const date = `${months[now.getMonth()]} ${now.getFullYear()}`;
-    const newItems: MediaFile[] = files.map((f, i) => ({
+    const newItems: MediaFile[] = previewFiles.map((f, i) => ({
       id: String(Date.now() + i),
       name: f.name,
       type: f.type.startsWith("image/") ? "Images"
@@ -358,13 +370,20 @@ export default function MediaGalleryPage() {
       date,
       color: "#2563eb",
       label: f.name.replace(/\.[^.]+$/, ""),
+      src: f.type.startsWith("image/") ? URL.createObjectURL(f) : undefined,
     }));
     setItems((prev) => [...newItems, ...prev]);
+    setPreviewFiles([]);
     setUploadOpen(false);
   }
 
-  function handleFileInput(e: React.ChangeEvent<HTMLInputElement>) {
-    if (e.target.files) addFiles(Array.from(e.target.files));
+  function cancelUpload() {
+    setPreviewFiles([]);
+    setUploadOpen(false);
+  }
+
+  function removePreviewFile(index: number) {
+    setPreviewFiles(prev => prev.filter((_, i) => i !== index));
   }
 
   function handleDownload(item: MediaFile) {
@@ -528,39 +547,107 @@ export default function MediaGalleryPage() {
       {/* ── Upload modal ── */}
       <Modal
         open={uploadOpen}
-        onClose={() => setUploadOpen(false)}
+        onClose={cancelUpload}
         title="Upload media"
         footer={
-          <>
-            <Button variant="outline" size="sm" onClick={() => setUploadOpen(false)}>
-              <X size={13} /> Cancel
-            </Button>
-            <Button size="sm" onClick={() => fileInputRef.current?.click()}>
-              <UploadCloud size={13} /> Select files
-            </Button>
-          </>
+          previewFiles.length > 0 ? (
+            <>
+              <Button variant="outline" size="sm" onClick={cancelUpload}>
+                <X size={13} /> Cancel
+              </Button>
+              <Button size="sm" onClick={confirmUpload}>
+                <Check size={13} /> Upload {previewFiles.length} file{previewFiles.length !== 1 ? 's' : ''}
+              </Button>
+            </>
+          ) : (
+            <>
+              <Button variant="outline" size="sm" onClick={cancelUpload}>
+                <X size={13} /> Cancel
+              </Button>
+              <Button size="sm" onClick={() => fileInputRef.current?.click()}>
+                <UploadCloud size={13} /> Select files
+              </Button>
+            </>
+          )
         }
       >
-        <div className="pt-2">
-          <div
-            onDragOver={(e) => { e.preventDefault(); setDragging(true); }}
-            onDragLeave={() => setDragging(false)}
-            onDrop={handleDrop}
-            onClick={() => fileInputRef.current?.click()}
-            className={`flex cursor-pointer flex-col items-center gap-3 rounded-lg border-2 border-dashed py-10 text-center transition-colors ${dragging ? "border-primary bg-primary/5" : "border-muted-foreground/30 hover:border-primary/50"
-              }`}
-          >
-            <UploadCloud size={32} className="text-muted-foreground" />
-            <div>
-              <p className="text-sm font-medium">Drop files to upload</p>
-              <p className="text-xs text-muted-foreground">or click to browse</p>
+        <div className="pt-2 space-y-4">
+          {previewFiles.length === 0 ? (
+            <div
+              onDragOver={(e) => { e.preventDefault(); setDragging(true); }}
+              onDragLeave={() => setDragging(false)}
+              onDrop={handleDrop}
+              onClick={() => fileInputRef.current?.click()}
+              className={`flex cursor-pointer flex-col items-center gap-3 rounded-lg border-2 border-dashed py-10 text-center transition-colors ${dragging ? "border-primary bg-primary/5" : "border-muted-foreground/30 hover:border-primary/50"
+                }`}
+            >
+              <UploadCloud size={32} className="text-muted-foreground" />
+              <div>
+                <p className="text-sm font-medium">Drop files to upload</p>
+                <p className="text-xs text-muted-foreground">or click to browse</p>
+              </div>
+              <p className="text-xs text-muted-foreground">Maximum upload file size: 256 MB</p>
             </div>
-            <p className="text-xs text-muted-foreground">Maximum upload file size: 256 MB</p>
-          </div>
+          ) : (
+            <>
+              <div className="rounded-lg border bg-muted/30 p-3">
+                <p className="text-sm font-semibold mb-3">{previewFiles.length} file{previewFiles.length !== 1 ? 's' : ''} ready to upload</p>
+                <div className="space-y-2 max-h-[400px] overflow-y-auto">
+                  {previewFiles.map((file, index) => (
+                    <div key={index} className="flex items-center gap-3 rounded-lg border bg-card p-3">
+                      {file.type.startsWith("image/") ? (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img
+                          src={URL.createObjectURL(file)}
+                          alt={file.name}
+                          className="h-16 w-16 rounded-lg object-cover"
+                        />
+                      ) : (
+                        <div className="flex h-16 w-16 items-center justify-center rounded-lg bg-muted">
+                          <TypeIcon
+                            type={
+                              file.type.startsWith("video/") ? "Video"
+                                : file.type.startsWith("audio/") ? "Audio"
+                                  : file.name.endsWith(".zip") || file.name.endsWith(".tar") ? "Archives"
+                                    : "Documents"
+                            }
+                            size={24}
+                          />
+                        </div>
+                      )}
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-medium truncate">{file.name}</p>
+                        <p className="text-xs text-muted-foreground">
+                          {file.size > 1_000_000 ? `${(file.size / 1_000_000).toFixed(1)} MB` : `${Math.round(file.size / 1000)} KB`}
+                        </p>
+                      </div>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => removePreviewFile(index)}
+                        className="shrink-0"
+                      >
+                        <X size={14} />
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => fileInputRef.current?.click()}
+                className="w-full"
+              >
+                <Plus size={14} /> Add more files
+              </Button>
+            </>
+          )}
           <input
             ref={fileInputRef}
             type="file"
             multiple
+            accept="image/*,video/*,audio/*,.pdf,.doc,.docx,.zip,.tar"
             className="hidden"
             onChange={handleFileInput}
           />
