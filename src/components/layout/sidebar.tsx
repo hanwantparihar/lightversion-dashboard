@@ -93,26 +93,28 @@ export function Sidebar({
             effectiveCollapsed ? 'justify-between px-2' : 'gap-2 px-3'
           )}
         >
-          <div
-            className={cn(
-              'flex min-w-0 items-center',
-              !effectiveCollapsed && 'flex-1 gap-3'
-            )}
-          >
+          <Link href={'/'}>
             <div
               className={cn(
-                'grid shrink-0 place-items-center rounded-[11px] bg-gradient-to-br from-primary to-primary/80 text-white shadow-lg shadow-primary/30',
-                effectiveCollapsed ? 'h-8 w-8' : 'h-9 w-9'
+                'flex min-w-0 items-center',
+                !effectiveCollapsed && 'flex-1 gap-3'
               )}
             >
-              <Sparkles size={effectiveCollapsed ? 17 : 20} />
-            </div>
-            {!effectiveCollapsed && (
-              <div className='min-w-0 flex-1 truncate text-lg font-extrabold tracking-tight text-white'>
-                Nexora<span className='text-primary'> AI</span>
+              <div
+                className={cn(
+                  'grid shrink-0 place-items-center rounded-[11px] bg-gradient-to-br from-primary to-primary/80 text-white shadow-lg shadow-primary/30',
+                  effectiveCollapsed ? 'h-8 w-8' : 'h-9 w-9'
+                )}
+              >
+                <Sparkles size={effectiveCollapsed ? 17 : 20} />
               </div>
-            )}
-          </div>
+              {!effectiveCollapsed && (
+                <div className='min-w-0 flex-1 truncate text-lg font-extrabold tracking-tight text-white'>
+                  Nexora<span className='text-primary'> AI</span>
+                </div>
+              )}
+            </div>
+          </Link>
         </div>
 
         {/* Nav — no visible scrollbar */}

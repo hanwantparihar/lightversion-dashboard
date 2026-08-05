@@ -1,4 +1,4 @@
-import {
+﻿﻿import {
 
   LayoutDashboard,
 
@@ -330,23 +330,44 @@ export const PAGE_TITLES: Record<string, string> = meta.titles;
 
 export const BREADCRUMB_GROUPS: Record<string, string> = meta.groups;
 
-
+export function getGroupPath(pathname: string): string | undefined {
+  for (const item of NAV) {
+    if (!("children" in item) || !item.children) continue;
+    const match = item.children.find(c => pathname === c.path || pathname.startsWith(c.path + "/"));
+    if (match) return item.children[0].path;
+  }
+  return undefined;
+}
 
 export function getPageTitle(pathname: string): string {
   if (PAGE_TITLES[pathname]) return PAGE_TITLES[pathname];
-
   if (/^\/users\/profile\/\d+$/.test(pathname)) return "Edit profile";
-
+  if (/^\/system\/support\/[^/]+$/.test(pathname)) return "Ticket details";
   return "Dashboard";
 }
 
 export function getBreadcrumbGroup(pathname: string): string | undefined {
   if (BREADCRUMB_GROUPS[pathname]) return BREADCRUMB_GROUPS[pathname];
-
-  if (pathname.startsWith("/users/profile")) return "User Management";
-  if (pathname.startsWith("/users/roles")) return "User Management";
-
+  if (pathname.startsWith("/users/profile"))       return "User Management";
+  if (pathname.startsWith("/users/roles"))         return "User Management";
+  if (pathname.startsWith("/crm/"))                return "CRM";
+  if (pathname.startsWith("/file-manager/"))       return "File Manager";
+  if (pathname.startsWith("/developer/api"))       return "API Module";
+  if (pathname.startsWith("/reports/"))            return "Advanced Dashboard";
+  if (pathname.startsWith("/system/billing"))      return "Billing";
+  if (pathname.startsWith("/system/support"))      return "Support System";
+  if (pathname.startsWith("/system/settings"))     return "Advanced Settings";
+  if (pathname.startsWith("/security/"))           return "Advanced Security";
+  if (pathname.startsWith("/team/"))               return "Team";
+  if (pathname.startsWith("/tenants"))             return "Multi-Tenant";
+  if (pathname.startsWith("/white-label"))         return "White Label";
+  if (pathname.startsWith("/integrations"))        return "Integrations";
+  if (pathname.startsWith("/workflows"))           return "Workflow Automation";
+  if (pathname.startsWith("/monitoring"))          return "Monitoring";
+  if (pathname.startsWith("/enterprise-security")) return "Enterprise Security";
+  if (pathname.startsWith("/enterprise"))          return "Enterprise Support";
+  if (pathname.startsWith("/ai/"))                 return "AI Features";
+  if (pathname.startsWith("/analytics/"))          return "Advanced Analytics";
+  if (pathname.startsWith("/developer/"))          return "Dev Tools";
   return undefined;
 }
-
-

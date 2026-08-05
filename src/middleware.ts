@@ -5,7 +5,7 @@ const TOKEN_KEY = "custom-auth-token";
 const PUBLIC_PATHS = [
   // "/",
   "/auth/login",
-  "/auth/register",
+  // "/auth/register",
   "/auth/forgot-password",
   "/auth/reset-password",
   "/auth/two-factor",

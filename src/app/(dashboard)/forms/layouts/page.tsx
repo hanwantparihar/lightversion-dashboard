@@ -57,9 +57,11 @@ export default function FormLayouts() {
           <CardHeader><CardTitle>Inline Form</CardTitle></CardHeader>
           <CardContent>
             <div className="fc g2" style={{ flexWrap: "wrap", marginBottom: 18 }}>
-              <div style={{ flex: 1, minWidth: 100 }}><Label>Search</Label><Input placeholder="Keywords…" /></div>
               <div style={{ flex: 1, minWidth: 100 }}>
-                <Label>Category</Label>
+                {/* <Label>Search</Label> */}
+                <Input placeholder="Keywords…" /></div>
+              <div style={{ flex: 1, minWidth: 100 }}>
+                {/* <Label>Category</Label> */}
                 <DropdownSelect
                   value={category}
                   onChange={setCategory}
@@ -70,7 +72,7 @@ export default function FormLayouts() {
                   ]}
                 />
               </div>
-              <div style={{ flex: "none", alignSelf: "flex-end" }}>
+              <div style={{ flex: "none", alignSelf: "flex-center" }}>
                 <Button size="sm"><Search />Search</Button>
               </div>
             </div>

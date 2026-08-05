@@ -50,7 +50,7 @@ const ROLE_COLORS = [
   '#ec4899'
 ]
 
-export default function UserRolesContent () {
+export default function UserRolesContent() {
   const searchParams = useSearchParams()
   const highlightId = Number(searchParams.get('user') || 0)
   const { users, updateUserRole } = useUsers()
@@ -207,7 +207,7 @@ export default function UserRolesContent () {
         <CardHeader className='space-y-4'>
           <div className='flex flex-wrap items-start justify-between gap-3'>
             <div>
-              <CardTitle className='fc g2'>
+              <CardTitle className='fc g2 mb-1'>
                 <Shield size={18} />
                 Role management
               </CardTitle>
