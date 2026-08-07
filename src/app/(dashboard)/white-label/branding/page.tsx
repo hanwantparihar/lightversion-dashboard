@@ -28,23 +28,24 @@ function BrandPreview({ cfg }: { cfg: WhiteLabelConfig }) {
             </div>
 
             {/* Navbar */}
-            <div className="flex items-center justify-between px-5 py-3 border-b border-border" style={{ background: cfg.primaryColor }}>
+            <div className="flex items-center justify-between px-3 sm:px-5 py-3 border-b border-border" style={{ background: cfg.primaryColor }}>
                 <div className="flex items-center gap-2">
                     <div className="w-7 h-7 rounded-lg bg-white/20 flex items-center justify-center text-white font-extrabold text-[11px]">
                         {(cfg.appName || "App")[0]}
                     </div>
-                    <span className="text-white font-bold text-sm">{cfg.appName || "Your App"}</span>
+                    <span className="text-white font-bold text-sm truncate">{cfg.appName || "Your App"}</span>
                 </div>
-                <div className="flex items-center gap-3">
+                <div className="hidden sm:flex items-center gap-3">
                     {["Dashboard", "Analytics", "Settings"].map(n => (
                         <span key={n} className="text-white/80 text-xs">{n}</span>
                     ))}
                     <div className="w-7 h-7 rounded-full bg-white/20" />
                 </div>
+                <div className="sm:hidden w-7 h-7 rounded-full bg-white/20" />
             </div>
 
             {/* Login page preview */}
-            <div className="p-8 flex flex-col items-center gap-4" style={{ background: cfg.loginPageBg || "#f8fafc" }}>
+            <div className="p-6 sm:p-8 flex flex-col items-center gap-4" style={{ background: cfg.loginPageBg || "#f8fafc" }}>
                 <div className="w-12 h-12 rounded-2xl flex items-center justify-center font-extrabold text-lg text-white"
                     style={{ background: cfg.primaryColor }}>
                     {(cfg.appName || "A")[0]}
@@ -93,52 +94,50 @@ export default function CustomBrandingPage() {
 
     return (
         <PageStack>
-            <div className="flex items-start justify-between gap-3 flex-wrap">
-                {/* <div>
-                    <h2 className="text-[22px] font-extrabold">Custom Branding</h2>
-                    <p className="text-sm text-muted-foreground mt-0.5">Configure white-label branding per tenant</p>
-                </div> */}
-                <div className="flex items-center gap-2">
-                    <Button variant="outline" size="sm" onClick={() => setShowPreview(v => !v)}>
+            <div className="flex flex-col sm:flex-row items-start justify-between gap-3">
+                <div className="flex items-center gap-2 flex-wrap w-full sm:w-auto">
+                    <Button variant="outline" size="sm" onClick={() => setShowPreview(v => !v)} className="flex-1 sm:flex-initial">
                         <Eye size={14} /> {showPreview ? "Hide" : "Show"} Preview
                     </Button>
-                    <Button size="sm" onClick={save}>
+                    <Button size="sm" onClick={save} className="flex-1 sm:flex-initial">
                         {saved ? <><Check size={14} /> Saved</> : <><Save size={14} /> Save Changes</>}
                     </Button>
                 </div>
             </div>
 
-            <div className="flex gap-5 items-start flex-wrap lg:flex-nowrap">
+            <div className="flex flex-col lg:flex-row gap-5 items-start">
                 {/* Tenant selector */}
-                <Card className="w-52 shrink-0">
+                <Card className="w-full lg:w-52 shrink-0">
                     <CardHeader className="pb-2"><CardTitle className="text-sm">Tenant</CardTitle></CardHeader>
                     <CardContent className="p-0">
-                        {TENANTS.filter(t => t.status !== "churned").map(t => {
-                            const isA = t.id === activeTenantId;
-                            return (
-                                <button key={t.id} onClick={() => setActiveTenantId(t.id)}
-                                    className="w-full flex items-center gap-2.5 px-4 py-2.5 text-left border-none transition-colors"
-                                    style={{ background: isA ? "var(--ac)" : "transparent", cursor: "pointer" }}
-                                    onMouseEnter={e => { if (!isA) e.currentTarget.style.background = "var(--mt)"; }}
-                                    onMouseLeave={e => { if (!isA) e.currentTarget.style.background = "transparent"; }}
-                                >
-                                    <div className="w-7 h-7 rounded-lg flex items-center justify-center font-bold text-[11px] shrink-0"
-                                        style={{ background: t.color + "22", color: t.color }}>{t.avatar}</div>
-                                    <div className="min-w-0">
-                                        <div className="text-[13px] truncate" style={{ fontWeight: isA ? 700 : 400, color: isA ? "hsl(var(--primary))" : "var(--fg)" }}>
-                                            {t.name}
+                        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-1">
+                            {TENANTS.filter(t => t.status !== "churned").map(t => {
+                                const isA = t.id === activeTenantId;
+                                return (
+                                    <button key={t.id} onClick={() => setActiveTenantId(t.id)}
+                                        className="w-full flex items-center gap-2.5 px-4 py-2.5 text-left border-none transition-colors"
+                                        style={{ background: isA ? "var(--ac)" : "transparent", cursor: "pointer" }}
+                                        onMouseEnter={e => { if (!isA) e.currentTarget.style.background = "var(--mt)"; }}
+                                        onMouseLeave={e => { if (!isA) e.currentTarget.style.background = "transparent"; }}
+                                    >
+                                        <div className="w-7 h-7 rounded-lg flex items-center justify-center font-bold text-[11px] shrink-0"
+                                            style={{ background: t.color + "22", color: t.color }}>{t.avatar}</div>
+                                        <div className="min-w-0">
+                                            <div className="text-[13px] truncate" style={{ fontWeight: isA ? 700 : 400, color: isA ? "hsl(var(--primary))" : "var(--fg)" }}>
+                                                {t.name}
+                                            </div>
+                                            <div className="text-[10px] text-muted-foreground capitalize">{t.plan}</div>
                                         </div>
-                                        <div className="text-[10px] text-muted-foreground capitalize">{t.plan}</div>
-                                    </div>
-                                    {isA && <ChevronRight size={12} className="ml-auto shrink-0 text-primary" />}
-                                </button>
-                            );
-                        })}
+                                        {isA && <ChevronRight size={12} className="ml-auto shrink-0 text-primary" />}
+                                    </button>
+                                );
+                            })}
+                        </div>
                     </CardContent>
                 </Card>
 
                 {/* Config */}
-                <div className="flex-1 min-w-0 flex flex-col gap-4">
+                <div className="flex-1 min-w-0 w-full flex flex-col gap-4">
 
                     {/* Plan gate */}
                     {!isPro && (
@@ -153,7 +152,7 @@ export default function CustomBrandingPage() {
                         <CardHeader>
                             <CardTitle className="text-sm flex items-center gap-2"><Paintbrush size={15} /> Brand Identity</CardTitle>
                         </CardHeader>
-                        <CardContent className="grid grid-cols-2 gap-4">
+                        <CardContent className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div className="flex flex-col gap-1.5">
                                 <Label className="text-xs text-muted-foreground">App / Product Name</Label>
                                 <Input value={cfg.appName} onChange={e => update("appName", e.target.value)} placeholder="Your App Name" disabled={!isPro} />
@@ -202,7 +201,7 @@ export default function CustomBrandingPage() {
                         <CardHeader>
                             <CardTitle className="text-sm flex items-center gap-2"><Upload size={15} /> Logo & Favicon</CardTitle>
                         </CardHeader>
-                        <CardContent className="grid grid-cols-2 gap-4">
+                        <CardContent className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             {[
                                 { label: "Logo URL", key: "logoUrl" as const, ph: "https://cdn.yourco.com/logo.svg" },
                                 { label: "Favicon URL", key: "faviconUrl" as const, ph: "https://cdn.yourco.com/favicon.ico" },
@@ -231,7 +230,7 @@ export default function CustomBrandingPage() {
                         <CardHeader>
                             <CardTitle className="text-sm">Social Links</CardTitle>
                         </CardHeader>
-                        <CardContent className="grid grid-cols-2 gap-4">
+                        <CardContent className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             {[
                                 { label: "Twitter / X", key: "twitterUrl" as const, Icon: Twitter, ph: "https://twitter.com/yourco" },
                                 { label: "LinkedIn", key: "linkedinUrl" as const, Icon: Linkedin, ph: "https://linkedin.com/company/yourco" },
@@ -250,7 +249,7 @@ export default function CustomBrandingPage() {
 
                 {/* Live preview */}
                 {showPreview && (
-                    <div className="w-80 shrink-0 flex flex-col gap-3">
+                    <div className="w-full lg:w-80 shrink-0 flex flex-col gap-3">
                         <div className="text-xs font-bold text-muted-foreground uppercase tracking-wide">Live Preview</div>
                         <BrandPreview cfg={cfg} />
                     </div>

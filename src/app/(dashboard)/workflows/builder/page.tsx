@@ -439,18 +439,18 @@ export default function AutomationBuilderPage() {
 
     return (
         <div
-            className="flex overflow-hidden rounded-2xl border border-border bg-card"
-            style={{ height: "calc(100vh - 80px)" }}
+            className="flex flex-col md:flex-row overflow-hidden rounded-2xl border border-border bg-card"
+            style={{ height: "calc(100vh - 80px)", maxHeight: "calc(100vh - 80px)" }}
         >
             {/* ── Left: Workflow list ───────────────────────────────────────────────── */}
-            <div className="w-72 shrink-0 border-r border-border flex flex-col">
+            <div className="w-full md:w-72 shrink-0 border-r border-border flex flex-col md:max-h-none">
                 <div className="px-4 py-3 border-b border-border flex items-center justify-between shrink-0">
                     <span className="font-extrabold text-sm">Automations</span>
                     <Button size="sm" variant="outline" className="h-7 px-2 text-xs" onClick={newAutomation}>
                         <Plus size={12} /> New
                     </Button>
                 </div>
-                <div className="flex-1 overflow-y-auto py-1">
+                <div className="flex-1 overflow-y-auto py-1 max-h-[200px] md:max-h-none">
                     {workflows.map((wf) => {
                         const ws = STATUS_STYLES[wf.status];
                         const isA = wf.id === activeWfId;
@@ -489,13 +489,13 @@ export default function AutomationBuilderPage() {
             </div>
 
             {/* ── Right: Builder ───────────────────────────────────────────────────── */}
-            <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
+            <div className="flex-1 flex flex-col min-w-0 overflow-hidden h-full">
                 {/* Header bar */}
-                <div className="flex items-center gap-2 px-5 h-[54px] border-b border-border shrink-0 flex-wrap">
+                <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 px-3 sm:px-5 py-3 border-b border-border shrink-0">
                     <Input
                         value={name}
                         onChange={(e) => setWfNames((p) => ({ ...p, [activeWfId]: e.target.value }))}
-                        className="h-8 text-sm font-bold border-transparent bg-transparent focus:border-border w-48"
+                        className="h-8 text-sm font-bold border-transparent bg-transparent focus:border-border w-full sm:w-48"
                     />
                     <span
                         className="text-[11px] font-bold px-2 py-0.5 rounded-full shrink-0"
@@ -503,18 +503,18 @@ export default function AutomationBuilderPage() {
                     >
                         {ss.label}
                     </span>
-                    <div className="flex items-center gap-2 ml-auto shrink-0">
-                        <Button size="sm" variant="outline" onClick={toggleStatus}>
+                    <div className="flex items-center gap-2 w-full sm:w-auto sm:ml-auto shrink-0">
+                        <Button size="sm" variant="outline" onClick={toggleStatus} className="flex-1 sm:flex-initial">
                             {activeWf.status === "active" ? "Deactivate" : "Activate"}
                         </Button>
-                        <Button size="sm">
+                        <Button size="sm" className="flex-1 sm:flex-initial">
                             <Save size={13} /> Save
                         </Button>
                     </div>
                 </div>
 
                 {/* Linear step stack */}
-                <div className="flex-1 overflow-y-auto px-5 py-5">
+                <div className="flex-1 overflow-y-auto px-3 sm:px-5 py-5">
                     <div className="max-w-xl mx-auto">
                         {nodes.map((node, i) => (
                             <StepCard
@@ -546,14 +546,14 @@ export default function AutomationBuilderPage() {
                 </div>
 
                 {/* Bottom bar: Test Run + Run History */}
-                <div className="border-t border-border shrink-0">
-                    <div className="flex items-center gap-3 px-5 py-2.5">
+                <div className="border-t border-border shrink-0 max-h-[200px] overflow-y-auto">
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 px-3 sm:px-5 py-2.5 bg-card sticky top-0 z-10 border-b border-border">
                         <Button
                             size="sm"
                             variant="outline"
                             onClick={runTest}
                             disabled={testRun}
-                            className="shrink-0"
+                            className="shrink-0 w-full sm:w-auto"
                         >
                             {testRun ? (
                                 <><RefreshCw size={12} className="animate-spin" /> Running…</>
@@ -565,7 +565,7 @@ export default function AutomationBuilderPage() {
                         <span className="text-xs text-muted-foreground">{runs.length} recent</span>
                     </div>
                     {runs.length > 0 && (
-                        <div className="border-t border-border">
+                        <div>
                             {runs.map((r) => (
                                 <RunRow key={r.id} run={r} />
                             ))}

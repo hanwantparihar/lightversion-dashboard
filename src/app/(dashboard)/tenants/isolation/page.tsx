@@ -75,36 +75,38 @@ export default function WorkspaceIsolationPage() {
     return (
         <PageStack>
 
-            <div className="flex gap-5 items-start" style={{ flexWrap: "wrap" }}>
+            <div className="flex flex-col lg:flex-row gap-5 items-start">
                 {/* Tenant list */}
-                <Card className="w-56 shrink-0">
+                <Card className="w-full lg:w-56 shrink-0">
                     <CardHeader className="pb-2">
                         <CardTitle className="text-sm">Select Tenant</CardTitle>
                     </CardHeader>
                     <CardContent className="p-0">
-                        {TENANTS.filter(t => t.status !== "churned").map(t => (
-                            <button key={t.id} onClick={() => setActiveTenant(t.id)}
-                                className="w-full flex items-center gap-2.5 px-4 py-2.5 text-left transition-colors border-none"
-                                style={{ background: activeTenant === t.id ? "var(--ac)" : "transparent", cursor: "pointer" }}
-                                onMouseEnter={e => { if (activeTenant !== t.id) e.currentTarget.style.background = "var(--mt)"; }}
-                                onMouseLeave={e => { if (activeTenant !== t.id) e.currentTarget.style.background = "transparent"; }}
-                            >
-                                <div className="w-7 h-7 rounded-lg flex items-center justify-center font-bold text-[11px] shrink-0"
-                                    style={{ background: t.color + "22", color: t.color }}>{t.avatar}</div>
-                                <span className="text-[13px] font-medium overflow-hidden text-ellipsis whitespace-nowrap"
-                                    style={{ color: activeTenant === t.id ? "hsl(var(--primary))" : "var(--fg)", fontWeight: activeTenant === t.id ? 700 : 400 }}>
-                                    {t.name}
-                                </span>
-                            </button>
-                        ))}
+                        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-1">
+                            {TENANTS.filter(t => t.status !== "churned").map(t => (
+                                <button key={t.id} onClick={() => setActiveTenant(t.id)}
+                                    className="w-full flex items-center gap-2.5 px-4 py-2.5 text-left transition-colors border-none"
+                                    style={{ background: activeTenant === t.id ? "var(--ac)" : "transparent", cursor: "pointer" }}
+                                    onMouseEnter={e => { if (activeTenant !== t.id) e.currentTarget.style.background = "var(--mt)"; }}
+                                    onMouseLeave={e => { if (activeTenant !== t.id) e.currentTarget.style.background = "transparent"; }}
+                                >
+                                    <div className="w-7 h-7 rounded-lg flex items-center justify-center font-bold text-[11px] shrink-0"
+                                        style={{ background: t.color + "22", color: t.color }}>{t.avatar}</div>
+                                    <span className="text-[13px] font-medium overflow-hidden text-ellipsis whitespace-nowrap"
+                                        style={{ color: activeTenant === t.id ? "hsl(var(--primary))" : "var(--fg)", fontWeight: activeTenant === t.id ? 700 : 400 }}>
+                                        {t.name}
+                                    </span>
+                                </button>
+                            ))}
+                        </div>
                     </CardContent>
                 </Card>
 
                 {/* Config panel */}
-                <div className="flex-1 min-w-0 flex flex-col gap-4">
+                <div className="flex-1 min-w-0 w-full flex flex-col gap-4">
                     {/* Score banner */}
                     <Card>
-                        <CardContent className="py-4 flex items-center gap-4 flex-wrap">
+                        <CardContent className="py-4 flex flex-col sm:flex-row items-start sm:items-center gap-4">
                             <div className="flex items-center gap-3">
                                 <div className="w-12 h-12 rounded-full flex items-center justify-center font-extrabold text-lg"
                                     style={{
@@ -120,7 +122,7 @@ export default function WorkspaceIsolationPage() {
                                     </div>
                                 </div>
                             </div>
-                            <div className="ml-auto flex items-center gap-2">
+                            <div className="sm:ml-auto flex items-center gap-2 flex-wrap">
                                 <span className="text-xs text-muted-foreground">Tenant:</span>
                                 <span className="font-bold text-sm">{tenant.name}</span>
                                 <span className="text-xs px-2 py-0.5 rounded-full capitalize font-bold"
@@ -155,7 +157,7 @@ export default function WorkspaceIsolationPage() {
                     </Card>
 
                     {/* Storage + Data Residency */}
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <Card>
                             <CardHeader><CardTitle className="flex items-center gap-2 text-sm"><Server size={16} /> Storage Isolation</CardTitle></CardHeader>
                             <CardContent>
@@ -190,11 +192,11 @@ export default function WorkspaceIsolationPage() {
                                 const Icon = t.icon;
                                 const on = cfg[t.key] as boolean;
                                 return (
-                                    <div key={t.key} className="flex items-center justify-between px-5 py-3.5 border-b last:border-0 border-border">
+                                    <div key={t.key} className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 px-4 sm:px-5 py-3.5 border-b last:border-0 border-border">
                                         <div className="flex items-center gap-3">
                                             <Icon size={16} className="text-muted-foreground shrink-0" />
                                             <div>
-                                                <div className="text-sm font-semibold flex items-center gap-2">
+                                                <div className="text-sm font-semibold flex items-center gap-2 flex-wrap">
                                                     {t.label}
                                                     {t.planRequired && (
                                                         <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-primary/10 text-primary capitalize">{t.planRequired}+</span>
@@ -203,7 +205,7 @@ export default function WorkspaceIsolationPage() {
                                                 <div className="text-xs text-muted-foreground">{t.desc}</div>
                                             </div>
                                         </div>
-                                        <button onClick={() => update(t.key, !on)} className="bg-transparent border-none cursor-pointer flex"
+                                        <button onClick={() => update(t.key, !on)} className="bg-transparent border-none cursor-pointer flex shrink-0"
                                             style={{ color: on ? "#10b981" : "var(--mt-fg)" }}>
                                             {on ? <ToggleRight size={26} /> : <ToggleLeft size={26} />}
                                         </button>
@@ -213,9 +215,9 @@ export default function WorkspaceIsolationPage() {
                         </CardContent>
                     </Card>
 
-                    <div className="flex justify-end gap-2">
-                        <Button variant="outline">Reset to defaults</Button>
-                        <Button>Save configuration</Button>
+                    <div className="flex flex-col sm:flex-row justify-end gap-2">
+                        <Button variant="outline" className="w-full sm:w-auto">Reset to defaults</Button>
+                        <Button className="w-full sm:w-auto">Save configuration</Button>
                     </div>
                 </div>
             </div>

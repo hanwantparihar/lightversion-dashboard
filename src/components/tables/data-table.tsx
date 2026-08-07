@@ -72,10 +72,10 @@ export function DataTable<T>({
     <div className={cn("w-full overflow-x-auto", className)}>
       <table
         className={cn(
-          "w-full table-fixed border-collapse text-sm",
+          "w-full border-collapse text-sm",
           tableClassName
         )}
-        style={{ tableLayout: "fixed" }}
+        style={{ minWidth: "max-content" }}
       >
         <thead className="bg-muted/50">
           <tr>
@@ -84,7 +84,7 @@ export function DataTable<T>({
                 key={col.key}
                 style={{
                   width: col.width || "auto",
-                  minWidth: col.width || "auto",
+                  minWidth: col.width || "120px",
                   whiteSpace: "nowrap",
                 }}
                 className={cn(
@@ -135,8 +135,10 @@ export function DataTable<T>({
                     key={col.key}
                     style={{
                       width: col.width || "auto",
-                      minWidth: col.width || "auto",
-                      wordBreak: "break-word",
+                      minWidth: col.width || "120px",
+                      whiteSpace: "nowrap",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
                     }}
                     className={cn(
                       "px-4 py-4 text-sm font-medium text-foreground",

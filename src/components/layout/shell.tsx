@@ -39,7 +39,7 @@ export function Shell({ children }: ShellProps) {
           collapsed={collapsed}
           onToggleCollapse={toggleCollapsed}
         />
-        <main className='flex-1 animate-fade-in p-5' key={pathname}>
+        <main className='dashboard-main flex-1 animate-fade-in p-5' key={pathname}>
           <div style={{ maxWidth, margin: maxWidth ? '0 auto' : undefined, width: '100%' }}>
             {/* Breadcrumb row */}
             <div className='breadcrumb-row mb-5 flex flex-wrap items-end justify-between gap-3.5'>

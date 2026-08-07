@@ -99,41 +99,43 @@ export default function CustomDomainPage() {
                 { icon: ShieldCheck, grad: "linear-gradient(135deg,#7c3aed,#6d28d9)", value: String(domainCounts.verified), label: "SSL Active", change: "HTTPS", up: true, spark: spB, color: "#7c3aed" },
             ]} />
 
-            <div className="flex gap-5 items-start flex-wrap lg:flex-nowrap">
+            <div className="flex flex-col lg:flex-row gap-5 items-start">
                 {/* Tenant list */}
-                <Card className="w-52 shrink-0">
+                <Card className="w-full lg:w-52 shrink-0">
                     <CardHeader className="pb-2"><CardTitle className="text-sm">Tenants</CardTitle></CardHeader>
                     <CardContent className="p-0">
-                        {TENANTS.filter(t => t.plan !== "starter" && t.status !== "churned").map(t => {
-                            const isA = t.id === activeTenantId;
-                            const tc = configs[t.id] ?? DEFAULT_WHITE_LABEL;
-                            const tdm = DOMAIN_META[tc.domainStatus];
-                            return (
-                                <button key={t.id} onClick={() => setActiveTenantId(t.id)}
-                                    className="w-full flex items-center gap-2.5 px-4 py-2.5 text-left border-none transition-colors"
-                                    style={{ background: isA ? "var(--ac)" : "transparent", cursor: "pointer" }}
-                                    onMouseEnter={e => { if (!isA) e.currentTarget.style.background = "var(--mt)"; }}
-                                    onMouseLeave={e => { if (!isA) e.currentTarget.style.background = "transparent"; }}
-                                >
-                                    <div className="w-7 h-7 rounded-lg flex items-center justify-center font-bold text-[11px] shrink-0"
-                                        style={{ background: t.color + "22", color: t.color }}>{t.avatar}</div>
-                                    <div className="flex-1 min-w-0">
-                                        <div className="text-[13px] truncate" style={{ fontWeight: isA ? 700 : 400, color: isA ? "hsl(var(--primary))" : "var(--fg)" }}>
-                                            {t.name}
+                        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-1">
+                            {TENANTS.filter(t => t.plan !== "starter" && t.status !== "churned").map(t => {
+                                const isA = t.id === activeTenantId;
+                                const tc = configs[t.id] ?? DEFAULT_WHITE_LABEL;
+                                const tdm = DOMAIN_META[tc.domainStatus];
+                                return (
+                                    <button key={t.id} onClick={() => setActiveTenantId(t.id)}
+                                        className="w-full flex items-center gap-2.5 px-4 py-2.5 text-left border-none transition-colors"
+                                        style={{ background: isA ? "var(--ac)" : "transparent", cursor: "pointer" }}
+                                        onMouseEnter={e => { if (!isA) e.currentTarget.style.background = "var(--mt)"; }}
+                                        onMouseLeave={e => { if (!isA) e.currentTarget.style.background = "transparent"; }}
+                                    >
+                                        <div className="w-7 h-7 rounded-lg flex items-center justify-center font-bold text-[11px] shrink-0"
+                                            style={{ background: t.color + "22", color: t.color }}>{t.avatar}</div>
+                                        <div className="flex-1 min-w-0">
+                                            <div className="text-[13px] truncate" style={{ fontWeight: isA ? 700 : 400, color: isA ? "hsl(var(--primary))" : "var(--fg)" }}>
+                                                {t.name}
+                                            </div>
+                                            <div className="flex items-center gap-1 mt-0.5">
+                                                <tdm.icon size={9} style={{ color: tdm.color }} />
+                                                <span className="text-[10px]" style={{ color: tdm.color }}>{tdm.label}</span>
+                                            </div>
                                         </div>
-                                        <div className="flex items-center gap-1 mt-0.5">
-                                            <tdm.icon size={9} style={{ color: tdm.color }} />
-                                            <span className="text-[10px]" style={{ color: tdm.color }}>{tdm.label}</span>
-                                        </div>
-                                    </div>
-                                </button>
-                            );
-                        })}
+                                    </button>
+                                );
+                            })}
+                        </div>
                     </CardContent>
                 </Card>
 
                 {/* Domain config */}
-                <div className="flex-1 min-w-0 flex flex-col gap-4">
+                <div className="flex-1 min-w-0 w-full flex flex-col gap-4">
 
                     {/* Current domain status */}
                     <Card>
@@ -144,15 +146,15 @@ export default function CustomDomainPage() {
                             {cfg.customDomain ? (
                                 <div className="flex flex-col gap-4">
                                     {/* Domain row */}
-                                    <div className="flex items-center justify-between gap-3 rounded-xl border border-border p-4 flex-wrap">
-                                        <div className="flex items-center gap-3">
+                                    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 rounded-xl border border-border p-4">
+                                        <div className="flex items-center gap-3 min-w-0 flex-1">
                                             <div className="w-9 h-9 rounded-lg flex items-center justify-center shrink-0"
                                                 style={{ background: dm.bg }}>
                                                 <DmIcon size={17} style={{ color: dm.color }} />
                                             </div>
-                                            <div>
-                                                <div className="font-semibold text-sm flex items-center gap-2">
-                                                    {cfg.customDomain}
+                                            <div className="min-w-0 flex-1">
+                                                <div className="font-semibold text-sm flex items-center gap-2 flex-wrap">
+                                                    <span className="truncate">{cfg.customDomain}</span>
                                                     <a href={`https://${cfg.customDomain}`} target="_blank" rel="noopener noreferrer">
                                                         <ExternalLink size={12} className="text-muted-foreground" />
                                                     </a>
@@ -164,16 +166,16 @@ export default function CustomDomainPage() {
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className="flex items-center gap-2">
+                                        <div className="flex items-center gap-2 flex-wrap w-full sm:w-auto">
                                             <span className="text-xs font-bold px-2.5 py-1 rounded-full"
                                                 style={{ background: dm.bg, color: dm.color }}>{dm.label}</span>
                                             {cfg.domainStatus !== "verified" && (
-                                                <Button size="sm" variant="outline" onClick={verify} disabled={verifying}>
+                                                <Button size="sm" variant="outline" onClick={verify} disabled={verifying} className="flex-1 sm:flex-initial">
                                                     <RefreshCw size={13} className={verifying ? "animate-spin" : ""} />
                                                     {verifying ? "Verifying…" : "Verify now"}
                                                 </Button>
                                             )}
-                                            <Button size="sm" variant="ghost" onClick={removeDomain}>
+                                            <Button size="sm" variant="ghost" onClick={removeDomain} className="flex-1 sm:flex-initial">
                                                 <Trash2 size={13} />
                                             </Button>
                                         </div>
@@ -199,10 +201,10 @@ export default function CustomDomainPage() {
                                     {/* Email domain */}
                                     <div className="flex flex-col gap-1.5">
                                         <label className="text-xs font-semibold text-muted-foreground">Custom Email Domain</label>
-                                        <div className="flex gap-2">
+                                        <div className="flex flex-col sm:flex-row gap-2">
                                             <Input value={cfg.customEmailDomain} onChange={e => update("customEmailDomain", e.target.value)}
                                                 placeholder="mail.yourco.com" className="flex-1" />
-                                            <Button variant="outline">Verify SPF</Button>
+                                            <Button variant="outline" className="w-full sm:w-auto">Verify SPF</Button>
                                         </div>
                                         {cfg.emailDomainStatus !== "none" && (
                                             <span className="text-xs font-semibold capitalize"
@@ -216,11 +218,11 @@ export default function CustomDomainPage() {
                                 /* Add domain form */
                                 <div className="flex flex-col gap-3">
                                     <p className="text-sm text-muted-foreground">No custom domain configured for <strong>{tenant.name}</strong>.</p>
-                                    <div className="flex gap-2">
+                                    <div className="flex flex-col sm:flex-row gap-2">
                                         <Input value={newDomain} onChange={e => setNewDomain(e.target.value)}
                                             placeholder="app.yourco.com" className="flex-1"
                                             onKeyDown={e => e.key === "Enter" && addDomain()} />
-                                        <Button onClick={addDomain} disabled={!newDomain.trim()}>
+                                        <Button onClick={addDomain} disabled={!newDomain.trim()} className="w-full sm:w-auto">
                                             <Plus size={14} /> Add Domain
                                         </Button>
                                     </div>

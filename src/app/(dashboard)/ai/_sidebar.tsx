@@ -40,7 +40,7 @@ export function AiSidebar({
     const unpinned = filtered.filter((c) => !c.pinned);
 
     return (
-        <div className="w-[252px] border-r border-border flex flex-col shrink-0 bg-card">
+        <div className="w-[252px] h-full md:h-auto border-r border-border flex flex-col shrink-0 bg-card" style={{ height: "calc(100vh - 80px)" }}>
 
             {/* Brand + new chat */}
             <div className="px-3 pt-[14px] pb-[10px] border-b border-border">

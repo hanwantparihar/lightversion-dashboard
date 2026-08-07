@@ -234,6 +234,45 @@ export default function SettingsContent() {
   const [smtpTestEmail, setSmtpTestEmail] = useState(smtpConfig.testRecipient)
   const [smtpTestSent, setSmtpTestSent] = useState(false)
 
+  // API Keys state
+  const [localApiKeys, setLocalApiKeys] = useState(apiKeys)
+  const [showGenerateDialog, setShowGenerateDialog] = useState(false)
+  const [newKeyName, setNewKeyName] = useState('')
+  const [newKeyScope, setNewKeyScope] = useState('read')
+  const [generatedKey, setGeneratedKey] = useState('')
+
+  const generateApiKey = () => {
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+    let key = 'sk_'
+    for (let i = 0; i < 48; i++) {
+      key += chars.charAt(Math.floor(Math.random() * chars.length))
+    }
+    return key
+  }
+
+  const handleGenerateKey = () => {
+    if (!newKeyName.trim()) return
+
+    const newKey = {
+      id: Date.now().toString(),
+      name: newKeyName,
+      key: generateApiKey(),
+      scope: newKeyScope,
+      requests: '0',
+      lastUsed: 'Never',
+      status: 'Active' as 'Active' | 'Revoked'
+    }
+
+    setGeneratedKey(newKey.key)
+    setLocalApiKeys([newKey, ...localApiKeys])
+    setNewKeyName('')
+    setNewKeyScope('read')
+  }
+
+  const copyToClipboard = (text: string) => {
+    navigator.clipboard.writeText(text)
+  }
+
   useEffect(() => {
     const urlTab = searchParams.get('tab')
     if (urlTab) setTab(urlTab)
@@ -287,7 +326,7 @@ export default function SettingsContent() {
       <div className='flex gap-8'>
 
         {/* ── Left sidebar nav ─────────────────────────────────── */}
-        <aside className='hidden w-52 shrink-0 md:block'>
+        <div className='hidden w-52 shrink-0 md:block'>
           {NAV.map((group) => (
             <div key={group.group} className='mb-6'>
               <p className='mb-2 px-3 text-xs font-semibold text-muted-foreground'>{group.group}</p>
@@ -317,10 +356,23 @@ export default function SettingsContent() {
               <p className='truncate text-xs text-muted-foreground'>{profile.email}</p>
             </div>
           </div>
-        </aside>
+        </div>
 
         {/* ── Right content ─────────────────────────────────────── */}
         <div className='min-w-0 flex-1'>
+          {/* Mobile dropdown selector */}
+          <div className='mb-4 md:hidden'>
+            <DropdownSelect
+              value={tab}
+              onChange={setTab}
+              options={NAV.flatMap(group =>
+                group.items.map(item => ({
+                  value: item.id,
+                  label: item.label
+                }))
+              )}
+            />
+          </div>
           <h1 className='mb-6 text-2xl font-bold'>{TITLES[tab] ?? tab}</h1>
 
           <div className='flex flex-col gap-5'>
@@ -682,7 +734,7 @@ export default function SettingsContent() {
 
             {/* ── API KEYS ─────────────────────────────────────── */}
             {tab === 'api-keys' && (
-              <Section title='API Keys' action={<Button size='sm'><Plus size={14} /> Generate Key</Button>}>
+              <Section title='API Keys' action={<Button size='sm' onClick={() => setShowGenerateDialog(true)}><Plus size={14} /> Generate Key</Button>}>
                 <div className='overflow-x-auto'>
                   <table className='w-full text-sm'>
                     <thead>
@@ -696,12 +748,12 @@ export default function SettingsContent() {
                       </tr>
                     </thead>
                     <tbody>
-                      {apiKeys.map((item) => (
+                      {localApiKeys.map((item) => (
                         <tr key={item.id} className='border-b last:border-0'>
                           <td className='py-3 font-medium'>{item.name}</td>
                           <td className='py-3'>
                             <span className='mr-2 font-mono text-xs'>{item.key}</span>
-                            <Button variant='ghost' size='sm'><Copy size={13} /></Button>
+                            <Button variant='ghost' size='sm' onClick={() => copyToClipboard(item.key)}><Copy size={13} /></Button>
                           </td>
                           <td className='py-3'>{item.scope}</td>
                           <td className='py-3'>{item.requests}</td>
@@ -712,6 +764,110 @@ export default function SettingsContent() {
                     </tbody>
                   </table>
                 </div>
+
+                {/* Generate Key Dialog */}
+                {showGenerateDialog && (
+                  <>
+                    <div
+                      className='fixed inset-0 z-[75] bg-black/50 backdrop-blur-sm'
+                      onClick={() => {
+                        setShowGenerateDialog(false)
+                        setGeneratedKey('')
+                      }}
+                    />
+                    <div className='fixed left-1/2 top-1/2 z-[76] w-[90%] max-w-md -translate-x-1/2 -translate-y-1/2 rounded-2xl border border-border bg-background shadow-2xl'>
+                      {!generatedKey ? (
+                        <>
+                          <div className='border-b border-border px-6 py-5'>
+                            <h3 className='text-[15px] font-extrabold tracking-tight text-foreground'>
+                              Generate API Key
+                            </h3>
+                            <p className='mt-1.5 text-[13px] text-muted-foreground'>
+                              Create a new API key for your application
+                            </p>
+                          </div>
+                          <div className='space-y-4 px-6 py-5'>
+                            <Field label='Key Name'>
+                              <Input
+                                value={newKeyName}
+                                onChange={(e) => setNewKeyName(e.target.value)}
+                                placeholder='e.g., Production API'
+                              />
+                            </Field>
+                            <Field label='Scope'>
+                              <DropdownSelect
+                                value={newKeyScope}
+                                onChange={setNewKeyScope}
+                                options={[
+                                  { value: 'read', label: 'Read Only' },
+                                  { value: 'write', label: 'Read & Write' },
+                                  { value: 'admin', label: 'Full Access' }
+                                ]}
+                              />
+                            </Field>
+                          </div>
+                          <div className='flex gap-3 border-t border-border px-6 py-5'>
+                            <Button
+                              variant='outline'
+                              onClick={() => {
+                                setShowGenerateDialog(false)
+                                setNewKeyName('')
+                                setNewKeyScope('read')
+                              }}
+                              className='flex-1'
+                            >
+                              Cancel
+                            </Button>
+                            <Button
+                              onClick={handleGenerateKey}
+                              disabled={!newKeyName.trim()}
+                              className='flex-1'
+                            >
+                              Generate
+                            </Button>
+                          </div>
+                        </>
+                      ) : (
+                        <>
+                          <div className='border-b border-border px-6 py-5'>
+                            <h3 className='text-[15px] font-extrabold tracking-tight text-foreground'>
+                              API Key Generated
+                            </h3>
+                            <p className='mt-1.5 text-[13px] text-destructive'>
+                              Copy this key now. You won't be able to see it again!
+                            </p>
+                          </div>
+                          <div className='px-6 py-5'>
+                            <div className='relative rounded-lg border border-border bg-muted p-4'>
+                              <code className='block break-all font-mono text-xs font-semibold text-foreground'>
+                                {generatedKey}
+                              </code>
+                              <Button
+                                variant='ghost'
+                                size='sm'
+                                onClick={() => copyToClipboard(generatedKey)}
+                                className='absolute right-2 top-2'
+                              >
+                                <Copy size={14} />
+                              </Button>
+                            </div>
+                          </div>
+                          <div className='border-t border-border px-6 py-5'>
+                            <Button
+                              onClick={() => {
+                                setShowGenerateDialog(false)
+                                setGeneratedKey('')
+                              }}
+                              className='w-full'
+                            >
+                              Done
+                            </Button>
+                          </div>
+                        </>
+                      )}
+                    </div>
+                  </>
+                )}
               </Section>
             )}
 

@@ -74,23 +74,24 @@ export default function ApiPlaygroundPage() {
             {/* API key bar */}
             <Card>
                 <CardContent style={{ paddingTop: 18, paddingBottom: 18 }}>
-                    <div className="fc g3" style={{ flexWrap: "wrap" }}>
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
                         <Zap size={16} style={{ color: "#f59e0b", flexShrink: 0 }} />
                         <Label style={{ flexShrink: 0, fontSize: 13 }}>API Key</Label>
                         <Input
                             value={apiKey}
                             onChange={(e) => setApiKey(e.target.value)}
-                            style={{ flex: 1, minWidth: 240, fontFamily: "monospace", fontSize: 13 }}
+                            className="flex-1 w-full sm:min-w-[240px]"
+                            style={{ fontFamily: "monospace", fontSize: 13 }}
                             placeholder="nx_live_..."
                         />
-                        <span style={{ fontSize: 12, color: "var(--mt-fg)" }}>Requests go to the sandbox — no real data is modified</span>
+                        <span style={{ fontSize: 12, color: "var(--mt-fg)" }} className="w-full sm:w-auto text-center sm:text-left">Requests go to the sandbox — no real data is modified</span>
                     </div>
                 </CardContent>
             </Card>
 
-            <div style={{ display: "flex", gap: 20, alignItems: "flex-start" }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: 20, alignItems: "flex-start" }} className="md:flex-row">
                 {/* Endpoint list */}
-                <Card style={{ width: 260, flexShrink: 0 }}>
+                <Card style={{ width: "100%", flexShrink: 0 }} className="md:w-[260px]">
                     <CardContent style={{ padding: "12px 0" }}>
                         <div style={{ padding: "8px 16px 6px", fontSize: 11, fontWeight: 700, color: "var(--mt-fg)", textTransform: "uppercase", letterSpacing: "0.06em" }}>Endpoints</div>
                         {PLAYGROUND_ENDPOINTS.map((ep) => {
@@ -138,11 +139,11 @@ export default function ApiPlaygroundPage() {
                                     <div style={{ fontSize: 12, fontWeight: 700, color: "var(--mt-fg)", marginBottom: 8, textTransform: "uppercase", letterSpacing: "0.05em" }}>Path</div>
                                     <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
                                         {pathParams.map((p) => (
-                                            <div key={p.name} className="fc g3">
-                                                <Label style={{ width: 120, flexShrink: 0, fontFamily: "monospace", fontSize: 13 }}>
+                                            <div key={p.name} className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3">
+                                                <Label style={{ fontFamily: "monospace", fontSize: 13 }} className="sm:w-[120px] sm:shrink-0">
                                                     {p.name} {p.required && <span style={{ color: "#ef4444" }}>*</span>}
                                                 </Label>
-                                                <Input value={getParam(p.name)} onChange={(e) => setParamVals((v) => ({ ...v, [p.name]: e.target.value }))} placeholder={p.type} style={{ flex: 1 }} />
+                                                <Input value={getParam(p.name)} onChange={(e) => setParamVals((v) => ({ ...v, [p.name]: e.target.value }))} placeholder={p.type} className="flex-1" />
                                             </div>
                                         ))}
                                     </div>
@@ -155,9 +156,9 @@ export default function ApiPlaygroundPage() {
                                     <div style={{ fontSize: 12, fontWeight: 700, color: "var(--mt-fg)", marginBottom: 8, textTransform: "uppercase", letterSpacing: "0.05em" }}>Query</div>
                                     <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
                                         {queryParams.map((p) => (
-                                            <div key={p.name} className="fc g3">
-                                                <Label style={{ width: 120, flexShrink: 0, fontFamily: "monospace", fontSize: 13 }}>{p.name}</Label>
-                                                <Input value={getParam(p.name)} onChange={(e) => setParamVals((v) => ({ ...v, [p.name]: e.target.value }))} placeholder={p.defaultValue || p.type} style={{ flex: 1 }} />
+                                            <div key={p.name} className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3">
+                                                <Label style={{ fontFamily: "monospace", fontSize: 13 }} className="sm:w-[120px] sm:shrink-0">{p.name}</Label>
+                                                <Input value={getParam(p.name)} onChange={(e) => setParamVals((v) => ({ ...v, [p.name]: e.target.value }))} placeholder={p.defaultValue || p.type} className="flex-1" />
                                             </div>
                                         ))}
                                     </div>
@@ -170,11 +171,11 @@ export default function ApiPlaygroundPage() {
                                     <div style={{ fontSize: 12, fontWeight: 700, color: "var(--mt-fg)", marginBottom: 8, textTransform: "uppercase", letterSpacing: "0.05em" }}>Body</div>
                                     <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
                                         {bodyParams.map((p) => (
-                                            <div key={p.name} className="fc g3">
-                                                <Label style={{ width: 120, flexShrink: 0, fontFamily: "monospace", fontSize: 13 }}>
+                                            <div key={p.name} className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3">
+                                                <Label style={{ fontFamily: "monospace", fontSize: 13 }} className="sm:w-[120px] sm:shrink-0">
                                                     {p.name} {p.required && <span style={{ color: "#ef4444" }}>*</span>}
                                                 </Label>
-                                                <Input value={getParam(p.name)} onChange={(e) => setParamVals((v) => ({ ...v, [p.name]: e.target.value }))} placeholder={p.type} style={{ flex: 1 }} />
+                                                <Input value={getParam(p.name)} onChange={(e) => setParamVals((v) => ({ ...v, [p.name]: e.target.value }))} placeholder={p.type} className="flex-1" />
                                             </div>
                                         ))}
                                     </div>

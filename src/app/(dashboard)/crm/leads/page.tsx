@@ -73,22 +73,24 @@ export default function LeadsPage() {
   }, [page, totalPages]);
 
   const columns: TableColumn<Lead>[] = [
-    { key: "name", title: "Name", sortable: true },
-    { key: "company", title: "Company", sortable: true },
-    { key: "email", title: "Email" },
-    { key: "source", title: "Source" },
+    { key: "name", title: "Name", sortable: true, width: "150px" },
+    { key: "company", title: "Company", sortable: true, width: "150px" },
+    { key: "email", title: "Email", width: "180px" },
+    { key: "source", title: "Source", width: "120px" },
     {
       key: "status",
       title: "Status",
+      width: "120px",
       render: (row) => <LeadStatusBadge status={row.status} />,
     },
     {
       key: "value",
       title: "Value",
+      width: "100px",
       render: (row) => `$${row.value.toLocaleString()}`,
     },
-    { key: "assignee", title: "Assignee" },
-    { key: "createdAt", title: "Created" },
+    { key: "assignee", title: "Assignee", width: "120px" },
+    { key: "createdAt", title: "Created", width: "100px" },
   ];
 
   return (
@@ -139,18 +141,18 @@ export default function LeadsPage() {
       />
 
       <Card>
-        <CardHeader className="flex flex-row flex-wrap items-center justify-between gap-3 space-y-0">
+        <CardHeader className="flex flex-col sm:flex-row sm:flex-wrap items-start sm:items-center justify-between gap-3 space-y-0">
           <CardTitle className="flex items-center gap-2">
             <Users size={18} />
             Lead Management
           </CardTitle>
-          <Button size="sm" onClick={() => setAddOpen(true)}>
+          <Button size="sm" onClick={() => setAddOpen(true)} className="w-full sm:w-auto">
             <UserPlus size={14} />
             Add Lead
           </Button>
         </CardHeader>
         <CardContent style={{ padding: 0 }}>
-          <div className="dt-f">
+          <div className="dt-f flex-col md:flex-row gap-3 md:gap-0">
             <div className="fc g2" style={{ fontSize: 13, fontWeight: 600, color: "var(--mt-fg)" }}>
               Show
               <DropdownSelect
@@ -161,9 +163,9 @@ export default function LeadsPage() {
               />
               entries
             </div>
-            <div className="fc g2" style={{ flexWrap: "wrap" }}>
+            <div className="fc g2 flex-wrap">
               <DropdownSelect
-                style={{ width: 140 }}
+                style={{ width: 140, minWidth: 140 }}
                 value={status}
                 onChange={setStatus}
                 options={["All", ...LEAD_STATUSES].map((s) => ({
@@ -171,7 +173,7 @@ export default function LeadsPage() {
                   label: s === "All" ? "All statuses" : s,
                 }))}
               />
-              <div style={{ position: "relative" }}>
+              <div style={{ position: "relative", flex: "1 1 auto", minWidth: 200 }}>
                 <Search
                   size={15}
                   style={{
@@ -186,18 +188,20 @@ export default function LeadsPage() {
                   placeholder="Search leads…"
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
-                  style={{ width: 220, height: 36, paddingLeft: 34, borderRadius: 9 }}
+                  style={{ width: "100%", height: 36, paddingLeft: 34, borderRadius: 9 }}
                 />
               </div>
             </div>
           </div>
 
-          <DataTable
-            columns={columns}
-            rows={pageLeads}
-            rowKey="id"
-            emptyMessage="No leads match your filters."
-          />
+          <div className="overflow-x-auto">
+            <DataTable
+              columns={columns}
+              rows={pageLeads}
+              rowKey="id"
+              emptyMessage="No leads match your filters."
+            />
+          </div>
 
           <TablePagination
             page={page}

@@ -116,11 +116,7 @@ export default function TenantBillingPage() {
                                                 <div className="flex items-center gap-1">
                                                     <Button size="sm" variant="ghost" className="h-7 w-7 p-0"><Eye size={13} /></Button>
                                                     <Button size="sm" variant="ghost" className="h-7 w-7 p-0"><Download size={13} /></Button>
-                                                    {inv.status === "overdue" && (
-                                                        <Button size="sm" variant="ghost" className="h-7 px-2" onClick={() => sendReminder(inv.id)}>
-                                                            <Send size={12} className="mr-1" /> Remind
-                                                        </Button>
-                                                    )}
+
                                                 </div>
                                             </td>
                                         </tr>

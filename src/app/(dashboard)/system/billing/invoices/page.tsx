@@ -100,21 +100,21 @@ export default function InvoicesPage() {
             )}
 
             <Card>
-                <CardHeader className="flex flex-row flex-wrap items-center justify-between gap-3 space-y-0">
+                <CardHeader className="flex flex-col sm:flex-row flex-wrap items-start sm:items-center justify-between gap-3 space-y-0">
                     <div>
                         <CardTitle className="fc g2"><Receipt size={18} /> Invoices</CardTitle>
                         <CardDescription>Generate, send, and track customer invoices</CardDescription>
                     </div>
-                    <div className="fc g2" style={{ flexWrap: "wrap" }}>
+                    <div className="fc g2 w-full sm:w-auto" style={{ flexWrap: "wrap" }}>
                         {(["all", "paid", "pending", "overdue", "draft"] as const).map((s) => (
                             <button key={s} onClick={() => setFilter(s)} style={{ padding: "5px 14px", borderRadius: 8, border: "1px solid var(--bd)", cursor: "pointer", fontWeight: 600, fontSize: 12, textTransform: "capitalize", background: filter === s ? "hsl(var(--primary))" : "var(--cd)", color: filter === s ? "#fff" : "var(--fg)" }}>{s}</button>
                         ))}
-                        <Button size="sm"><Plus size={14} /> New Invoice</Button>
+                        <Button size="sm" className="w-full sm:w-auto"><Plus size={14} /> New Invoice</Button>
                     </div>
                 </CardHeader>
                 <CardContent style={{ padding: 0 }}>
                     <div className="overflow-x-auto">
-                        <table className="w-full text-sm">
+                        <table className="w-full text-sm" style={{ minWidth: "800px" }}>
                             <thead>
                                 <tr className="border-b text-left text-muted-foreground">
                                     <th className="pb-3 pt-4 pl-5 font-semibold">Invoice</th>
@@ -151,9 +151,6 @@ export default function InvoicesPage() {
                                             <div className="fc g1">
                                                 <Button size="sm" variant="ghost" onClick={() => setPreview(inv)}><Eye size={13} /></Button>
                                                 <Button size="sm" variant="ghost"><Download size={13} /></Button>
-                                                {inv.status === "draft" && (
-                                                    <Button size="sm" variant="ghost" onClick={() => send(inv.id)}><Send size={13} /></Button>
-                                                )}
                                             </div>
                                         </td>
                                     </tr>

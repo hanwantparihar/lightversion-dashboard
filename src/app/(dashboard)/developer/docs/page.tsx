@@ -27,8 +27,8 @@ export default function SdkDocsPage() {
 
     return (
         <PageStack>
-            <div className="fb">
-                <div className="fc g2">
+            <div className="fb flex-col sm:flex-row items-start sm:items-center gap-3">
+                <div className="fc g2 w-full sm:w-auto flex-wrap">
                     {(Object.keys(LANG_LABELS) as Lang[]).map((l) => (
                         <button
                             key={l}
@@ -45,9 +45,9 @@ export default function SdkDocsPage() {
                 </div>
             </div>
 
-            <div style={{ display: "flex", gap: 20, alignItems: "flex-start" }}>
+            <div className="flex flex-col md:flex-row gap-5 items-stretch">
                 {/* Sidebar */}
-                <Card style={{ width: 220, flexShrink: 0 }}>
+                <Card className="w-full md:w-[220px] shrink-0">
                     <CardContent style={{ padding: "12px 0" }}>
                         {categories.map((cat) => (
                             <div key={cat}>
@@ -79,61 +79,47 @@ export default function SdkDocsPage() {
                 </Card>
 
                 {/* Content */}
-                <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", gap: 16 }}>
-                    <Card>
+                <div className="flex-1 min-w-0 flex flex-col gap-4">
+                    <Card className="overflow-hidden">
                         <CardContent style={{ paddingTop: 24 }}>
-                            <div style={{ fontWeight: 800, fontSize: 22, marginBottom: 8 }}>{doc.title}</div>
-                            <p style={{ fontSize: 14, color: "var(--mt-fg)", lineHeight: 1.7, marginBottom: 0 }}>{doc.description}</p>
+                            <div className="font-extrabold text-xl sm:text-2xl mb-2">{doc.title}</div>
+                            <p className="text-sm text-muted-foreground leading-relaxed mb-0">{doc.description}</p>
                         </CardContent>
                     </Card>
 
                     {/* Code block */}
-                    <Card style={{ overflow: "hidden" }}>
-                        <div
-                            style={{
-                                padding: "10px 18px", borderBottom: "1px solid var(--bd)",
-                                display: "flex", alignItems: "center", justifyContent: "space-between",
-                            }}
-                        >
+                    <Card className="overflow-hidden">
+                        <div className="flex items-center justify-between px-4 sm:px-5 py-2.5 border-b border-border">
                             <div className="fc g2">
                                 <div style={{ width: 10, height: 10, borderRadius: "50%", background: METHOD_COLORS[lang] }} />
-                                <span style={{ fontSize: 13, fontWeight: 700 }}>{LANG_LABELS[lang]}</span>
+                                <span className="text-xs sm:text-sm font-bold">{LANG_LABELS[lang]}</span>
                             </div>
                             <Button size="sm" variant="ghost" onClick={copy}>
                                 {copied ? <Check size={14} style={{ color: "#10b981" }} /> : <Copy size={14} />}
                                 {copied ? "Copied" : "Copy"}
                             </Button>
                         </div>
-                        <pre
-                            style={{
-                                margin: 0, padding: "20px 22px",
-                                background: "hsl(222 47% 8%)",
-                                color: "#e2e8f0",
-                                fontSize: 13, lineHeight: 1.75,
-                                overflowX: "auto",
-                                fontFamily: '"JetBrains Mono", "Fira Code", monospace',
-                            }}
-                        >
+                        <pre className="m-0 p-4 sm:p-5 bg-[hsl(222,47%,8%)] text-slate-200 text-xs sm:text-sm leading-relaxed overflow-x-auto font-mono">
                             <code>{doc.code[lang]}</code>
                         </pre>
                     </Card>
 
                     {/* Installation hint */}
                     {lang === "ts" && (
-                        <Card>
-                            <CardContent style={{ paddingTop: 20 }}>
-                                <div style={{ fontWeight: 700, fontSize: 14, marginBottom: 10 }}>Install</div>
-                                <pre style={{ margin: 0, padding: "12px 16px", background: "var(--mt)", borderRadius: 8, fontSize: 13, fontFamily: "monospace", overflowX: "auto" }}>
+                        <Card className="overflow-hidden">
+                            <CardContent className="pt-5">
+                                <div className="font-bold text-sm mb-2.5">Install</div>
+                                <pre className="m-0 p-3 sm:p-4 bg-muted rounded-lg text-xs sm:text-sm font-mono overflow-x-auto">
                                     npm install @nexora/sdk
                                 </pre>
                             </CardContent>
                         </Card>
                     )}
                     {lang === "python" && (
-                        <Card>
-                            <CardContent style={{ paddingTop: 20 }}>
-                                <div style={{ fontWeight: 700, fontSize: 14, marginBottom: 10 }}>Install</div>
-                                <pre style={{ margin: 0, padding: "12px 16px", background: "var(--mt)", borderRadius: 8, fontSize: 13, fontFamily: "monospace", overflowX: "auto" }}>
+                        <Card className="overflow-hidden">
+                            <CardContent className="pt-5">
+                                <div className="font-bold text-sm mb-2.5">Install</div>
+                                <pre className="m-0 p-3 sm:p-4 bg-muted rounded-lg text-xs sm:text-sm font-mono overflow-x-auto">
                                     pip install nexora-sdk
                                 </pre>
                             </CardContent>

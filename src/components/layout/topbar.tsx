@@ -82,7 +82,7 @@ export function Topbar({ openMenu, collapsed, onToggleCollapse }: TopbarProps) {
         />
         <Input placeholder='Search…' className='h-10 rounded-xl pl-9' />
       </div>
-      <div className='flex-1' />
+      <div className='flex-1 hidden sm:block' />
 
       <div className='flex items-center gap-3'>
         {/* Theme toggle */}
@@ -133,7 +133,7 @@ export function Topbar({ openMenu, collapsed, onToggleCollapse }: TopbarProps) {
               setProfileOpen(v => !v)
               setNotifOpen(false)
             }}
-            className='flex items-center gap-2 rounded-full border bg-card py-1 pl-1 pr-2.5 transition-colors hover:bg-muted/60'
+            className='flex items-center gap-2 rounded-full border bg-card py-1 pl-1 pr-1 sm:pr-2.5 transition-colors hover:bg-muted/60'
             aria-label='Open profile menu'
             aria-expanded={profileOpen}
           >

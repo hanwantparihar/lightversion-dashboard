@@ -55,7 +55,7 @@ function WorkspaceMenu({
                         onMouseEnter={(e) => (e.currentTarget.style.background = "#ef444410")}
                         onMouseLeave={(e) => (e.currentTarget.style.background = "none")}
                     >
-                        <Trash2 size={14} /> Delete workspace
+                        <Trash2 size={14} /> Delete
                     </button>
                 </div>
             )}
@@ -95,11 +95,12 @@ function DeleteConfirm({
                     Are you sure you want to delete <strong style={{ color: "var(--fg)" }}>{ws.name}</strong>?
                     This will permanently remove the workspace and all its projects. This action cannot be undone.
                 </p>
-                <div className="fc g2" style={{ justifyContent: "flex-end" }}>
-                    <Button variant="outline" onClick={onCancel}>Cancel</Button>
+                <div className="fc g2 flex-col-reverse sm:flex-row" style={{ justifyContent: "flex-end" }}>
+                    <Button variant="outline" onClick={onCancel} className="w-full sm:w-auto">Cancel</Button>
                     <Button
                         onClick={onConfirm}
                         style={{ background: "#ef4444", borderColor: "#ef4444" }}
+                        className="w-full sm:w-auto"
                     >
                         <Trash2 size={14} /> Delete
                     </Button>
@@ -144,9 +145,9 @@ function RenameDialog({
                         onKeyDown={(e) => { if (e.key === "Enter" && name.trim()) onConfirm(name.trim()); if (e.key === "Escape") onCancel(); }}
                     />
                 </div>
-                <div className="fc g2" style={{ justifyContent: "flex-end" }}>
-                    <Button variant="outline" onClick={onCancel}>Cancel</Button>
-                    <Button onClick={() => { if (name.trim()) onConfirm(name.trim()); }} disabled={!name.trim()}>
+                <div className="fc g2 flex-col-reverse sm:flex-row" style={{ justifyContent: "flex-end" }}>
+                    <Button variant="outline" onClick={onCancel} className="w-full sm:w-auto">Cancel</Button>
+                    <Button onClick={() => { if (name.trim()) onConfirm(name.trim()); }} disabled={!name.trim()} className="w-full sm:w-auto">
                         <Pencil size={14} /> Rename
                     </Button>
                 </div>
@@ -211,21 +212,22 @@ export default function WorkspacesPage() {
                 <RenameDialog ws={renameTarget} onConfirm={confirmRename} onCancel={() => setRenameTarget(null)} />
             )}
 
-            <div className="fb">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                 <div>
                     <h2 style={{ fontWeight: 800, fontSize: 22 }}>Team Workspaces</h2>
                     <p style={{ color: "var(--mt-fg)", fontSize: 14, marginTop: 2 }}>
                         Organize your team into focused workspaces
                     </p>
                 </div>
-                <div className="fc g2">
+                <div className="fc g2 w-full sm:w-auto flex-wrap">
                     <Input
                         placeholder="Search workspaces..."
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
-                        style={{ width: 220 }}
+                        style={{ minWidth: 200, flex: "1 1 auto" }}
+                        className="sm:max-w-[220px]"
                     />
-                    <Button onClick={() => setShowNew(true)}>
+                    <Button onClick={() => setShowNew(true)} className="w-full sm:w-auto">
                         <Plus size={16} /> New Workspace
                     </Button>
                 </div>
@@ -247,16 +249,16 @@ export default function WorkspacesPage() {
                                 <label style={{ fontSize: 13, fontWeight: 600 }}>Description</label>
                                 <Input placeholder="Short description (optional)" value={newDesc} onChange={(e) => setNewDesc(e.target.value)} />
                             </div>
-                            <div className="fc g2">
-                                <Button onClick={addWorkspace}>Create</Button>
-                                <Button variant="outline" onClick={() => setShowNew(false)}>Cancel</Button>
+                            <div className="fc g2 flex-col-reverse sm:flex-row">
+                                <Button variant="outline" onClick={() => setShowNew(false)} className="w-full sm:w-auto">Cancel</Button>
+                                <Button onClick={addWorkspace} className="w-full sm:w-auto">Create</Button>
                             </div>
                         </div>
                     </CardContent>
                 </Card>
             )}
 
-            <div className="gr g-4 g2">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 {filtered.map((ws) => (
                     <Card key={ws.id} style={{ overflow: "hidden" }}>
                         <div style={{ height: 6, background: ws.color }} />

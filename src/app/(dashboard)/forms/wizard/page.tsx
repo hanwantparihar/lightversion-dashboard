@@ -88,12 +88,12 @@ function HorizontalWizard() {
       </CardHeader>
 
       {/* Step bar */}
-      <div className="flex items-start px-8 py-5 border-b border-border bg-muted/40">
+      <div className="flex items-start px-4 sm:px-8 py-5 border-b border-border bg-muted/40 overflow-x-auto">
         {STEPS_H.map((s, i) => {
           const done = i < step; const active = i === step;
           const Icon = s.icon;
           return (
-            <div key={i} className="flex items-center flex-1 last:flex-none">
+            <div key={i} className="flex items-center flex-1 last:flex-none min-w-[80px]">
               <button
                 onClick={() => done && setStep(i)}
                 className="flex flex-col items-center gap-2"
@@ -114,7 +114,7 @@ function HorizontalWizard() {
               </button>
               {i < STEPS_H.length - 1 && (
                 <div className={cn(
-                  "flex-1 h-0.5 mx-3 mb-6 rounded-full transition-all duration-300",
+                  "flex-1 h-0.5 mx-2 sm:mx-3 mb-6 rounded-full transition-all duration-300",
                   done ? "bg-primary" : "bg-border",
                 )} />
               )}
@@ -254,8 +254,8 @@ function IconWizard() {
 
       {/* Step bubbles */}
       <div
-        className="grid px-8 py-5 border-b border-border bg-muted/40"
-        style={{ gridTemplateColumns: `repeat(${STEPS_I.length}, 1fr)` }}
+        className="grid px-4 sm:px-8 py-5 border-b border-border bg-muted/40 overflow-x-auto"
+        style={{ gridTemplateColumns: `repeat(${STEPS_I.length}, minmax(80px, 1fr))` }}
       >
         {STEPS_I.map((s, i) => {
           const done = i < step; const active = i === step;
@@ -399,9 +399,9 @@ function VerticalWizard() {
         <CardDescription>Sidebar navigation with step descriptions and progress connector</CardDescription>
       </CardHeader>
 
-      <div className="flex" style={{ minHeight: 420 }}>
+      <div className="flex flex-col md:flex-row" style={{ minHeight: 420 }}>
         {/* Sidebar */}
-        <div className="w-60 shrink-0 border-r border-border bg-muted/40 py-3">
+        <div className="w-full md:w-60 shrink-0 border-b md:border-b-0 md:border-r border-border bg-muted/40 py-3">
           {STEPS_V.map((s, i) => {
             const done = i < step; const active = i === step;
             const SI = s.icon;

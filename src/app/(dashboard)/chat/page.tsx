@@ -1,6 +1,6 @@
 "use client";
 import { useState, useRef, useEffect } from "react";
-import { Send, Search, Users, Hash } from "lucide-react";
+import { Send, Search, Users, Hash, ArrowLeft } from "lucide-react";
 import { Card, Input, Button } from "@/components/ui";
 import { PageStack } from "@/components";
 import { CHAT_CONTACTS, CHAT_MESSAGES, type ChatContact, type ChatMessage } from "@/lib/chat-data";
@@ -13,6 +13,7 @@ export default function ChatPage() {
     const [messages, setMessages] = useState<Record<string, ChatMessage[]>>(CHAT_MESSAGES);
     const [text, setText] = useState("");
     const [search, setSearch] = useState("");
+    const [showSidebar, setShowSidebar] = useState(true);
     const bottomRef = useRef<HTMLDivElement>(null);
 
     const thread = messages[active.id] ?? [];
@@ -39,6 +40,11 @@ export default function ChatPage() {
         if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); send(); }
     }
 
+    function selectContact(contact: ChatContact) {
+        setActive(contact);
+        setShowSidebar(false); // Hide sidebar on mobile after selecting
+    }
+
     const filtered = CHAT_CONTACTS.filter((c) =>
         c.name.toLowerCase().includes(search.toLowerCase())
     );
@@ -50,71 +56,77 @@ export default function ChatPage() {
     return (
         <PageStack>
 
-            <Card style={{ overflow: "hidden", display: "flex", height: 680 }}>
+            <Card className="overflow-hidden flex flex-col sm:flex-row h-[500px] sm:h-[680px] relative">
                 {/* Sidebar */}
-                <div style={{ width: 280, borderRight: "1px solid var(--bd)", display: "flex", flexDirection: "column", flexShrink: 0 }}>
-                    <div style={{ padding: "14px 16px", borderBottom: "1px solid var(--bd)" }}>
-                        <div style={{ position: "relative" }}>
-                            <Search size={14} style={{ position: "absolute", left: 10, top: "50%", transform: "translateY(-50%)", color: "var(--mt-fg)" }} />
+                <div className={`w-full sm:w-[280px] border-b sm:border-b-0 sm:border-r border-border flex flex-col shrink-0 sm:max-h-full overflow-y-auto absolute sm:relative inset-0 sm:inset-auto bg-card z-10 sm:z-auto transition-transform ${showSidebar ? 'translate-x-0' : '-translate-x-full sm:translate-x-0'}`}>
+                    <div className="p-3.5 sm:p-4 border-b border-border shrink-0">
+                        <div className="relative">
+                            <Search size={14} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-muted-foreground" />
                             <Input
                                 placeholder="Search..."
                                 value={search}
                                 onChange={(e) => setSearch(e.target.value)}
-                                style={{ paddingLeft: 32, fontSize: 13 }}
+                                className="pl-8 text-xs sm:text-sm"
                             />
                         </div>
                     </div>
 
-                    <div style={{ flex: 1, overflowY: "auto" }}>
+                    <div className="flex-1 overflow-y-auto">
                         {directs.length > 0 && (
                             <>
-                                <div style={{ padding: "10px 16px 4px", fontSize: 11, fontWeight: 700, color: "var(--mt-fg)", textTransform: "uppercase", letterSpacing: "0.06em" }}>
+                                <div className="px-4 pt-2.5 pb-1 text-[10px] sm:text-[11px] font-bold text-muted-foreground uppercase tracking-wider">
                                     Direct Messages
                                 </div>
-                                {directs.map((c, i) => <ContactRow key={c.id} contact={c} color={colorFor(i)} active={active.id === c.id} onClick={() => setActive(c)} />)}
+                                {directs.map((c, i) => <ContactRow key={c.id} contact={c} color={colorFor(i)} active={active.id === c.id} onClick={() => selectContact(c)} />)}
                             </>
                         )}
                         {groups.length > 0 && (
                             <>
-                                <div style={{ padding: "10px 16px 4px", fontSize: 11, fontWeight: 700, color: "var(--mt-fg)", textTransform: "uppercase", letterSpacing: "0.06em" }}>
+                                <div className="px-4 pt-2.5 pb-1 text-[10px] sm:text-[11px] font-bold text-muted-foreground uppercase tracking-wider">
                                     Channels
                                 </div>
-                                {groups.map((c, i) => <ContactRow key={c.id} contact={c} color={colorFor(i + 10)} active={active.id === c.id} onClick={() => setActive(c)} />)}
+                                {groups.map((c, i) => <ContactRow key={c.id} contact={c} color={colorFor(i + 10)} active={active.id === c.id} onClick={() => selectContact(c)} />)}
                             </>
                         )}
                     </div>
                 </div>
 
                 {/* Chat pane */}
-                <div style={{ flex: 1, display: "flex", flexDirection: "column", minWidth: 0 }}>
+                <div className="flex-1 flex flex-col min-w-0">
                     {/* Header */}
-                    <div className="fc g3" style={{ padding: "14px 20px", borderBottom: "1px solid var(--bd)", flexShrink: 0 }}>
-                        <div style={{ position: "relative" }}>
+                    <div className="fc g3 px-3 sm:px-5 py-3 sm:py-3.5 border-b border-border shrink-0">
+                        <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => setShowSidebar(true)}
+                            className="sm:hidden p-2 h-auto"
+                        >
+                            <ArrowLeft size={18} />
+                        </Button>
+                        <div className="relative">
                             <div
+                                className="w-8 h-8 sm:w-9 sm:h-9 rounded-full font-bold text-xs sm:text-sm flex items-center justify-center"
                                 style={{
-                                    width: 36, height: 36, borderRadius: "50%",
                                     background: colorFor(CHAT_CONTACTS.indexOf(active)) + "22",
                                     color: colorFor(CHAT_CONTACTS.indexOf(active)),
-                                    fontWeight: 700, fontSize: 13,
-                                    display: "flex", alignItems: "center", justifyContent: "center",
                                 }}
                             >
                                 {active.isGroup ? <Hash size={14} /> : active.avatar}
                             </div>
-                            <div style={{ position: "absolute", bottom: 0, right: 0, width: 10, height: 10, borderRadius: "50%", background: STATUS_COLOR[active.status], border: "2px solid var(--cd)" }} />
+                            <div className="absolute bottom-0 right-0 w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full border-2 border-card" style={{ background: STATUS_COLOR[active.status] }} />
                         </div>
-                        <div>
-                            <div style={{ fontWeight: 700, fontSize: 15 }}>{active.name}</div>
-                            <div style={{ fontSize: 12, color: active.status === "online" ? "#10b981" : "var(--mt-fg)", fontWeight: 600, textTransform: "capitalize" }}>
-                                {active.isGroup ? <span className="fc g1"><Users size={12} /> Group channel</span> : active.status}
+                        <div className="min-w-0">
+                            <div className="font-bold text-sm sm:text-base truncate">{active.name}</div>
+                            <div className="text-xs font-semibold capitalize" style={{ color: active.status === "online" ? "#10b981" : "var(--mt-fg)" }}>
+                                {active.isGroup ? <span className="fc g1"><Users size={11} /> Group channel</span> : active.status}
                             </div>
                         </div>
                     </div>
 
                     {/* Messages */}
-                    <div style={{ flex: 1, overflowY: "auto", padding: "20px 20px 0" }}>
+                    <div className="flex-1 overflow-y-auto px-3 sm:px-5 pt-4 sm:pt-5">
                         {thread.length === 0 ? (
-                            <div style={{ textAlign: "center", color: "var(--mt-fg)", fontSize: 13, marginTop: 60 }}>
+                            <div className="text-center text-muted-foreground text-xs sm:text-sm mt-10 sm:mt-15">
                                 No messages yet. Say hello!
                             </div>
                         ) : (
@@ -124,16 +136,16 @@ export default function ChatPage() {
                     </div>
 
                     {/* Input */}
-                    <div className="fc g2" style={{ padding: "14px 20px", borderTop: "1px solid var(--bd)", flexShrink: 0 }}>
+                    <div className="fc g2 px-3 sm:px-5 py-3 sm:py-3.5 border-t border-border shrink-0">
                         <Input
                             placeholder={`Message ${active.name}...`}
                             value={text}
                             onChange={(e) => setText(e.target.value)}
                             onKeyDown={handleKey}
-                            style={{ flex: 1, fontSize: 14 }}
+                            className="flex-1 text-sm"
                         />
-                        <Button onClick={send} disabled={!text.trim()}>
-                            <Send size={15} />
+                        <Button onClick={send} disabled={!text.trim()} size="sm" className="sm:size-default">
+                            <Send size={14} className="sm:w-[15px] sm:h-[15px]" />
                         </Button>
                     </div>
                 </div>
@@ -146,37 +158,31 @@ function ContactRow({ contact, color, active, onClick }: { contact: ChatContact;
     return (
         <div
             onClick={onClick}
-            style={{
-                display: "flex", alignItems: "center", gap: 10, padding: "10px 16px",
-                cursor: "pointer", background: active ? "var(--ac)" : "transparent",
-                transition: "background .15s",
-            }}
+            className="flex items-center gap-2 sm:gap-2.5 px-3 sm:px-4 py-2 sm:py-2.5 cursor-pointer transition-colors"
+            style={{ background: active ? "var(--ac)" : "transparent" }}
         >
-            <div style={{ position: "relative", flexShrink: 0 }}>
+            <div className="relative shrink-0">
                 <div
-                    style={{
-                        width: 34, height: 34, borderRadius: "50%",
-                        background: color + "22", color, fontWeight: 700, fontSize: 12,
-                        display: "flex", alignItems: "center", justifyContent: "center",
-                    }}
+                    className="w-8 h-8 sm:w-[34px] sm:h-[34px] rounded-full font-bold text-xs flex items-center justify-center"
+                    style={{ background: color + "22", color }}
                 >
-                    {contact.isGroup ? <Hash size={14} /> : contact.avatar}
+                    {contact.isGroup ? <Hash size={12} className="sm:w-[14px] sm:h-[14px]" /> : contact.avatar}
                 </div>
-                <div style={{ position: "absolute", bottom: 0, right: 0, width: 9, height: 9, borderRadius: "50%", background: STATUS_COLOR[contact.status], border: "2px solid var(--cd)" }} />
+                <div className="absolute bottom-0 right-0 w-2 h-2 sm:w-[9px] sm:h-[9px] rounded-full border-2 border-card" style={{ background: STATUS_COLOR[contact.status] }} />
             </div>
-            <div style={{ flex: 1, minWidth: 0 }}>
+            <div className="flex-1 min-w-0">
                 <div className="fb">
-                    <span style={{ fontWeight: 600, fontSize: 13, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                    <span className="font-semibold text-xs sm:text-[13px] truncate">
                         {contact.name}
                     </span>
-                    <span style={{ fontSize: 11, color: "var(--mt-fg)", flexShrink: 0 }}>{contact.lastTime}</span>
+                    <span className="text-[10px] sm:text-[11px] text-muted-foreground shrink-0">{contact.lastTime}</span>
                 </div>
-                <div className="fb" style={{ marginTop: 2 }}>
-                    <span style={{ fontSize: 12, color: "var(--mt-fg)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", flex: 1 }}>
+                <div className="fb mt-0.5">
+                    <span className="text-[11px] sm:text-xs text-muted-foreground truncate flex-1">
                         {contact.lastMessage}
                     </span>
                     {contact.unread > 0 && (
-                        <span style={{ marginLeft: 4, minWidth: 18, height: 18, borderRadius: 9, background: "hsl(var(--primary))", color: "#fff", fontSize: 11, fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center", padding: "0 5px" }}>
+                        <span className="ml-1 min-w-[16px] sm:min-w-[18px] h-4 sm:h-[18px] rounded-full bg-primary text-white text-[10px] sm:text-[11px] font-bold flex items-center justify-center px-1 sm:px-1.5">
                             {contact.unread}
                         </span>
                     )}
@@ -189,40 +195,34 @@ function ContactRow({ contact, color, active, onClick }: { contact: ChatContact;
 function MessageBubble({ msg }: { msg: ChatMessage }) {
     return (
         <div
-            style={{
-                display: "flex", gap: 10, marginBottom: 16,
-                flexDirection: msg.isMine ? "row-reverse" : "row",
-                alignItems: "flex-end",
-            }}
+            className="flex gap-2 sm:gap-2.5 mb-3 sm:mb-4 items-end"
+            style={{ flexDirection: msg.isMine ? "row-reverse" : "row" }}
         >
             {!msg.isMine && (
                 <div
-                    style={{
-                        width: 30, height: 30, borderRadius: "50%", flexShrink: 0,
-                        background: "#2563eb22", color: "#2563eb", fontWeight: 700, fontSize: 11,
-                        display: "flex", alignItems: "center", justifyContent: "center",
-                    }}
+                    className="w-6 h-6 sm:w-[30px] sm:h-[30px] rounded-full shrink-0 font-bold text-[10px] sm:text-[11px] flex items-center justify-center"
+                    style={{ background: "#2563eb22", color: "#2563eb" }}
                 >
                     {msg.avatar}
                 </div>
             )}
-            <div style={{ maxWidth: "68%" }}>
+            <div className="max-w-[75%] sm:max-w-[68%]">
                 {!msg.isMine && (
-                    <div style={{ fontSize: 12, fontWeight: 700, marginBottom: 4, color: "var(--mt-fg)" }}>
+                    <div className="text-xs font-bold mb-1 text-muted-foreground">
                         {msg.sender}
                     </div>
                 )}
                 <div
+                    className="px-3 py-2 sm:px-3.5 sm:py-2.5 text-xs sm:text-sm leading-relaxed"
                     style={{
-                        padding: "10px 14px", borderRadius: msg.isMine ? "14px 14px 4px 14px" : "14px 14px 14px 4px",
+                        borderRadius: msg.isMine ? "14px 14px 4px 14px" : "14px 14px 14px 4px",
                         background: msg.isMine ? "hsl(var(--primary))" : "var(--mt)",
                         color: msg.isMine ? "#fff" : "var(--fg)",
-                        fontSize: 14, lineHeight: 1.5,
                     }}
                 >
                     {msg.content}
                 </div>
-                <div style={{ fontSize: 11, color: "var(--mt-fg)", marginTop: 4, textAlign: msg.isMine ? "right" : "left" }}>
+                <div className="text-[10px] sm:text-[11px] text-muted-foreground mt-1" style={{ textAlign: msg.isMine ? "right" : "left" }}>
                     {msg.time}
                 </div>
             </div>

@@ -151,7 +151,7 @@ function CreateScheduleForm({ onAdd, onCancel }: {
                 {/* Frequency selector — Radio buttons */}
                 <div className="flex flex-col gap-2">
                     <Label className="text-xs">Frequency</Label>
-                    <div className="flex items-center gap-4 flex-wrap">
+                    <div className="flex items-center gap-3 sm:gap-4 flex-wrap">
                         {FREQUENCIES.map((f) => (
                             <Radio key={f} checked={freq === f} onChange={() => setFreq(f)} label={f} />
                         ))}
@@ -244,11 +244,11 @@ function CreateScheduleForm({ onAdd, onCancel }: {
                     <DropdownSelect value={tz} onChange={setTz} options={tzOptions} />
                 </div>
 
-                <div className="flex gap-2">
-                    <Button onClick={handleAdd} disabled={!name.trim()}>
+                <div className="flex flex-col sm:flex-row gap-2">
+                    <Button onClick={handleAdd} disabled={!name.trim()} className="w-full sm:w-auto">
                         <CalendarClock size={13} /> Create Schedule
                     </Button>
-                    <Button variant="outline" onClick={onCancel}>Cancel</Button>
+                    <Button variant="outline" onClick={onCancel} className="w-full sm:w-auto">Cancel</Button>
                 </div>
             </CardContent>
         </Card>
@@ -278,7 +278,7 @@ function ScheduleRow({
     return (
         <div className="border-b last:border-0 border-border">
             <div
-                className="flex items-center gap-4 px-5 py-4 hover:bg-muted/30 transition-colors flex-wrap cursor-pointer"
+                className="flex flex-col lg:flex-row items-start lg:items-center gap-4 px-3 sm:px-5 py-4 hover:bg-muted/30 transition-colors cursor-pointer"
                 onClick={() => setExpanded((v) => !v)}
             >
                 {/* Status icon */}
@@ -310,26 +310,28 @@ function ScheduleRow({
                 </div>
 
                 {/* Schedule details */}
-                <div className="flex flex-col items-end text-xs text-muted-foreground shrink-0">
-                    <span className="font-semibold text-foreground">Next: {schedule.nextRun}</span>
-                    <span>Last: {schedule.lastRun}</span>
-                    <span className="flex items-center gap-1 mt-0.5">
-                        <Globe size={10} />{schedule.timezone}
-                    </span>
-                </div>
+                <div className="flex flex-col sm:flex-row items-start sm:items-end gap-3 text-xs text-muted-foreground shrink-0">
+                    <div className="flex flex-col">
+                        <span className="font-semibold text-foreground">Next: {schedule.nextRun}</span>
+                        <span>Last: {schedule.lastRun}</span>
+                        <span className="flex items-center gap-1 mt-0.5">
+                            <Globe size={10} />{schedule.timezone}
+                        </span>
+                    </div>
 
-                <div className="text-xs text-muted-foreground text-right shrink-0">
-                    <span className="block font-semibold text-foreground">{schedule.runCount.toLocaleString()}</span>
-                    <span>total runs</span>
+                    <div className="text-right">
+                        <span className="block font-semibold text-foreground">{schedule.runCount.toLocaleString()}</span>
+                        <span>total runs</span>
+                    </div>
                 </div>
 
                 {/* Actions — stop propagation so row click doesn't conflict */}
                 <div
-                    className="flex items-center gap-1.5 shrink-0"
+                    className="flex items-center gap-1.5 shrink-0 w-full lg:w-auto"
                     onClick={(e) => e.stopPropagation()}
                 >
                     <Button
-                        size="sm" variant="outline" className="h-8 px-2.5"
+                        size="sm" variant="outline" className="h-8 px-2.5 flex-1 lg:flex-initial"
                         onClick={onRunNow} disabled={isRunning}
                     >
                         {isRunning
@@ -348,13 +350,13 @@ function ScheduleRow({
 
                 <ChevronRight
                     size={15}
-                    className={cn("text-muted-foreground shrink-0 transition-transform", expanded && "rotate-90")}
+                    className={cn("text-muted-foreground shrink-0 transition-transform hidden lg:block", expanded && "rotate-90")}
                 />
             </div>
 
             {/* Inline run history */}
             {expanded && (
-                <div className="px-5 pb-4">
+                <div className="px-3 sm:px-5 pb-4">
                     <div className="rounded-xl border border-border overflow-hidden">
                         <div className="px-4 py-2 bg-muted/50 border-b border-border">
                             <span className="text-xs font-bold text-muted-foreground uppercase tracking-wide">
@@ -364,22 +366,25 @@ function ScheduleRow({
                         {logs.length === 0 ? (
                             <div className="px-4 py-3 text-xs text-muted-foreground">No runs yet.</div>
                         ) : (
-                            logs.map((log, i) => (
-                                <div
-                                    key={i}
-                                    className="flex items-center gap-3 px-4 py-2.5 border-b last:border-0 border-border text-xs hover:bg-muted/20"
-                                >
-                                    <span
-                                        className="w-2 h-2 rounded-full shrink-0"
-                                        style={{ background: LOG_COLORS[log.status] }}
-                                    />
-                                    <span className="font-semibold capitalize" style={{ color: LOG_COLORS[log.status] }}>
-                                        {log.status}
-                                    </span>
-                                    <span className="text-muted-foreground">{log.time}</span>
-                                    <span className="text-muted-foreground ml-auto">{log.duration}</span>
-                                </div>
-                            ))
+                            <div className="overflow-x-auto">
+                                {logs.map((log, i) => (
+                                    <div
+                                        key={i}
+                                        className="flex items-center gap-3 px-4 py-2.5 border-b last:border-0 border-border text-xs hover:bg-muted/20"
+                                        style={{ minWidth: "400px" }}
+                                    >
+                                        <span
+                                            className="w-2 h-2 rounded-full shrink-0"
+                                            style={{ background: LOG_COLORS[log.status] }}
+                                        />
+                                        <span className="font-semibold capitalize" style={{ color: LOG_COLORS[log.status] }}>
+                                            {log.status}
+                                        </span>
+                                        <span className="text-muted-foreground">{log.time}</span>
+                                        <span className="text-muted-foreground ml-auto">{log.duration}</span>
+                                    </div>
+                                ))}
+                            </div>
                         )}
                     </div>
                 </div>
@@ -424,14 +429,14 @@ export default function ScheduledWorkflowsPage() {
     return (
         <PageStack>
             {/* Page heading */}
-            <div className="flex items-center justify-between gap-3 flex-wrap">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
                 <div>
                     <h2 className="text-[22px] font-extrabold">Scheduled Workflows</h2>
                     <p className="text-sm text-muted-foreground mt-0.5">
                         Run workflows automatically on a cron schedule
                     </p>
                 </div>
-                <Button onClick={() => setShowNew((v) => !v)}>
+                <Button onClick={() => setShowNew((v) => !v)} className="w-full sm:w-auto">
                     <Plus size={14} /> {showNew ? "Cancel" : "New Schedule"}
                 </Button>
             </div>
@@ -481,7 +486,7 @@ export default function ScheduledWorkflowsPage() {
                 </CardHeader>
                 <CardContent>
                     {/* 5 field boxes */}
-                    <div className="grid grid-cols-5 gap-3 mb-5">
+                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 mb-5">
                         {[
                             { field: "Minute", range: "0–59" },
                             { field: "Hour", range: "0–23" },
@@ -497,7 +502,7 @@ export default function ScheduledWorkflowsPage() {
                     </div>
 
                     {/* Preset examples */}
-                    <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
                         {CRON_PRESETS.map((p) => (
                             <div
                                 key={p.cron}
